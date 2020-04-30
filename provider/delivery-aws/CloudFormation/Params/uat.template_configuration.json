@@ -1,0 +1,34 @@
+{
+  "Parameters" : {
+    "Environment" : "uat",
+    "DeploymentRegion" : "us-east-1",
+    "ApplicationName" : "os-delivery",
+    "KeyName": "delivery-ecs-keypair",
+    "DesiredCapacity": "1",
+    "MaxSize": "3",
+    "InstanceType": "t3.large",
+    "SchemaRepositoryDynamoDBName" : "SchemaRepository",
+    "RecordMetadataRepositoryDynamoDBName" : "RecordMetadataRepository",
+    "TenantInfoDynamoDBName" : "TenantInfo",
+    "DatafileS3BucketName": "osdu-data",
+    "DeliveryServiceIamUsername": "service-user-os-delivery",
+    "DeliveryServiceIamKeyRotationSerial": "1",
+    "SNSTopicName": "osdu-delivery-service-messages",
+    "SQSQueueName": "osdu-delivery-service-queue",
+    "GroupCacheName": "deliverygroupcache",
+    "GroupCacheEngine": "redis",
+    "GroupCacheNodeInstanceType": "cache.t2.micro",
+    "GroupCacheNumberOfCacheNodes": "1",
+    "ECSPort": "80",
+    "ECSCPUAllocation": "1024",
+    "ECSMemoryAllocation": "3072",
+    "DomainName": "",
+    "HostedZoneName": "",
+    "AcmCertificateArn": "",
+    "ServiceName": "delivery",
+    "VersionNumber": "0.0.1"
+  },
+  "Tags" : {
+    "Environment" : "uat"
+  }
+}

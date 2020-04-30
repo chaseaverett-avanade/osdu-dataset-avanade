@@ -1,0 +1,80 @@
+swagger: "2.0"
+info:
+  description: The os-delivery service provides a set of APIs that enable users to perform OSDU file operations such as retrieving a signed URL for a SRN
+  version: 1.0.0
+  title: os-delivery
+basePath: /v1
+schemes:
+- https
+paths:
+  /getFileSignedURLS:
+    post:
+      summary: Given a list of SRNs representing files, return the signed URLs for those files
+      operationId: getFileSignedURLS
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        type: string
+        description: In the form of `Bearer <JWT Token>`
+      - in: header
+        name: data-partition-id
+        required: true
+        type: string
+        description: tenant ID to query
+      - in: body
+        name: body
+        description: List of SRNs for which signed URLs are being requested
+        required: true
+        schema:
+          $ref: "#/definitions/GetFileSignedURLSRequest"
+      responses:
+        200:
+          description: HTTP 200 indicates OK
+          schema:
+            $ref: "#/definitions/GetFileSignedURLSResponse"
+        401:
+          description: HTTP 401 indicates that the user is unauthorized to access the data
+        403:
+          description: HTTP 403 indicates that the user is forbidden to access the data
+
+definitions:
+  GetFileSignedURLSRequest:
+    type: object
+    properties:
+      srn:
+        description: A list of SRNs to fetch
+        type: array
+        items:
+          type: string
+    example:
+      srns:
+        - srn:some-valid-srn
+        - srn:some-invalid-srn
+  GetFileSignedURLSResponse:
+    type: object
+    properties:
+      unprocessed:
+        description: A list of SRNs which could not be processed
+        type: array
+        items:
+          type: string
+      processed:
+        description: Each key is equal to an SRN that was able to be processed
+        type: object
+        additionalProperties:
+          description: Signed URL and/or related properties for the processed SRN
+          type: object
+          properties:
+            signedUrl:
+              type: string
+    example:
+      unprocessed:
+        - srn:some-invalid-srn
+      processed:
+        srn:some-valid-srn:
+          signedUrl: https://...

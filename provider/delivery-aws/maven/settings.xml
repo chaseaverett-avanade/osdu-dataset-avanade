@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <profiles>
+        <profile>
+            <id>repositoryConfiguration</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <deployment.environment>dev</deployment.environment>
+                <aws.accessKeyId>no-default</aws.accessKeyId>
+                <aws.secretKey>no-default</aws.secretKey>
+                <deployment.repositorybucket>osdu-local-maven-repository</deployment.repositorybucket>
+                <azure.devops.token>no-default</azure.devops.token>
+            </properties>
+        </profile>
+    </profiles>
+
+    <servers>
+
+        <!-- Local S3 Repository (used to the AWS Util Library) -->
+        <server>
+            <id>maven-s3-release-repo</id>
+            <username>${aws.accessKeyId}</username>
+            <password>${aws.secretKey}</password>
+        </server>
+
+        <server>
+            <id>maven-s3-snapshot-repo</id>
+            <username>${aws.accessKeyId}</username>
+            <password>${aws.secretKey}</password>
+        </server>
+
+        <server>
+            <id>s3.release</id>
+            <username>${aws.accessKeyId}</username>
+            <password>${aws.secretKey}</password>
+        </server>
+
+        <server>
+            <id>s3.snapshot</id>
+            <username>${aws.accessKeyId}</username>
+            <password>${aws.secretKey}</password>
+        </server>
+
+        <server>
+            <id>s3.site</id>
+            <username>${aws.accessKeyId}</username>
+            <password>${aws.secretKey}</password>
+        </server>
+
+        <!-- Azure DevOps Artifact Store -->
+        <server>
+            <id>os-core</id>
+            <username>slb-des-ext-collaboration</username>
+            <!-- Treat this auth token like a password. Do not share it with anyone, including Microsoft support. -->
+            <!-- The generated token expires on or before 11/14/2019 -->
+            <password>${VSTS_FEED_TOKEN}</password>
+        </server>
+
+    </servers>
+
+    <activeProfiles>
+        <activeProfile>repositoryConfiguration</activeProfile>
+    </activeProfiles>
+
+</settings>

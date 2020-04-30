@@ -1,0 +1,55 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+      - README.md
+      - .gitignore
+
+pool:
+  name: Hosted Ubuntu 1604
+  demands: maven
+
+steps:
+- task: Maven@3
+  displayName: 'build, test, code coverage'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    options: '--settings ./delivery-core/maven/settings.xml -DVSTS_FEED_TOKEN=$(VSTS_FEED_TOKEN)'
+    #testResultsFiles: '**/*/TEST-*.xml'
+    #codeCoverageToolOption: JaCoCo
+    goals: 'clean install'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'testing'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/delivery-integration-tests.zip'
+    replaceExistingArchive: true
+
+- task: CopyFiles@2
+  displayName: 'Copy AWS artifacts for maven deploy to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder:
+    Contents: |
+      provider/delivery-aws/CloudFormation
+      provider/delivery-aws/Dockerfile
+      provider/delivery-aws/buildspec-post-deploy.yml
+      provider/delivery-aws/buildspec-pre-deploy.yml
+      provider/delivery-aws/target/*-spring-boot.jar
+    TargetFolder: '$(build.artifactstagingdirectory)'
+    
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  condition: succeededOrFailed()
