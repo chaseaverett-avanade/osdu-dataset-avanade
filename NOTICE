@@ -267,8 +267,8 @@ The following software have components provided under the terms of this license:
 - Lucene Suggest (from )
 - MapStruct Core (from )
 - Mockito (from http://mockito.org)
-- Mockito (from http://www.mockito.org)
 - Mockito (from http://mockito.org)
+- Mockito (from http://www.mockito.org)
 - Mockito (from http://www.mockito.org)
 - Netty/Buffer (from http://netty.io/)
 - Netty/Codec (from )
@@ -326,8 +326,8 @@ The following software have components provided under the terms of this license:
 - jackson-databind (from http://github.com/FasterXML/jackson)
 - java-cloudant (from https://cloudant.com)
 - java-cloudant (from https://cloudant.com)
-- javax.inject (from http://code.google.com/p/atinject/)
 - javax.inject (from )
+- javax.inject (from http://code.google.com/p/atinject/)
 - jersey-repackaged-guava (from )
 - jose4j (from https://bitbucket.org/b_c/jose4j/)
 - lang-mustache (from https://github.com/elastic/elasticsearch)
@@ -413,7 +413,6 @@ The following software have components provided under the terms of this license:
 
 - HK2 API module (from git://java.net/hk2~git/hk2-api)
 - HK2 Implementation Utilities (from )
-- JavaBeans Activation Framework API jar (from )
 - JavaBeans(TM) Activation Framework (from http://java.sun.com/javase/technologies/desktop/javabeans/jaf/index.jsp)
 - ServiceLocator Default Implementation (from git://java.net/hk2~git/hk2-locator)
 - aopalliance-repackaged (from )
@@ -428,7 +427,6 @@ CDDL-1.1
 ========================================================================
 The following software have components provided under the terms of this license:
 
-- Java Architecture For XML Binding (from )
 - JavaMail API (from )
 - OSGi resource locator (from )
 - tomcat-embed-core (from http://tomcat.apache.org/)
@@ -451,8 +449,6 @@ The following software have components provided under the terms of this license:
 
 - HK2 API module (from git://java.net/hk2~git/hk2-api)
 - HK2 Implementation Utilities (from )
-- Java Architecture For XML Binding (from )
-- JavaBeans Activation Framework API jar (from )
 - JavaMail API (from )
 - OSGi resource locator (from )
 - RabbitMQ Java Client (from http://www.rabbitmq.com)
@@ -478,8 +474,6 @@ GPL-2.0-with-classpath-exception
 ========================================================================
 The following software have components provided under the terms of this license:
 
-- Java Architecture For XML Binding (from )
-- JavaBeans Activation Framework API jar (from )
 - JavaMail API (from )
 - OSGi resource locator (from )
 - RabbitMQ Java Client (from http://www.rabbitmq.com)
@@ -540,10 +534,10 @@ The following software have components provided under the terms of this license:
 - JUL to SLF4J bridge (from http://www.slf4j.org)
 - Java JWT (from http://www.jwt.io)
 - Lucene Core (from )
-- Mockito (from http://www.mockito.org)
-- Mockito (from http://mockito.org)
 - Mockito (from http://mockito.org)
 - Mockito (from http://www.mockito.org)
+- Mockito (from http://www.mockito.org)
+- Mockito (from http://mockito.org)
 - Netty/Codec/HTTP (from )
 - Netty/Common (from )
 - Project Lombok (from https://projectlombok.org)
