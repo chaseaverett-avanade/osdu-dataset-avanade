@@ -43,9 +43,8 @@ public class Steps extends RecordSteps {
     public void before(Scenario scenario) throws InterruptedException, MalformedURLException {
         this.scenario = scenario;
         this.httpClient = new AWSHTTPClient();
-        ClientResponse respd = legalTagUtils.delete(Config.getLegalTag());
         ClientResponse resp = legalTagUtils.create(Config.getLegalTag());
-        Assert.assertEquals(resp.getStatus(), 201);
+        Assert.assertTrue("Creating LegalTag", resp.getStatus() == 201 || resp.getStatus() == 409);
     }
 
     @After
