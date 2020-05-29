@@ -16,7 +16,7 @@ package org.opengroup.osdu.util;
 
 public class AwsConfig {
 
-    private static final String DEFAULT_CLOUD_STORAGE_REGION="";
+    private static final String DEFAULT_CLOUD_STORAGE_REGION="us-east-1";
 
     public static String getAWSCognitoClientId() {
         return getEnvironmentVariableOrDefaultValue("AWS_COGNITO_CLIENT_ID", "");
