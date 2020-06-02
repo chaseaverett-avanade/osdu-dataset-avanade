@@ -25,6 +25,7 @@ import java.util.List;
 public class CloudStorageUtilsAws extends CloudStorageUtils {
 
     private static final String BASE_INTEGRATION_TEST_BUCKET_NAME = "osdu-delivery-integration-test-bucket";
+    private static final String DELIVERY_INT_TEST_BUCKET_PARAM = "DELIVERY_INT_TEST_BUCKET_NAME";
 
     private AmazonS3 s3;
     private String testBucketName;
@@ -33,15 +34,15 @@ public class CloudStorageUtilsAws extends CloudStorageUtils {
         String region = AwsConfig.getCloudStorageRegion();
         String storageEndpoint = String.format("s3.%s.amazonaws.com", region);
         S3Config config = new S3Config(storageEndpoint, region);
-        testBucketName = String.format("%s-%s", Long.toString(System.currentTimeMillis()), BASE_INTEGRATION_TEST_BUCKET_NAME);
+        testBucketName = System.getenv(DELIVERY_INT_TEST_BUCKET_PARAM);
         s3 = config.amazonS3();
     }
 
     @Override
     public void createBucket()
     {
-        deleteAllBuckets();
-        s3.createBucket(testBucketName);
+        createBucketIfNotExists(testBucketName);
+        clearTestBucket(testBucketName);
     }
 
     @Override
@@ -50,7 +51,6 @@ public class CloudStorageUtilsAws extends CloudStorageUtils {
         for (S3ObjectSummary summary: result.getObjectSummaries()) {
             deleteCloudFile(testBucketName, summary.getKey());
         }
-        s3.deleteBucket(testBucketName);
     }
 
     @Override
@@ -62,6 +62,20 @@ public class CloudStorageUtilsAws extends CloudStorageUtils {
     @Override
     public void deleteCloudFile(String bucketName,String fileName) {
         s3.deleteObject(bucketName, fileName);
+    }
+
+    private void createBucketIfNotExists(String testBucketName){
+        boolean exists = s3.doesBucketExistV2(testBucketName);
+        if(!exists){
+            s3.createBucket(testBucketName);
+        }
+    }
+
+    private void clearTestBucket(String testBucketName){
+        ListObjectsV2Result result = s3.listObjectsV2(testBucketName);
+        for(S3ObjectSummary summary: result.getObjectSummaries()){
+            deleteCloudFile(testBucketName, summary.getKey());
+        }
     }
 
     private void deleteAllBuckets() {
