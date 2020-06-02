@@ -266,9 +266,9 @@ The following software have components provided under the terms of this license:
 - Lucene Spatial Extras (from )
 - Lucene Suggest (from )
 - MapStruct Core (from )
-- Mockito (from http://mockito.org)
-- Mockito (from http://mockito.org)
 - Mockito (from http://www.mockito.org)
+- Mockito (from http://mockito.org)
+- Mockito (from http://mockito.org)
 - Mockito (from http://www.mockito.org)
 - Netty/Buffer (from http://netty.io/)
 - Netty/Codec (from )
@@ -387,7 +387,6 @@ The following software have components provided under the terms of this license:
 
 - ASM Core (from )
 - Apache Commons Codec (from http://commons.apache.org/proper/commons-codec/)
-- Byte Buddy (without dependencies) (from )
 - Hamcrest library (from )
 - Lucene Common Analyzers (from )
 - Lucene Core (from )
@@ -535,9 +534,9 @@ The following software have components provided under the terms of this license:
 - Java JWT (from http://www.jwt.io)
 - Lucene Core (from )
 - Mockito (from http://mockito.org)
-- Mockito (from http://www.mockito.org)
-- Mockito (from http://www.mockito.org)
 - Mockito (from http://mockito.org)
+- Mockito (from http://www.mockito.org)
+- Mockito (from http://www.mockito.org)
 - Netty/Codec/HTTP (from )
 - Netty/Common (from )
 - Project Lombok (from https://projectlombok.org)
@@ -606,6 +605,7 @@ unknown
 ========================================================================
 The following software have components provided under the terms of this license:
 
+- Byte Buddy (without dependencies) (from )
 - RabbitMQ Java Client (from http://www.rabbitmq.com)
 
 
