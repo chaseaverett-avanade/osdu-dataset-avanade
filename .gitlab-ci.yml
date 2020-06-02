@@ -1,3 +1,9 @@
+variables:
+  AWS_BUILD_SUBDIR: provider/delivery-aws/build-aws
+  AWS_TEST_SUBDIR: testing/delivery-test-aws
+  AWS_SERVICE: delivery
+  AWS_ENVIRONMENT: dev
+
 include:
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'standard-setup.yml'
