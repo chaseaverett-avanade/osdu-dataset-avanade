@@ -14,15 +14,22 @@
 
 package org.opengroup.osdu.step_definitions.delivery.record;
 
+import com.sun.jersey.api.client.ClientResponse;
 import cucumber.api.DataTable;
 import cucumber.api.Scenario;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.Before;
+import org.junit.Assert;
 import org.opengroup.osdu.common.RecordSteps;
 import org.opengroup.osdu.util.AWSHTTPClient;
 import org.opengroup.osdu.util.CloudStorageUtilsAws;
+import org.opengroup.osdu.util.Config;
+import org.opengroup.osdu.util.LegalTagUtilsAws;
+
+import java.net.MalformedURLException;
 
 public class Steps extends RecordSteps {
 
@@ -30,10 +37,19 @@ public class Steps extends RecordSteps {
         super(new AWSHTTPClient(), new CloudStorageUtilsAws());
     }
 
+    LegalTagUtilsAws legalTagUtils = new LegalTagUtilsAws();
+
     @Before
-    public void before(Scenario scenario) {
+    public void before(Scenario scenario) throws InterruptedException, MalformedURLException {
         this.scenario = scenario;
         this.httpClient = new AWSHTTPClient();
+        ClientResponse resp = legalTagUtils.create(Config.getLegalTag());
+        Assert.assertTrue("Creating LegalTag", resp.getStatus() == 201 || resp.getStatus() == 409);
+    }
+
+    @After
+    public void after() throws MalformedURLException {
+        legalTagUtils.delete(Config.getLegalTag());
     }
 
     @Given("^the schema is created with the following kind$")
