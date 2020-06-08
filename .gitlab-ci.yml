@@ -4,6 +4,9 @@ variables:
   AWS_SERVICE: delivery
   AWS_ENVIRONMENT: dev
 
+  IBM_BUILD_SUBDIR: provider/delivery-ibm
+  IBM_INT_TEST_SUBDIR: testing/delivery-test-ibm
+
 include:
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'standard-setup.yml'
@@ -22,6 +25,9 @@ include:
 
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'cloud-providers/aws.yml'    
+
+  - project: 'osdu/platform/ci-cd-pipelines'
+    file: 'cloud-providers/ibm.yml'
 
 # disable the eslint scanner
 # I think this is being generated from the presence of an HTML file, but there

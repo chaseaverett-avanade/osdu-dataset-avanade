@@ -16,9 +16,11 @@
 
 package org.opengroup.osdu.delivery.provider.ibm.service;
 
+import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -33,11 +35,14 @@ import org.opengroup.osdu.delivery.provider.interfaces.IStorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.ibm.cloud.objectstorage.HttpMethod;
-import com.ibm.cloud.objectstorage.SdkClientException;
-import com.ibm.cloud.objectstorage.services.s3.AmazonS3;
-import com.ibm.cloud.objectstorage.services.s3.model.GeneratePresignedUrlRequest;
-
+import io.minio.MinioClient;
+import io.minio.errors.ErrorResponseException;
+import io.minio.errors.InsufficientDataException;
+import io.minio.errors.InternalException;
+import io.minio.errors.InvalidBucketNameException;
+import io.minio.errors.InvalidExpiresRangeException;
+import io.minio.errors.InvalidResponseException;
+import io.minio.errors.XmlParserException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +57,7 @@ public class StorageServiceImpl implements IStorageService {
 	@Inject
 	private CloudObjectStorageFactory cosFactory;
 
-	private AmazonS3 s3Client;
+	private MinioClient minioClient;
 
 	private ExpirationDateHelper expirationDateHelper;
 
@@ -64,7 +69,7 @@ public class StorageServiceImpl implements IStorageService {
 
 	@PostConstruct
 	public void init() {
-		s3Client = cosFactory.getClient();
+	  minioClient = cosFactory.getClient();
 		expirationDateHelper = new ExpirationDateHelper();
 		instantHelper = new InstantHelper();
 	}
@@ -83,14 +88,15 @@ public class StorageServiceImpl implements IStorageService {
 
 		String bucketName = s3ObjectKeyParts[0];
 		String s3Key = String.join("/", Arrays.copyOfRange(s3ObjectKeyParts, 1, s3ObjectKeyParts.length));
-
-		URL s3SignedUrl = generateSignedS3Url(bucketName, s3Key, "GET");
 		SignedUrl url = new SignedUrl();
+
+
 		try {
+			URL s3SignedUrl = generateSignedS3Url(bucketName, s3Key, "GET");
 			url.setUri(new URI(s3SignedUrl.toString()));
 			url.setUrl(s3SignedUrl);
 			url.setCreatedAt(instantHelper.getCurrentInstant());
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			log.error("There was an error generating the URI.", e);
 			throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", URI_EXCEPTION_REASON, e);
 		}
@@ -101,13 +107,13 @@ public class StorageServiceImpl implements IStorageService {
 	 * This method will take a string of a pre-validated S3 bucket name, and use the
 	 * AWS Java SDK to generate a signed URL with an expiration date set to be
 	 * as-configured
-	 * 
+	 *
 	 * @param s3BucketName - pre-validated S3 bucket name
 	 * @param s3ObjectKey  - pre-validated S3 object key (keys include the path +
 	 *                     filename)
 	 * @return - String of the signed S3 URL to allow file access temporarily
 	 */
-	private URL generateSignedS3Url(String s3BucketName, String s3ObjectKey, String httpMethod) {
+	private URL generateSignedS3Url(String s3BucketName, String s3ObjectKey, String httpMethod)  {
 		// Set the presigned URL to expire after the amount of time specified by the
 		// configuration variables
 		Date expiration = expirationDateHelper.getExpirationDate(s3SignedUrlExpirationTimeInDays);
@@ -115,16 +121,16 @@ public class StorageServiceImpl implements IStorageService {
 		log.debug("Requesting a signed S3 URL with an expiration of: " + expiration.toString() + " ("
 				+ s3SignedUrlExpirationTimeInDays + " minutes from now)");
 
-		// Generate the presigned URL
-		GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(s3BucketName,
-				s3ObjectKey).withMethod(HttpMethod.valueOf(httpMethod)).withExpiration(expiration);
 		try {
-			// Attempt to generate the signed S3 URL
-			URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-			return url;
-		} catch (SdkClientException e) {
-			// Catch any SDK client exceptions, and return a 500 error
-			log.error("There was an AWS SDK error processing the signing request.", e);
+			log.debug("creating signed url from minio ");
+			int expiryTime = 24 * 60 * 60 * s3SignedUrlExpirationTimeInDays;
+			String url = minioClient.presignedGetObject(s3BucketName, s3ObjectKey,expiryTime);
+			log.debug("url from minio " + url);
+			return new URL(url);
+		} catch (InvalidKeyException | ErrorResponseException | IllegalArgumentException | InsufficientDataException
+				| InternalException | InvalidBucketNameException | InvalidExpiresRangeException
+				| InvalidResponseException | NoSuchAlgorithmException | XmlParserException | IOException e) {
+			log.error("error creating signed url from minio ", e);
 			throw new AppException(HttpStatus.SC_SERVICE_UNAVAILABLE, "Remote Service Unavailable",
 					AWS_SDK_EXCEPTION_MSG, e);
 		}
