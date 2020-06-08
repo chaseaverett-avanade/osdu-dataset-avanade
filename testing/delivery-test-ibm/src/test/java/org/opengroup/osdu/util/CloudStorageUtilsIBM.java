@@ -21,6 +21,8 @@ package org.opengroup.osdu.util;
 
 import java.util.List;
 
+import org.opengroup.osdu.core.ibm.util.Config;
+
 import com.ibm.cloud.objectstorage.ClientConfiguration;
 import com.ibm.cloud.objectstorage.auth.AWSCredentials;
 import com.ibm.cloud.objectstorage.auth.AWSStaticCredentialsProvider;
@@ -41,10 +43,10 @@ public class CloudStorageUtilsIBM extends CloudStorageUtils {
 
     public CloudStorageUtilsIBM() {    		
     		
-    	String url = System.getProperty("IBM_COS_ENDPOINT");
-    	String region = System.getProperty("IBM_COS_REGION", "us-south");
-    	String accessKey = System.getProperty("IBM_COS_ACCESS_KEY");
-    	String secretKey = System.getProperty("IBM_COS_SECRET_KEY");
+    	String url = Config.getEnvironmentVariable("IBM_COS_ENDPOINT");
+    	String region = Config.getEnvironmentVariable("IBM_COS_REGION");
+    	String accessKey = Config.getEnvironmentVariable("IBM_COS_ACCESS_KEY");
+    	String secretKey = Config.getEnvironmentVariable("IBM_COS_SECRET_KEY");
     	    		
 		AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 

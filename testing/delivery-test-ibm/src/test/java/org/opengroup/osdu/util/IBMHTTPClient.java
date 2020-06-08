@@ -19,6 +19,8 @@
 
 package org.opengroup.osdu.util;
 
+import org.opengroup.osdu.core.ibm.util.IdentityClient;
+
 import lombok.ToString;
 import lombok.extern.java.Log;
 

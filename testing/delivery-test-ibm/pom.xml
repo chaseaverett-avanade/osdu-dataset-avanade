@@ -35,9 +35,15 @@
 		<dependency>
 			<groupId>org.opengroup.osdu</groupId>
 			<artifactId>os-core-lib-ibm</artifactId>
-			<version>0.0.13-SNAPSHOT</version>
+			<version>0.0.14-SNAPSHOT</version>
 		</dependency>
-
+		
+		<!-- Remove this and refactor the test -->
+		<dependency>
+			<groupId>com.ibm.cos</groupId>
+			<artifactId>ibm-cos-java-sdk</artifactId>
+			<version>2.1.0</version>
+		</dependency>
 		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -158,41 +164,5 @@
 			<url>https://community.opengroup.org/api/v4/projects/118/packages/maven</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<trimStackTrace>false</trimStackTrace>
-					<systemPropertyVariables>
-						<OTHER_RELEVANT_DATA_COUNTRIES>US</OTHER_RELEVANT_DATA_COUNTRIES>
-						<LEGAL_TAG>opendes-public-usa-dataset-1</LEGAL_TAG>
-						<DEFAULT_DATA_PARTITION_ID_TENANT1>opendes</DEFAULT_DATA_PARTITION_ID_TENANT1>
-						<DEFAULT_DATA_PARTITION_ID_TENANT2>common</DEFAULT_DATA_PARTITION_ID_TENANT2>
-						<ENTITLEMENTS_DOMAIN>ibm.com</ENTITLEMENTS_DOMAIN>
 
-						<SEARCH_HOST>http://localhost:8085/api/search/v2/</SEARCH_HOST>
-						<STORAGE_HOST>http://localhost:8082/api/storage/v2/</STORAGE_HOST>
-						<DELIVERY_HOST>http://localhost:8086/api/delivery/v2/</DELIVERY_HOST>
-
-						<KEYCLOAK_URL>CHANGE_ME</KEYCLOAK_URL>
-						<KEYCLOAK_REALM>OSDU</KEYCLOAK_REALM>
-						<KEYCLOAK_CLIENT_ID>osdu-login</KEYCLOAK_CLIENT_ID>
-						<KEYCLOAK_CLIENT_SECRET>CHANGE_ME</KEYCLOAK_CLIENT_SECRET>
-						<AUTH_USER_ACCESS>CHANGE_ME</AUTH_USER_ACCESS>
-						<AUTH_USER_ACCESS_PASSWORD>CHANGE_ME</AUTH_USER_ACCESS_PASSWORD>
-
-						<IBM_COS_ENDPOINT>CHANGE_ME</IBM_COS_ENDPOINT>
-						<IBM_COS_REGION>us-south</IBM_COS_REGION>
-						<IBM_COS_ACCESS_KEY>CHANGE_ME</IBM_COS_ACCESS_KEY>
-						<IBM_COS_SECRET_KEY>CHANGE_ME</IBM_COS_SECRET_KEY>
-
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
 </project>
