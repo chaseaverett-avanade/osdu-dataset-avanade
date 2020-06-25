@@ -15,24 +15,6 @@
         <cucumber.version>1.2.5</cucumber.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>${repo.releases.id}</id>
-            <url>${repo.releases.url}</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>${publish.releases.id}</id>
-            <url>${publish.releases.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>${publish.snapshots.id}</id>
-            <url>${publish.snapshots.url}</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.opengroup.osdu</groupId>

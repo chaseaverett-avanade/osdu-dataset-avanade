@@ -64,19 +64,19 @@
 		</dependency>
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>${repo.releases.id}</id>
-			<url>${repo.releases.url}</url>
-		</repository>
-	</repositories>
-
 	<modules>
 		<module>delivery-core</module>
 		<module>provider/delivery-aws</module>
 		<module>provider/delivery-ibm</module>
 		<module>provider/delivery-gcp</module>
 	</modules>
+
+	<repositories>
+		<repository>
+			<id>${repo.releases.id}</id>
+			<url>${repo.releases.url}</url>
+		</repository>
+	</repositories>
 
 	<distributionManagement>
 		<repository>
