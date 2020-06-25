@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+  Copyright 2020 Google LLC
   Copyright 2017-2019, Schlumberger
+  Copyright 2020 EPAM
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -64,8 +66,8 @@
 
 	<repositories>
 		<repository>
-			<id>${gitlab-server}</id>
-			<url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</url>
+			<id>${repo.releases.id}</id>
+			<url>${repo.releases.url}</url>
 		</repository>
 	</repositories>
 
@@ -73,16 +75,17 @@
 		<module>delivery-core</module>
 		<module>provider/delivery-aws</module>
 		<module>provider/delivery-ibm</module>
+		<module>provider/delivery-gcp</module>
 	</modules>
 
 	<distributionManagement>
 		<repository>
-			<id>${gitlab-server}</id>
-			<url>https://community.opengroup.org/api/v4/projects/118/packages/maven</url>
+			<id>${publish.releases.id}</id>
+			<url>${publish.releases.url}</url>
 		</repository>
 		<snapshotRepository>
-			<id>${gitlab-server}</id>
-			<url>https://community.opengroup.org/api/v4/projects/118/packages/maven</url>
+			<id>${publish.snapshots.id}</id>
+			<url>${publish.snapshots.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
 
