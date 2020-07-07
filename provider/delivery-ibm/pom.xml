@@ -41,7 +41,7 @@
         <dependency>
    			<groupId>org.opengroup.osdu</groupId>
    			<artifactId>os-core-lib-ibm</artifactId>
-   			<version>0.0.14-SNAPSHOT</version>
+   			<version>0.0.18</version>
    		</dependency>
         <dependency>
             <groupId>org.opengroup.osdu</groupId>
