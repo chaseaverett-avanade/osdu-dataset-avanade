@@ -122,7 +122,7 @@ public class RecordSteps extends TestsBase {
                 testRecord.put("id", recordId);
                 testRecord.put("kind", actualKind);
                 testRecord.put("legal", generateLegalTag());
-                String[] x_acl = {generateActualName(dataGroup,timeStamp)+"."+getEntitlementsDomain()};
+                String[] x_acl = {generateActualName(dataGroup,timeStamp) + getEntitlementsDomain()};
                 Acl acl = Acl.builder().viewers(x_acl).owners(x_acl).build();
                 testRecord.put("acl", acl);
             }

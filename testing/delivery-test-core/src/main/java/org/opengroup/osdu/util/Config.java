@@ -30,6 +30,8 @@ public class Config {
 
     private static final String DEFAULT_ENTITLEMENTS_DOMAIN = "";
 
+	private static final String DEFAULT_TENANT = "opendes";
+
     public static String getOtherRelevantDataCountries() {
         return getEnvironmentVariableOrDefaultValue("OTHER_RELEVANT_DATA_COUNTRIES", DEFAULT_OTHER_RELEVANT_DATA_COUNTRIES);
     }
@@ -67,7 +69,8 @@ public class Config {
     }
 
     public static String getEntitlementsDomain() {
-        return getEnvironmentVariableOrDefaultValue("ENTITLEMENTS_DOMAIN", DEFAULT_ENTITLEMENTS_DOMAIN);
+        return getEnvironmentVariableOrDefaultValue("TENANT",DEFAULT_TENANT) + "." +
+			getEnvironmentVariableOrDefaultValue("ENTITLEMENTS_DOMAIN", DEFAULT_ENTITLEMENTS_DOMAIN);
     }
 
     private static String getEnvironmentVariableOrDefaultValue(String key, String defaultValue) {
