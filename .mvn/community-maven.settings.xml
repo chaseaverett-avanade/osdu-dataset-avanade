@@ -7,7 +7,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<repo.releases.id>community-maven-via-job-token</repo.releases.id>
+				<repo.releases.id>community-maven-repo</repo.releases.id>
 				<publish.snapshots.id>community-maven-via-job-token</publish.snapshots.id>
 				<publish.releases.id>community-maven-via-job-token</publish.releases.id>
 
@@ -28,7 +28,7 @@
 			</property>
 			</activation>
 			<properties>
-				<repo.releases.id>community-maven-via-private-token</repo.releases.id>
+				<repo.releases.id>community-maven-repo</repo.releases.id>
 				<publish.snapshots.id>community-maven-via-private-token</publish.snapshots.id>
 				<publish.releases.id>community-maven-via-private-token</publish.releases.id>
 
@@ -63,5 +63,16 @@
 				</httpHeaders>
 			</configuration>
 		</server>
+
+		<server>
+			<id>azure-auth</id>
+			<configuration>
+				<tenant>${env.AZURE_TENANT_ID}</tenant>
+				<client>${env.AZURE_CLIENT_ID}</client>
+				<key>${env.AZURE_CLIENT_SECRET}</key>
+				<environment>AZURE</environment>
+			</configuration>
+		</server>
+
 	</servers>
 </settings>
