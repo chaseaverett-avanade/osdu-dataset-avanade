@@ -17,22 +17,27 @@
 
 package org.opengroup.osdu.util;
 
-import com.google.auth.Credentials;
-import com.google.auth.oauth2.GoogleCredentials;
-import java.io.FileInputStream;
-import java.io.IOException;
+public class GcpConfig {
 
-public class AccountCredentialsProvider {
-
-	private static GoogleCredentials credentials = null;
-
-	public static Credentials getCredentials() {
-		try {
-			credentials = GoogleCredentials
-				.fromStream(new FileInputStream(Config.getKeyValue()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return credentials;
+	public static String getProjectID() {
+		return getEnvironmentVariableOrDefaultValue("GCLOUD_PROJECT", "");
 	}
+
+	public static String getStorageAccount() {
+		return getEnvironmentVariableOrDefaultValue("EPAM_GCP_DEPLOY_FILE", "");
+	}
+
+	private static String getEnvironmentVariableOrDefaultValue(String key, String defaultValue) {
+		String environmentVariable = getEnvironmentVariable(key);
+		if (environmentVariable == null) {
+			environmentVariable = defaultValue;
+		}
+		return environmentVariable;
+	}
+
+	private static String getEnvironmentVariable(String propertyKey) {
+		return System.getProperty(propertyKey, System.getenv(propertyKey));
+	}
+
+
 }

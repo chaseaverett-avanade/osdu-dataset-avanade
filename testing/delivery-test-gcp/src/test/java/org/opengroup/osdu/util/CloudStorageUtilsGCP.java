@@ -32,15 +32,13 @@ public class CloudStorageUtilsGCP extends CloudStorageUtils {
 
 	private static final String BASE_INTEGRATION_TEST_BUCKET_NAME = "osdu-delivery-integration-test-bucket";
 
-	private static final String PROJECT_ID = "osdu-sample";
-
-
 	private Storage storage;
 	private String testBucketName;
 
 	public CloudStorageUtilsGCP() {
-		storage = StorageOptions.newBuilder().setCredentials(AccountCredentialsProvider.getCredentials())
-			.setProjectId(PROJECT_ID).build()
+		storage = StorageOptions.newBuilder()
+			.setCredentials(StorageServiceAccountCredentialsProvider.getCredentials())
+			.setProjectId(GcpConfig.getProjectID()).build()
 			.getService();
 
 		testBucketName = String
