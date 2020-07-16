@@ -24,7 +24,7 @@ public class GcpConfig {
 	}
 
 	public static String getStorageAccount() {
-		return getEnvironmentVariableOrDefaultValue("EPAM_GCP_DEPLOY_FILE", "");
+		return getEnvironmentVariableOrDefaultValue("GCP_DEPLOY_FILE", "");
 	}
 
 	private static String getEnvironmentVariableOrDefaultValue(String key, String defaultValue) {
