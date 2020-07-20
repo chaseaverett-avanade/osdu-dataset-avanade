@@ -60,7 +60,7 @@ public class SearchServiceImplTest {
 
     private final String QUERY_MAX = "1000";
 
-    private String query = "{\"from\":0,\"kind\":\"*:*:*:*.*.*\",\"limit\":"+ QUERY_MAX + ",\"query\"" +
+    private String query = "{\"offset\":0,\"kind\":\"*:*:*:*.*.*\",\"limit\":"+ QUERY_MAX + ",\"query\"" +
             ":\"data.ResourceID: (\\\"srn:file/csv:7344999246049527:\\\" OR \\\"srn:file/csv:69207556434748899880399:\\\"" +
             " OR \\\"srn:file/csv:59158134479121976019:\\\")\",\"returnHighlightedFields\":false,\"returnedFields\":[],\"" +
             "queryAsOwner\":false}";

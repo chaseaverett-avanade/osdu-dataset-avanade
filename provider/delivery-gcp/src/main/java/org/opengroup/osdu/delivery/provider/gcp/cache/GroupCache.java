@@ -25,10 +25,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class GroupCache extends RedisCache<String, Groups> {
 
-	public GroupCache(@Value("${REDIS_GROUP_HOST}") final String REDIS_GROUP_HOST,
-		@Value("${REDIS_GROUP_PORT}") final String REDIS_GROUP_PORT) {
-		super(REDIS_GROUP_HOST, Integer.parseInt(REDIS_GROUP_PORT), 5 * 60, String.class,
-			Groups.class);
-
+	public GroupCache(
+			@Value("${gcp.redis.host}") final String redisHost,
+			@Value("${gcp.redis.port}") final Integer redisPort,
+			@Value("${gcp.redis.exp.time}") final Integer expTimeSec) {
+		super(redisHost, redisPort, expTimeSec, String.class, Groups.class);
 	}
 }
