@@ -14,6 +14,7 @@
 
 package org.opengroup.osdu.common;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -21,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.ClientResponse;
 import cucumber.api.DataTable;
 import lombok.extern.java.Log;
+import org.apache.commons.text.StringSubstitutor;
 import org.opengroup.osdu.core.common.model.entitlements.Acl;
 import org.opengroup.osdu.core.common.model.search.QueryRequest;
 import org.opengroup.osdu.core.common.model.search.QueryResponse;
@@ -29,6 +31,7 @@ import org.opengroup.osdu.delivery.model.UrlSigningResponse;
 import org.opengroup.osdu.models.Setup;
 import org.opengroup.osdu.models.TestIndex;
 import org.opengroup.osdu.util.CloudStorageUtils;
+import org.opengroup.osdu.util.Config;
 import org.opengroup.osdu.util.FileHandler;
 import org.opengroup.osdu.util.HTTPClient;
 
@@ -108,6 +111,11 @@ public class RecordSteps extends TestsBase {
         String actualKind = generateActualName(kind, timeStamp);
         try {
             String fileContent = FileHandler.readFile(String.format("%s.%s", record, "json"));
+            StringSubstitutor stringSubstitutor = new StringSubstitutor(
+                ImmutableMap.of(
+                    "tenant", Config.getTenant(),
+                    "domain",Config.getEntitlementsDomain())
+            );
             records = new Gson().fromJson(fileContent, new TypeToken<List<Map<String, Object>>>() {}.getType());
 
             cloudStorageUtils.createBucket();
@@ -122,7 +130,7 @@ public class RecordSteps extends TestsBase {
                 testRecord.put("id", recordId);
                 testRecord.put("kind", actualKind);
                 testRecord.put("legal", generateLegalTag());
-                String[] x_acl = {generateActualName(dataGroup,timeStamp) + getEntitlementsDomain()};
+                String[] x_acl = {stringSubstitutor.replace(generateActualName(dataGroup,timeStamp))};
                 Acl acl = Acl.builder().viewers(x_acl).owners(x_acl).build();
                 testRecord.put("acl", acl);
             }

@@ -69,8 +69,11 @@ public class Config {
     }
 
     public static String getEntitlementsDomain() {
-        return getEnvironmentVariableOrDefaultValue("TENANT",DEFAULT_TENANT) + "." +
-			getEnvironmentVariableOrDefaultValue("ENTITLEMENTS_DOMAIN", DEFAULT_ENTITLEMENTS_DOMAIN);
+		return getEnvironmentVariableOrDefaultValue("ENTITLEMENTS_DOMAIN", DEFAULT_ENTITLEMENTS_DOMAIN);
+    }
+
+    public static String getTenant(){
+        return getEnvironmentVariableOrDefaultValue("TENANT",DEFAULT_TENANT);
     }
 
     private static String getEnvironmentVariableOrDefaultValue(String key, String defaultValue) {
