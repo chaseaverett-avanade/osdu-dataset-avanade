@@ -16,8 +16,8 @@ Feature: Delivery of the documents
 
     Examples:
       | kind                                      | recordFile        | number | acl |
-      | "tenant1:testindex<timestamp>:well:3.0.0" | "index_records_1" | 5      | "data.default.viewers@" |
-      | "tenant1:testindex<timestamp>:well:1.0.0" | "index_records_1" | 5      | "data.default.viewers@" |
+      | "tenant1:testindex<timestamp>:well:3.0.0" | "index_records_1" | 5      | "data.default.viewers@${tenant}.${domain}" |
+      | "tenant1:testindex<timestamp>:well:1.0.0" | "index_records_1" | 5      | "data.default.viewers@${tenant}.${domain}" |
 
 
   Scenario Outline: Ingest the record and Index in the Elastic Search with bad file paths
@@ -26,4 +26,4 @@ Feature: Delivery of the documents
     Then I should get an Error with no File Path
     Examples:
       | kind                                      | recordFile        | number | expected | acl                                   |
-      | "tenant1:testindex<timestamp>:well:2.0.0" | "index_records_2" | 5      | 0 | "data.default.viewers@" |
+      | "tenant1:testindex<timestamp>:well:2.0.0" | "index_records_2" | 5      | 0 | "data.default.viewers@${tenant}.${domain}" |
