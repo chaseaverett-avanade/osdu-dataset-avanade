@@ -22,14 +22,14 @@ import com.google.auth.oauth2.GoogleCredentials;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class AccountCredentialsProvider {
+public class StorageServiceAccountCredentialsProvider {
 
 	private static GoogleCredentials credentials = null;
 
 	public static Credentials getCredentials() {
 		try {
 			credentials = GoogleCredentials
-				.fromStream(new FileInputStream(Config.getKeyValue()));
+				.fromStream(new FileInputStream(GcpConfig.getStorageAccount()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
