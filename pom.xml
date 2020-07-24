@@ -69,6 +69,7 @@
 		<module>provider/delivery-aws</module>
 		<module>provider/delivery-ibm</module>
 		<module>provider/delivery-gcp</module>
+		<module>provider/delivery-azure</module>
 	</modules>
 
 	<repositories>
