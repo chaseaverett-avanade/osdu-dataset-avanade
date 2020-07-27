@@ -115,4 +115,9 @@ public class StorageServiceImpl implements IStorageService {
     return url;
   }
 
+  @Override
+  public SignedUrl createSignedUrl(String unsignedUrl, String authorizationToken) {
+    throw new AppException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "Unsupported Operation Exception", "Unsupported Operation Exception");
+  }
+
 }
