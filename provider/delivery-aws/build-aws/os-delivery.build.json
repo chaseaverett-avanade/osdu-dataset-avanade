@@ -1,0 +1,78 @@
+{
+    "name": "os-delivery",
+    "description": "Build of the os-delivery repository",
+    "source": {
+        "type": "CODECOMMIT",
+        "location": "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/os-delivery",
+        "gitCloneDepth": 1,
+        "gitSubmodulesConfig": {
+            "fetchSubmodules": false
+        },
+        "buildspec": "./provider/delivery-aws/build-aws/buildspec.yaml",
+        "insecureSsl": false
+    },
+    "secondarySources": [],
+    "sourceVersion": "refs/heads/dev",
+    "secondarySourceVersions": [],
+    "artifacts": {
+        "type": "S3",
+        "location": "888733619319-devops-build-artifacts",
+        "path": "os-delivery",
+        "namespaceType": "NONE",
+        "name": "os-delivery",
+        "packaging": "ZIP",
+        "overrideArtifactName": true,
+        "encryptionDisabled": false
+    },
+    "secondaryArtifacts": [],
+    "cache": {
+        "type": "LOCAL",
+        "modes": [
+            "LOCAL_CUSTOM_CACHE"
+        ]
+    },
+    "environment": {
+        "type": "LINUX_CONTAINER",
+        "image": "aws/codebuild/standard:2.0",
+        "computeType": "BUILD_GENERAL1_SMALL",
+        "environmentVariables": [
+            {
+                "name": "M2_REPO_S3_BUCKET",
+                "value": "dev-888733619319-persistent-maven-m2-bucket",
+                "type": "PLAINTEXT"
+            },
+            {
+                "name": "ECR_REGISTRY",
+                "value": "888733619319.dkr.ecr.us-east-1.amazonaws.com/os-delivery_dev",
+                "type": "PLAINTEXT"
+            }
+        ],
+        "privilegedMode": true,
+        "imagePullCredentialsType": "CODEBUILD"
+    },
+    "serviceRole": "arn:aws:iam::888733619319:role/service-role/dev-CodeBuildRole",
+    "timeoutInMinutes": 60,
+    "queuedTimeoutInMinutes": 480,
+    "encryptionKey": "arn:aws:kms:us-east-1:888733619319:alias/aws/s3",
+    "tags": [],
+    "vpcConfig": {
+        "vpcId": "vpc-0f273733df61bc541",
+        "subnets": [
+            "subnet-03963a50e77043e12",
+            "subnet-04a975f0e6e0c9279"
+        ],
+        "securityGroupIds": [
+            "sg-0dee4e811c2062e26"
+        ]
+    },
+    "badgeEnabled": true,
+    "logsConfig": {
+        "cloudWatchLogs": {
+            "status": "ENABLED"
+        },
+        "s3Logs": {
+            "status": "DISABLED",
+            "encryptionDisabled": false
+        }
+    }
+}

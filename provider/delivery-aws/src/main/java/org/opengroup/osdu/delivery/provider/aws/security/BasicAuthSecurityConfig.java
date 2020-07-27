@@ -22,10 +22,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class BasicAuthSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .csrf().disable();  //disable default authN. AuthN handled by endpoints proxy
+        http.httpBasic()
+                .disable()
+                .csrf()
+                .disable();  //disable default authN. AuthN handled by endpoints proxy
     }
 }

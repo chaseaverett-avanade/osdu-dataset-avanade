@@ -14,10 +14,26 @@
 
 package org.opengroup.osdu.delivery.provider.aws.service;
 
+import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 
+/**
+ * A non static implementation of the Instant.now() method that's unit testable
+ */
+@Component
 public class InstantHelper {
+
+    @Deprecated
     public Instant getCurrentInstant() {
+        return Instant.now();
+    }
+
+    /**
+     * Returns Instant.now()
+     * @return Instant
+     */
+    public Instant now() {
         return Instant.now();
     }
 }
