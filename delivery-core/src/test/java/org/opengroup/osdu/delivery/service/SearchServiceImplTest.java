@@ -124,8 +124,8 @@ public class SearchServiceImplTest {
         Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromSearchResponse(searchResult3)).thenReturn(null);
 
         Map<String, SrnFileData> processed = new HashMap<>();
-        processed.put("srn:file/csv:7344999246049527:", new SrnFileData(null, unsignedUrl1, searchResult1.get("kind").toString()));
-        processed.put("srn:file/csv:69207556434748899880399:", new SrnFileData(null, unsignedUrl2, searchResult2.get("kind").toString()));
+        processed.put("srn:file/csv:7344999246049527:", new SrnFileData(null, unsignedUrl1, searchResult1.get("kind").toString(), null));
+        processed.put("srn:file/csv:69207556434748899880399:", new SrnFileData(null, unsignedUrl2, searchResult2.get("kind").toString(), null));
 
         List<String> unprocessed = new ArrayList<>();
         unprocessed.add("srn:file/csv:59158134479121976019:");
