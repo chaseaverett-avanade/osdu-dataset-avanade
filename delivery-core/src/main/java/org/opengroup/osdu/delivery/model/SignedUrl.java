@@ -32,9 +32,13 @@ public class SignedUrl {
 
   @JsonProperty("uri")
   URI uri;
+  
   @JsonProperty("url")
   URL url;
+
   @JsonProperty("createdAt")
   Instant createdAt;
 
+  @JsonProperty("connectionString")
+  String connectionString;
 }
