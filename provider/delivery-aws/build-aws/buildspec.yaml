@@ -61,6 +61,7 @@ phases:
 
 #     DISABLING INTEGRATION TESTS - Tests rely on schemas already existing in the system
       - echo "Building integration testing assemblies and gathering artifacts..."
+      - chmod +x ./testing/delivery-test-aws/build-aws/prepare-dist.sh
       - ./testing/delivery-test-aws/build-aws/prepare-dist.sh
 
       - echo "Building docker image..."
