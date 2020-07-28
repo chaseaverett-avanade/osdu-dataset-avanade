@@ -13,9 +13,15 @@
 // limitations under the License.
 
 package org.opengroup.osdu.delivery.service;
-import com.google.api.client.http.HttpMethods;
+
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import com.google.gson.Gson;
-import org.apache.http.HttpStatus;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +30,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.opengroup.osdu.core.common.http.FetchServiceHttpRequest;
 import org.opengroup.osdu.core.common.http.IUrlFetchService;
-import org.opengroup.osdu.core.common.model.http.AppException;
 import org.opengroup.osdu.core.common.model.http.HttpResponse;
 import org.opengroup.osdu.core.common.model.search.QueryResponse;
 import org.opengroup.osdu.delivery.DeliveryApplication;
@@ -34,14 +40,6 @@ import org.opengroup.osdu.delivery.model.UrlSigningResponse;
 import org.opengroup.osdu.delivery.provider.interfaces.IUnsignedUrlLocationMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(classes={DeliveryApplication.class})
@@ -105,11 +103,7 @@ public class SearchServiceImplTest {
 
         HttpResponse response = new HttpResponse();
         response.setBody(responseBody);
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.eq(query)))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(response);
 
         QueryResponse queryResponse = this.gson.fromJson(responseBody, QueryResponse.class);
@@ -152,11 +146,7 @@ public class SearchServiceImplTest {
 
         HttpResponse response = new HttpResponse();
         response.setBody(responseBody);
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.eq(query)))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(response);
 
         Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromSearchResponse(Mockito.anyMap())).thenReturn(null);
@@ -183,11 +173,7 @@ public class SearchServiceImplTest {
 
         HttpResponse response = new HttpResponse();
         response.setBody(responseBody);
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.eq(query)))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(response);
 
         QueryResponse expected = this.gson.fromJson(responseBody, QueryResponse.class);
@@ -212,12 +198,8 @@ public class SearchServiceImplTest {
         recordIds.add("srn:file/csv:7344999246049527:");
         recordIds.add("srn:file/csv:69207556434748899880399:");
         recordIds.add("srn:file/csv:59158134479121976019:");
-
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any()))
+        FetchServiceHttpRequest.builder().httpMethod("POST").build();
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(new HttpResponse());
 
         // Manually set test environment variables
