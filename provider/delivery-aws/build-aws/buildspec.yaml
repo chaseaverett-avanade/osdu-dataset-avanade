@@ -52,7 +52,7 @@ phases:
 
       - echo "Building primary service assemblies..."
       - mvn install -N # required for this service to install the parent pom so that the integration tests will find it
-      - mvn -s ./.mvn/community-maven.settings.xml -B test install -pl delivery-core,provider/delivery-aws -Ddeployment.environment=prod
+      - mvn -B test install -pl delivery-core,provider/delivery-aws -Ddeployment.environment=prod
 
 #      Suspended until further notice
 #      - echo "Copying assemblies to dist..."
