@@ -22,6 +22,8 @@ echo $INTEGRATION_TEST_OUTPUT_BIN_DIR
 rm -rf "$INTEGRATION_TEST_OUTPUT_DIR"
 mkdir -p "$INTEGRATION_TEST_OUTPUT_DIR" && mkdir -p "$INTEGRATION_TEST_OUTPUT_BIN_DIR"
 echo "Building integration testing assemblies and gathering artifacts..."
+mvn install -N -f pom.xml
+mvn install -N -f "$INTEGRATION_TEST_SOURCE_DIR"/pom.xml
 mvn install -f "$INTEGRATION_TEST_SOURCE_DIR_CORE"/pom.xml
 mvn install dependency:copy-dependencies -DskipTests -f "$INTEGRATION_TEST_SOURCE_DIR_AWS"/pom.xml -DincludeGroupIds=org.opengroup.osdu -Dmdep.copyPom
 cp "$INTEGRATION_TEST_SOURCE_DIR_AWS"/target/dependency/* "${INTEGRATION_TEST_OUTPUT_BIN_DIR}"
