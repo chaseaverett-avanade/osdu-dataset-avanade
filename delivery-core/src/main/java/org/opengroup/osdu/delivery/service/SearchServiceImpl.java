@@ -161,15 +161,14 @@ public class SearchServiceImpl implements ISearchService {
 
         // e.g. "data.ResourceID: \"srn:master-data/Well:7806:\" OR data.ResourceID: \"srn:master-data/Well:5587:\""
         query.setQuery(generateSrnQueryString(ids));
-        FetchServiceHttpRequest request = FetchServiceHttpRequest.builder()
-                .httpMethod(HttpMethods.POST.toString())
+        FetchServiceHttpRequest request = FetchServiceHttpRequest
+                .builder()
+                .httpMethod(HttpMethods.POST)
                 .url(SEARCH_QUERY_RECORD_HOST)
-                .body(null)
                 .headers(dpsHeaders)
-                .queryParams(query.getQuery())
-                .build();
+                .body(query.toString()).build();
 
-        HttpResponse response = this.urlFetchService.sendRequest(, SEARCH_QUERY_RECORD_HOST, dpsHeaders, null, query.toString());
+        HttpResponse response = this.urlFetchService.sendRequest(request);
 
         String dataFromSearch = response.getBody();
 
