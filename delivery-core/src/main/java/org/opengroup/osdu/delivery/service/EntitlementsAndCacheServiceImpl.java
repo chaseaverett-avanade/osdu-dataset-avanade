@@ -17,6 +17,7 @@ package org.opengroup.osdu.delivery.service;
 import org.apache.http.HttpStatus;
 import org.opengroup.osdu.core.common.cache.ICache;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
+import org.opengroup.osdu.core.common.model.storage.RecordMetadata;
 import org.opengroup.osdu.core.common.util.Crc32c;
 import org.opengroup.osdu.core.common.model.entitlements.EntitlementsException;
 import org.opengroup.osdu.core.common.model.entitlements.Groups;
@@ -27,8 +28,10 @@ import org.opengroup.osdu.core.common.http.HttpResponse;
 import org.opengroup.osdu.core.common.logging.JaxRsDpsLog;
 import org.opengroup.osdu.core.common.entitlements.IEntitlementsAndCacheService;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -77,6 +80,16 @@ public class EntitlementsAndCacheServiceImpl implements IEntitlementsAndCacheSer
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean hasOwnerAccess(DpsHeaders dpsHeaders, String[] strings) {
+		throw new NotImplementedException(); // TODO: Implement later
+	}
+
+	@Override
+	public List<RecordMetadata> hasValidAccess(List<RecordMetadata> list, DpsHeaders dpsHeaders) {
+		throw new NotImplementedException(); // TODO: Implement later
 	}
 
 	protected Groups getGroups(DpsHeaders headers) {

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.opengroup.osdu.core.common.http.FetchServiceHttpRequest;
 import org.opengroup.osdu.core.common.http.IUrlFetchService;
 import org.opengroup.osdu.core.common.logging.JaxRsDpsLog;
 import org.opengroup.osdu.core.common.model.http.AppException;
@@ -147,8 +148,14 @@ public class SearchServiceImpl implements ISearchService {
 
         // e.g. "data.ResourceID: \"srn:master-data/Well:7806:\" OR data.ResourceID: \"srn:master-data/Well:5587:\""
         query.setQuery(generateSrnQueryString(ids));
-
-        HttpResponse response = this.urlFetchService.sendRequest(HttpMethods.POST, SEARCH_QUERY_RECORD_HOST, dpsHeaders, null, query.toString());
+        FetchServiceHttpRequest request = FetchServiceHttpRequest
+                .builder()
+                .httpMethod(HttpMethods.POST)
+                .url(SEARCH_QUERY_RECORD_HOST)
+                .body(query.toString())
+                .headers(dpsHeaders)
+                .build();
+        HttpResponse response = this.urlFetchService.sendRequest(request);
         String dataFromSearch = response.getBody();
 
         QueryResponse queryResponse = this.gson.fromJson(dataFromSearch, QueryResponse.class);
