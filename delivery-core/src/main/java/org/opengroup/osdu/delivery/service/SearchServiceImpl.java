@@ -36,7 +36,10 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log
@@ -63,6 +66,10 @@ public class SearchServiceImpl implements ISearchService {
     @Value("${SEARCH_QUERY_LIMIT}")
     private String SEARCH_QUERY_LIMIT;
 
+    protected DpsHeaders getDpsHeaders() {
+        return dpsHeaders;
+    }
+
     @Override
     public UrlSigningResponse GetUnsignedUrlsBySrn(List<String> srns) {
         QueryResponse searchResponse;
@@ -80,7 +87,7 @@ public class SearchServiceImpl implements ISearchService {
         for(Map<String, Object> searchResult : searchResponse.getResults()){
             String kind = null;
             String srn = null;
-            Map<String,Object> data = null;
+            Map<String, Object> data = null;
 
             Object currentNode = searchResult.get("data");
             if(currentNode != null) {
@@ -140,10 +147,16 @@ public class SearchServiceImpl implements ISearchService {
         return QueryResponse.builder().results(results).totalCount(totalCount).build();
     }
 
-    private QueryResponse searchRecordsByRecordId(List<String> ids, int limit) throws URISyntaxException {
-        QueryRequest query = new QueryRequest();
+    protected void setQueryKind(QueryRequest query) {
         // Query across all Kinds
         query.setKind("*:*:*:*.*.*");
+    }
+
+    private QueryResponse searchRecordsByRecordId(List<String> ids, int limit) throws URISyntaxException {
+        QueryRequest query = new QueryRequest();
+
+        this.setQueryKind(query);
+
         query.setLimit(limit);
 
         // e.g. "data.ResourceID: \"srn:master-data/Well:7806:\" OR data.ResourceID: \"srn:master-data/Well:5587:\""

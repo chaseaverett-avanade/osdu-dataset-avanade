@@ -51,11 +51,11 @@ public class LocationServiceImpl implements ILocationService {
     List<String> unprocessed = unsignedUrls.getUnprocessed();
     Map<String, SrnFileData> processed = new HashMap<>();
 
-    for (Map.Entry<String,SrnFileData> entry : unsignedUrls.getProcessed().entrySet()) {
+    for (Map.Entry<String, SrnFileData> entry : unsignedUrls.getProcessed().entrySet()) {
 
       SrnFileData value = entry.getValue();
 
-      SignedUrl signedUrl = storageService.createSignedUrl(value.getUnsignedUrl(), headers.getAuthorization());
+      SignedUrl signedUrl = storageService.createSignedUrl(entry.getKey(), value.getUnsignedUrl(), headers.getAuthorization());
 
       if(signedUrl != null && signedUrl.getUrl() != null){
         value.setSignedUrl(signedUrl.getUrl().toString());

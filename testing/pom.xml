@@ -36,6 +36,7 @@
 		<module>delivery-test-aws</module>
 		<module>delivery-test-ibm</module>
 		<module>delivery-test-gcp</module>
+		<module>delivery-test-azure</module>
 	</modules>
 
 	<repositories>

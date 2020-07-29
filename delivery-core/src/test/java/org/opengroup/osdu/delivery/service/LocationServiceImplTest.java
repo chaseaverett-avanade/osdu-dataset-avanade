@@ -93,9 +93,9 @@ public class LocationServiceImplTest {
         signedUrl3.setUrl(new URL(unsignedUrl3));
         signedUrl3.setCreatedAt(Instant.now());
 
-        Mockito.when(storageService.createSignedUrl(Mockito.eq(unsignedUrl1), Mockito.any())).thenReturn(signedUrl1);
-        Mockito.when(storageService.createSignedUrl(Mockito.eq(unsignedUrl2), Mockito.any())).thenReturn(signedUrl2);
-        Mockito.when(storageService.createSignedUrl(Mockito.eq(unsignedUrl3), Mockito.any())).thenReturn(signedUrl3);
+        Mockito.when(storageService.createSignedUrl(Mockito.eq(srn1), Mockito.eq(unsignedUrl1), Mockito.any())).thenReturn(signedUrl1);
+        Mockito.when(storageService.createSignedUrl(Mockito.eq(srn2), Mockito.eq(unsignedUrl2), Mockito.any())).thenReturn(signedUrl2);
+        Mockito.when(storageService.createSignedUrl(Mockito.eq(srn3), Mockito.eq(unsignedUrl3), Mockito.any())).thenReturn(signedUrl3);
 
         ReflectionTestUtils.setField(CUT, "headers", new DpsHeaders());
 
