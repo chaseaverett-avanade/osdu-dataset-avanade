@@ -7,6 +7,20 @@ variables:
   IBM_BUILD_SUBDIR: provider/delivery-ibm
   IBM_INT_TEST_SUBDIR: testing/delivery-test-ibm
 
+  # OSDU_BUILD_SUBDIR: provider/file-gcp-datastore
+  # OSDU_INT_TEST_SUBDIR: testing/file-test-core
+  OSDU_SERVICE: delivery
+  OSDU_VPC_CONNECTOR: osdu-connector
+  OSDU_VENDOR: gcp
+  OSDU_APPLICATION_NAME: os-delivery
+  OSDU_SERVICE_ACCOUNT: osdu-gcp-sa@osdu-cicd-epam.iam.gserviceaccount.com
+  OSDU_GCP_REDIS_HOST: 10.234.198.27
+  OSDU_GCP_SEARCH_QUERY_URL: https://os-search-dot-nice-etching-277309.uc.r.appspot.com//api/search/v2/query 
+  OSDU_ENV_VARS: GCP_ENTITLEMENTS_URL=$OSDU_ENTITLEMENTS_URL,OSDU_GCP_SEARCH_QUERY_URL=$OSDU_GCP_SEARCH_QUERY_URL,GCP_REDIS_HOST=$OSDU_GCP_REDIS_HOST --vpc-connector=$OSDU_VPC_CONNECTOR
+  OSDU_PROJECT: nice-etching-277309
+  OSDU_PORT: 8080
+
+
 include:
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'standard-setup.yml'
@@ -28,6 +42,10 @@ include:
 
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'cloud-providers/ibm.yml'
+
+  - project: "osdu/platform/ci-cd-pipelines"
+    ref: 'osdu-gcp-cloudrun'
+    file: 'cloud-providers/osdu-cloudrun.yml'
 
 # disable the eslint scanner
 # I think this is being generated from the presence of an HTML file, but there
