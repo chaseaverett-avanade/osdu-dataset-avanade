@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "classpath:features.deliveryrecord/DeliveryRecord.feature",
         glue = {"classpath:org.opengroup.osdu.step_definitions.delivery.record"},
-        plugin = {"pretty", "junit:target/cucumber-reports/TEST-deliveryrecord.xml"}
+        plugin = {"pretty", "junit:target/cucumber-reports/os-delivery-junit-report.xml"}
 )
 public class RunTest {
 }

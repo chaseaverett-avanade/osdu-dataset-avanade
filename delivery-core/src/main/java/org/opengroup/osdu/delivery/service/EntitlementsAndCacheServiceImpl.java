@@ -17,6 +17,7 @@ package org.opengroup.osdu.delivery.service;
 import org.apache.http.HttpStatus;
 import org.opengroup.osdu.core.common.cache.ICache;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
+import org.opengroup.osdu.core.common.model.storage.RecordMetadata;
 import org.opengroup.osdu.core.common.util.Crc32c;
 import org.opengroup.osdu.core.common.model.entitlements.EntitlementsException;
 import org.opengroup.osdu.core.common.model.entitlements.Groups;
@@ -29,6 +30,7 @@ import org.opengroup.osdu.core.common.entitlements.IEntitlementsAndCacheService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -78,6 +80,17 @@ public class EntitlementsAndCacheServiceImpl implements IEntitlementsAndCacheSer
 		}
 		return true;
 	}
+
+	@Override
+	public boolean hasOwnerAccess(DpsHeaders headers, String[] ownerList) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<RecordMetadata> hasValidAccess(List<RecordMetadata> recordsMetadata, DpsHeaders headers) {
+		throw new UnsupportedOperationException();
+	}
+
 
 	protected Groups getGroups(DpsHeaders headers) {
 		String cacheKey = this.getGroupCacheKey(headers);

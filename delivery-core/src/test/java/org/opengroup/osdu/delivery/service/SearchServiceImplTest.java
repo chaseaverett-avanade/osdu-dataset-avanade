@@ -105,11 +105,7 @@ public class SearchServiceImplTest {
 
         HttpResponse response = new HttpResponse();
         response.setBody(responseBody);
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.eq(query)))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(response);
 
         QueryResponse queryResponse = this.gson.fromJson(responseBody, QueryResponse.class);
@@ -124,8 +120,8 @@ public class SearchServiceImplTest {
         Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromSearchResponse(searchResult3)).thenReturn(null);
 
         Map<String, SrnFileData> processed = new HashMap<>();
-        processed.put("srn:file/csv:7344999246049527:", new SrnFileData(null, unsignedUrl1, searchResult1.get("kind").toString()));
-        processed.put("srn:file/csv:69207556434748899880399:", new SrnFileData(null, unsignedUrl2, searchResult2.get("kind").toString()));
+        processed.put("srn:file/csv:7344999246049527:", new SrnFileData(null, unsignedUrl1, searchResult1.get("kind").toString(), null));
+        processed.put("srn:file/csv:69207556434748899880399:", new SrnFileData(null, unsignedUrl2, searchResult2.get("kind").toString(), null));
 
         List<String> unprocessed = new ArrayList<>();
         unprocessed.add("srn:file/csv:59158134479121976019:");
@@ -152,11 +148,7 @@ public class SearchServiceImplTest {
 
         HttpResponse response = new HttpResponse();
         response.setBody(responseBody);
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.eq(query)))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(response);
 
         Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromSearchResponse(Mockito.anyMap())).thenReturn(null);
@@ -183,11 +175,7 @@ public class SearchServiceImplTest {
 
         HttpResponse response = new HttpResponse();
         response.setBody(responseBody);
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.eq(query)))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(response);
 
         QueryResponse expected = this.gson.fromJson(responseBody, QueryResponse.class);
@@ -213,11 +201,7 @@ public class SearchServiceImplTest {
         recordIds.add("srn:file/csv:69207556434748899880399:");
         recordIds.add("srn:file/csv:59158134479121976019:");
 
-        Mockito.when(urlFetchService.sendRequest(Mockito.eq(HttpMethods.POST),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any(),
-                Mockito.any()))
+        Mockito.when(urlFetchService.sendRequest(Mockito.any()))
                 .thenReturn(new HttpResponse());
 
         // Manually set test environment variables

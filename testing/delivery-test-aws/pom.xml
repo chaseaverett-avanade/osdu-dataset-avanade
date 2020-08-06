@@ -29,7 +29,7 @@
 
     <groupId>org.opengroup.osdu.delivery</groupId>
     <artifactId>delivery-test-aws</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -44,14 +44,14 @@
         <dependency>
             <groupId>org.opengroup.osdu.delivery</groupId>
             <artifactId>delivery-test-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
 
         <!-- AWS specific packages -->
         <dependency>
             <groupId>org.opengroup.osdu.core.aws</groupId>
             <artifactId>os-core-lib-aws</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.5</version>
         </dependency>
 
         <!-- Testing -->

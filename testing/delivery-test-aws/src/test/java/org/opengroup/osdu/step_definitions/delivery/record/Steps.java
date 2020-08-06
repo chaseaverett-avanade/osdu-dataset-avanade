@@ -24,12 +24,15 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import org.opengroup.osdu.common.RecordSteps;
+import org.opengroup.osdu.delivery.model.SrnFileData;
+import org.opengroup.osdu.delivery.model.UrlSigningResponse;
 import org.opengroup.osdu.util.AWSHTTPClient;
 import org.opengroup.osdu.util.CloudStorageUtilsAws;
 import org.opengroup.osdu.util.Config;
 import org.opengroup.osdu.util.LegalTagUtilsAws;
 
 import java.net.MalformedURLException;
+import java.util.Map;
 
 public class Steps extends RecordSteps {
 
@@ -75,6 +78,24 @@ public class Steps extends RecordSteps {
     @Then("^I should get an error with no File Path$")
     public void i_should_get_no_signed_urls_from_file() throws Throwable {
         super.i_should_get_an_error_with_no_file_path();
+    }
+
+    @Override
+    public void validate_cloud_provider_connection_string(UrlSigningResponse signedResponse) {
+        Map<String, SrnFileData> items = signedResponse.getProcessed();
+        for (Map.Entry<String,SrnFileData> item : items.entrySet()) {
+            SrnFileData entry = item.getValue();
+            String connectionString = entry.getConnectionString();
+            if ( ! (
+                    connectionString.contains("AccessKeyId") &&
+                            connectionString.contains("SecretAccessKey") &&
+                            connectionString.contains("SessionToken") &&
+                            connectionString.contains("Expiration")
+                    )) {
+                Assert.fail("GetFileSignedUrl response either doesn't contain a " +
+                        "ConnectionString property or it is malformed : " + connectionString);
+            }
+        }
     }
 }
 
