@@ -13,9 +13,8 @@
 // limitations under the License.
 
 package org.opengroup.osdu.delivery.provider.aws.service;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,16 +23,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.opengroup.osdu.core.aws.entitlements.Authorizer;
 import org.opengroup.osdu.core.common.model.http.AppException;
-import org.opengroup.osdu.delivery.DeliveryApplication;
+import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.delivery.model.SignedUrl;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.opengroup.osdu.delivery.provider.aws.AwsServiceConfig;
+import org.opengroup.osdu.delivery.provider.aws.model.S3Location;
+import org.opengroup.osdu.delivery.provider.aws.model.TemporaryCredentials;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 
@@ -41,17 +42,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
-@SpringBootTest(classes={DeliveryApplication.class})
 public class StorageServiceImplTest {
 
     @InjectMocks
-    private StorageServiceImpl CUT = new StorageServiceImpl();
+    private StorageServiceImpl CUT;
 
     @Mock
-    private Authorizer authorizer;
+    private DpsHeaders headers;
 
     @Mock
-    private AmazonS3 s3Client;
+    private S3Helper s3Helper;
+
+    @Mock
+    private STSHelper stsHelper;
+
+    @Mock
+    private AwsServiceConfig awsServiceConfig;
 
     @Mock
     private ExpirationDateHelper expirationDateHelper;
@@ -61,95 +67,91 @@ public class StorageServiceImplTest {
 
     private String bucketName = "aws-osdu-demo-r2";
     private String key = "data/provided/tno/well-logs/7845_l0904s1_1989_comp.las";
-    private String unsignedUrl = "s3://" + bucketName + "/" + key;
-    private String authorizationToken = "eyJraWQiOiJ5eWFDS2VmNmJTNFZEbDU2NnBSTm5kS1pIRDFzZllMbDZmYkpyNGtuU1dVPSIsImFsZyI6IlJ" +
-            "TMjU2In0.eyJzdWIiOiI3NGY0OTEwOC1mNjJlLTQ3ZjYtODlmMy1lN2RkNmNjN2NmZWMiLCJldmVudF9pZCI6Ijc0MGQwNjQ5LWRmND" +
-            "UtNDVjMS1hYjJjLWVkOGMxNzllZWQ4MCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZ" +
-            "XIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1ODU3NjQwMzYsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9u" +
-            "YXdzLmNvbVwvdXMtZWFzdC0xX2FuaFZPUkc4RCIsImV4cCI6MTU4NTc2NzYzNiwiaWF0IjoxNTg1NzY0MDM2LCJqdGkiOiI1MmJhNjM" +
-            "2Ny01OGNjLTRmYzItYTc0OC01ZWJjNzRiZmEyMDYiLCJjbGllbnRfaWQiOiIzcm1nbWc4bXVwMjgxdHRjMW1idXQxcGltYyIsInVzZX" +
-            "JuYW1lIjoidGVzdC11c2VyLXdpdGgtYWNjZXNzQHRlc3RpbmcuY29tIn0.bCbxjZQ0ocJhfRVc_Je6EVgoCHhnqtTK1gr9QSBXrA5dm" +
-            "G8iS09Jk6fdnnjhkjGc6ekKU5KRLt1YAfLCWK0DajOBt_5amDzrkm43B_ISgmm9B2SacpJANrm3wvtjQleP8BlgutKcpmGDXwXOEznQ" +
-            "6NhDKtNJxjzS0i1vU3QsbQT5YYsyqvmvlXLSEsrufFl_tkxNY09W40NBafORzo5Mfv7cJxWp64WtPLQezVSyGP5i-ocGQ4zD_48xM4v" +
-            "ep4FuVe5BLkENO5BDlT8rUv7T-VSybqxahJS8tRgtEfZhLE71mzplqV9ovLcM_-bhyNZSqJ0mOfTgwDY-QmpNNlXYtg";
+    private String s3uri = "s3://" + bucketName + "/" + key;
+    private String authorizationToken = "authorization_token";
+    private String srn = "";
 
     @Test
-    public void createSignedUrl() throws IOException, URISyntaxException {
-        // Arrange
-        Date testDate = new Date();
-        Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
+    public void should_createSignedUrl() throws IOException, URISyntaxException {
+
+        Date expirationDate = new Date();
+        Mockito.when(expirationDateHelper.getExpiration(Mockito.any(Instant.class),
+                Mockito.any(Duration.class))).thenReturn(expirationDate);
 
         URL url = new URL("http://testsignedurl.com");
-        Mockito.when(s3Client.generatePresignedUrl(Mockito.any(GeneratePresignedUrlRequest.class))).thenReturn(url);
 
-        String user = "test-user-with-access@testing.com";
-        Mockito.when(authorizer.validateJWT(Mockito.eq(authorizationToken))).thenReturn(user);
+        TemporaryCredentials credentials = TemporaryCredentials
+                .builder()
+                .accessKeyId("A")
+                .expiration(expirationDate)
+                .secretAccessKey("S")
+                .sessionToken("ST")
+                .build();
 
-        Instant instant = Instant.now();
-        Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+        Mockito.when(s3Helper.generatePresignedUrl(Mockito.any(S3Location.class),
+                Mockito.any(HttpMethod.class), Mockito.eq(expirationDate)))
+                .thenReturn(url);
+
+        Mockito.when(stsHelper.getCredentials(Mockito.eq(srn), Mockito.any(),
+                Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(credentials);
+
+        Instant createdAt = Instant.now();
+        Mockito.when(instantHelper.now()).thenReturn(createdAt);
 
         SignedUrl expected = new SignedUrl();
         expected.setUri(new URI(url.toString()));
         expected.setUrl(url);
-        expected.setCreatedAt(instant);
+        expected.setCreatedAt(createdAt);
+        expected.setConnectionString(credentials.toConnectionString());
 
-        // Act
-        SignedUrl actual = CUT.createSignedUrl(unsignedUrl, authorizationToken);
+        SignedUrl actual = CUT.createSignedUrl(srn, s3uri, authorizationToken);
 
-        // Assert
         Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void createSignedUrl_malformedUnsignedUrl_throwsAppException() {
+    public void should_throwAppException_for_malformedUnsignedUrl() {
         try {
-            // Arrange
             String unsignedUrl = "malformedUrlString";
             String authorizationToken = "testAuthorizationToken";
 
-            // Act
-            CUT.createSignedUrl(unsignedUrl, authorizationToken);
+            CUT.createSignedUrl(null, unsignedUrl, authorizationToken);
 
-            // Assert
             fail("Should not succeed!");
         } catch (AppException e) {
-            // Assert
+
             assertEquals(HttpStatus.SC_BAD_REQUEST, e.getError().getCode());
             assertEquals("Malformed URL", e.getError().getReason());
             assertEquals( "Unsigned url invalid, needs to be full S3 path", e.getError().getMessage());
         } catch (Exception e) {
-            // Assert
             fail("Should not get different exception");
         }
     }
 
     @Test
-    public void createSignedUrl_s3ClientServiceError_throwsSdkClientException() {
+    public void should_throwSdkClientException_for_s3ClientServiceError() {
         try {
-            // Arrange
-            Date testDate = new Date();
-            Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
+            Date expirationDate = new Date();
+            Mockito.when(expirationDateHelper.getExpiration(Mockito.any(Instant.class),
+                    Mockito.any(Duration.class))).thenReturn(expirationDate);
 
             String user = "test-user-with-access@testing.com";
-            Mockito.when(authorizer.validateJWT(Mockito.eq(authorizationToken))).thenReturn(user);
+
 
             Instant instant = Instant.now();
-            Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+            Mockito.when(instantHelper.now()).thenReturn(instant);
 
-            Mockito.when(s3Client.generatePresignedUrl(Mockito.any(GeneratePresignedUrlRequest.class))).thenThrow(SdkClientException.class);
+            Mockito.when(s3Helper.generatePresignedUrl(Mockito.any(S3Location.class),
+                    Mockito.any(HttpMethod.class), Mockito.eq(expirationDate))).thenThrow(SdkClientException.class);
 
-            // Act
-            CUT.createSignedUrl(unsignedUrl, authorizationToken);
+            CUT.createSignedUrl(srn, s3uri, authorizationToken);
 
-            // Assert
             fail("Should not succeed!");
         } catch (AppException e) {
-            // Assert
             assertEquals(HttpStatus.SC_SERVICE_UNAVAILABLE, e.getError().getCode());
-            assertEquals("Remote Service Unavailable", e.getError().getReason());
-            assertEquals( "There was an error communicating with the Amazon S3 SDK request for S3 URL signing.", e.getError().getMessage());
+            assertEquals("S3 Error", e.getError().getReason());
+            assertEquals( "Exception creating signed url", e.getError().getMessage());
         } catch (Exception e) {
-            // Assert
             fail("Should not get different exception");
         }
     }

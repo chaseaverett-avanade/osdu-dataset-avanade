@@ -157,6 +157,9 @@ public class RecordSteps extends TestsBase {
         assertEquals(0, signedResponse.getUnprocessed().size());
     }
 
+    // Method to be overridden by cloud providers to validate connectionString property in the response
+    public void validate_cloud_provider_connection_string(UrlSigningResponse signedResponse) { }
+
     public void i_should_get_an_error_with_no_file_path() throws Throwable {
         ClientResponse response = retrieveSignedResponse();
         assertEquals(500, response.getStatus());

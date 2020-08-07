@@ -109,7 +109,7 @@ public class SearchServiceImpl implements ISearchService {
 
             String unsignedURL = unsignedUrlLocationMapper.getUnsignedURLFromSearchResponse(searchResult);
 
-            SrnFileData srnData = new SrnFileData(null, unsignedURL, kind);
+            SrnFileData srnData = new SrnFileData(null, unsignedURL, kind, null);
             if(unsignedURL != null) {
                 parsed.put(srn, srnData);
             } else {
@@ -165,10 +165,11 @@ public class SearchServiceImpl implements ISearchService {
                 .builder()
                 .httpMethod(HttpMethods.POST)
                 .url(SEARCH_QUERY_RECORD_HOST)
-                .body(query.toString())
                 .headers(dpsHeaders)
-                .build();
+                .body(query.toString()).build();
+
         HttpResponse response = this.urlFetchService.sendRequest(request);
+
         String dataFromSearch = response.getBody();
 
         QueryResponse queryResponse = this.gson.fromJson(dataFromSearch, QueryResponse.class);

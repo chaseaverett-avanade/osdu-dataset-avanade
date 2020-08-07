@@ -63,6 +63,7 @@ public class LocationServiceImplTest {
         String unsignedUrl2 = "http://unsignedurl2.com";
         String unsignedUrl3 = "http://unsignedurl3.com";
         String kind = "opendes:osdu:file:0.0.4";
+        String connectionString = "connectionString";
 
         List<String> srns = new ArrayList<>();
         srns.add(srn1);
@@ -70,9 +71,9 @@ public class LocationServiceImplTest {
         srns.add(srn3);
 
         Map<String, SrnFileData> processed = new HashMap<>();
-        processed.put(srn1, new SrnFileData(null, unsignedUrl1, kind));
-        processed.put(srn2, new SrnFileData(null, unsignedUrl2, kind));
-        processed.put(srn3, new SrnFileData(null, unsignedUrl3, kind));
+        processed.put(srn1, new SrnFileData(null, unsignedUrl1, kind, connectionString));
+        processed.put(srn2, new SrnFileData(null, unsignedUrl2, kind, connectionString));
+        processed.put(srn3, new SrnFileData(null, unsignedUrl3, kind, connectionString));
         List<String> unprocessed = new ArrayList<>();
 
         UrlSigningResponse unsignedUrlsResponse = UrlSigningResponse.builder().processed(processed).unprocessed(unprocessed).build();
@@ -82,16 +83,19 @@ public class LocationServiceImplTest {
         signedUrl1.setUri(new URI(unsignedUrl1));
         signedUrl1.setUrl(new URL(unsignedUrl1));
         signedUrl1.setCreatedAt(Instant.now());
+        signedUrl1.setConnectionString(connectionString);
 
         SignedUrl signedUrl2 = new SignedUrl();
         signedUrl2.setUri(new URI(unsignedUrl2));
         signedUrl2.setUrl(new URL(unsignedUrl2));
         signedUrl2.setCreatedAt(Instant.now());
+        signedUrl1.setConnectionString(connectionString);
 
         SignedUrl signedUrl3 = new SignedUrl();
         signedUrl3.setUri(new URI(unsignedUrl3));
         signedUrl3.setUrl(new URL(unsignedUrl3));
         signedUrl3.setCreatedAt(Instant.now());
+        signedUrl1.setConnectionString(connectionString);
 
         Mockito.when(storageService.createSignedUrl(Mockito.eq(srn1), Mockito.eq(unsignedUrl1), Mockito.any())).thenReturn(signedUrl1);
         Mockito.when(storageService.createSignedUrl(Mockito.eq(srn2), Mockito.eq(unsignedUrl2), Mockito.any())).thenReturn(signedUrl2);
