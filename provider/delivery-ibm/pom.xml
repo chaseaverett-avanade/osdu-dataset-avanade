@@ -33,7 +33,7 @@
 	<properties>
 		<os-core-lib-ibm.version>0.0.18</os-core-lib-ibm.version>
 	</properties>
-	
+
     <dependencies>
         <!-- Remove this and refactor the test -->
 		<dependency>
