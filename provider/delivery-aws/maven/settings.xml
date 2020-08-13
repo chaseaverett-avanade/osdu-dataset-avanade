@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright © Amazon Web Services
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
     <profiles>
         <profile>
-            <id>repositoryConfiguration</id>
+            <id>aws-osdu-dev-maven</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>aws-osdu-dev-maven</id>
+                    <url>${env.AWS_OSDU_DEV_MAVEN_URL}</url>
+                </repository>
+                <repository>
+                    <id>gitlab-os-core-common-maven</id>
+                    <url>https://community.opengroup.org/api/v4/projects/67/packages/maven</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>credentialsConfiguration</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -13,58 +45,32 @@
                 <deployment.environment>dev</deployment.environment>
                 <aws.accessKeyId>no-default</aws.accessKeyId>
                 <aws.secretKey>no-default</aws.secretKey>
-                <deployment.repositorybucket>osdu-local-maven-repository</deployment.repositorybucket>
+                <azure.devops.username>Another-Access-Token-2021</azure.devops.username>
                 <azure.devops.token>no-default</azure.devops.token>
             </properties>
         </profile>
     </profiles>
 
     <servers>
-
-        <!-- Local S3 Repository (used to the AWS Util Library) -->
         <server>
-            <id>maven-s3-release-repo</id>
-            <username>${aws.accessKeyId}</username>
-            <password>${aws.secretKey}</password>
+            <id>aws-osdu-dev-maven</id>
+            <username>aws</username>
+            <password>${env.AWS_OSDU_DEV_MAVEN_AUTH_TOKEN}</password>
         </server>
-
-        <server>
-            <id>maven-s3-snapshot-repo</id>
-            <username>${aws.accessKeyId}</username>
-            <password>${aws.secretKey}</password>
-        </server>
-
-        <server>
-            <id>s3.release</id>
-            <username>${aws.accessKeyId}</username>
-            <password>${aws.secretKey}</password>
-        </server>
-
-        <server>
-            <id>s3.snapshot</id>
-            <username>${aws.accessKeyId}</username>
-            <password>${aws.secretKey}</password>
-        </server>
-
-        <server>
-            <id>s3.site</id>
-            <username>${aws.accessKeyId}</username>
-            <password>${aws.secretKey}</password>
-        </server>
-
-        <!-- Azure DevOps Artifact Store -->
-        <server>
-            <id>os-core</id>
-            <username>slb-des-ext-collaboration</username>
-            <!-- Treat this auth token like a password. Do not share it with anyone, including Microsoft support. -->
-            <!-- The generated token expires on or before 11/14/2019 -->
-            <password>${VSTS_FEED_TOKEN}</password>
-        </server>
-
     </servers>
 
+    <!-- CodeArtifact doesn't support external repos yet that aren't Maven Central.  ETA Q4 2020. -->
+    <!-- <mirrors> -->
+    <!-- <mirror> -->
+    <!-- <id>aws-osdu-dev-maven</id> -->
+    <!-- <name>aws-osdu-dev-maven</name> -->
+    <!-- <url>https://osdu-dev-888733619319.d.codeartifact.us-east-1.amazonaws.com/maven/osdu-maven/</url> -->
+    <!-- <mirrorOf>*,!gitlab-os-core-common-maven</mirrorOf> -->
+    <!-- </mirror> -->
+    <!-- </mirrors> -->
+
     <activeProfiles>
-        <activeProfile>repositoryConfiguration</activeProfile>
+        <activeProfile>credentialsConfiguration</activeProfile>
     </activeProfiles>
 
 </settings>
