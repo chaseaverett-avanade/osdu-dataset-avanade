@@ -42,7 +42,6 @@ include:
     file: 'cloud-providers/ibm.yml'
 
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: 'osdu-gcp-cloudrun'
     file: 'cloud-providers/osdu-gcp-cloudrun.yml'
 
 # disable the eslint scanner
