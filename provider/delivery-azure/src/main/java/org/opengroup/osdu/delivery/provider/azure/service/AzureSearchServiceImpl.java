@@ -26,7 +26,7 @@ public class AzureSearchServiceImpl extends SearchServiceImpl  {
 
     @Override
     protected void setQueryKind(QueryRequest query) {
-        String kind = String.format("%s:*:*:*.*.*", getDpsHeaders().getPartitionId());
+        String kind = String.format("%s:*:file:*", getDpsHeaders().getPartitionId());
         query.setKind(kind);
     }
 }
