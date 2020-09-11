@@ -1,0 +1,121 @@
+---
+# Source: delivery/templates/service.yaml
+#  Copyright © Microsoft Corporation
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery
+  namespace: osdu
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: delivery
+---
+# Source: delivery/templates/deployment.yaml
+#  Copyright © Microsoft Corporation
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osdu-gitlab-delivery
+  namespace: osdu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery
+  template:
+    metadata:
+      labels:
+        app: delivery
+        aadpodidbinding: osdu-identity
+    spec:
+      volumes:
+      - name: azure-keyvault
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: azure-keyvault
+      containers:
+      - name: delivery
+        image: community.opengroup.org:5555/osdu/platform/system/delivery/delivery-master:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /api/delivery/v2/swagger-ui.html
+            port: 80
+        volumeMounts:
+        - name: azure-keyvault
+          mountPath: "/mnt/azure-keyvault"
+          readOnly: true
+        env:
+        - name: spring_application_name
+          value: delivery
+        - name: server.servlet.contextPath
+          value: /api/delivery/v2/
+        - name: server_port
+          value: "80"
+        - name: ACCEPT_HTTP  # TEMPORARY UNTIL HTTPS
+          value: "true"
+        - name: KEYVAULT_URI
+          valueFrom:
+            configMapKeyRef:
+              name: osdu-svc-properties
+              key: ENV_KEYVAULT
+        - name: AZURE_TENANT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: osdu-svc-properties
+              key: ENV_TENANT_ID
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: clientid
+              key: clientid
+        - name: AZURE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: clientpassword
+              key: clientpassword
+        - name: SEARCH_QUERY_LIMIT
+          value: "1000"
+        - name: BATCH_SIZE
+          value: "100"
+        - name: SEARCH_QUERY_RECORD_HOST
+          value: http://search-service/api/search/v2
+        - name: AUTHORIZE_API
+          value: http://entitlements-azure/entitlements/v1
+        - name: AUTHORIZE_API_KEY
+          value: "OBSOLETE"
