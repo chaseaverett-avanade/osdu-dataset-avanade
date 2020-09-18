@@ -70,7 +70,8 @@
 		<module>provider/delivery-ibm</module>
 		<module>provider/delivery-gcp</module>
 		<module>provider/delivery-azure</module>
-	</modules>
+        <module>provider/delivery-reference</module>
+    </modules>
 
 	<repositories>
 		<repository>
