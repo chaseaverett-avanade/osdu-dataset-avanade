@@ -12,9 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * @author alanbraz@br.ibm.com
- * 
+ *
  */
 
 package org.opengroup.osdu.delivery.provider.ibm.service.test;
@@ -28,9 +28,10 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,6 +39,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.model.http.AppException;
+import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.delivery.DeliveryApplication;
 import org.opengroup.osdu.delivery.model.SignedUrl;
 import org.opengroup.osdu.delivery.provider.ibm.service.ExpirationDateHelper;
@@ -47,19 +49,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.ibm.cloud.objectstorage.SdkClientException;
 import com.ibm.cloud.objectstorage.services.s3.AmazonS3;
-import com.ibm.cloud.objectstorage.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.securitytoken.model.Credentials;
 
-// TODO must be refactor after minio migration
-@Ignore
+import org.opengroup.osdu.core.common.model.entitlements.EntitlementsException;
+import org.opengroup.osdu.core.common.model.entitlements.Groups;
+import com.ibm.cloud.objectstorage.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
+
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(classes={DeliveryApplication.class})
 public class StorageServiceImplTest {
 
     @InjectMocks
     private StorageServiceImpl CUT = new StorageServiceImpl();
-
-    //@Mock
-    //private Authorizer authorizer;
 
     @Mock
     private AmazonS3 s3Client;
@@ -69,34 +71,51 @@ public class StorageServiceImplTest {
 
     @Mock
     private InstantHelper instantHelper;
-
+    
+    @Mock
+	private DpsHeaders headers;
+    
+   
+    @Mock
+    private Credentials creds;
+    
+    private Groups grp;
+    
+    @Mock
+    private AWSSecurityTokenServiceClient sts;       
+    
+    
     private String bucketName = "osdu-ibm-storage-records";
     private String key = "object.csv";
     private String unsignedUrl = "s3://" + bucketName + "/" + key;
     private String authorizationToken = "123";
 
     @Test
-    public void createSignedUrl() throws IOException, URISyntaxException {
+    public void createSignedUrl() throws IOException, URISyntaxException, EntitlementsException {
         // Arrange
         Date testDate = new Date();
         Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
+        String srn="srn:file:-965274437";
 
         URL url = new URL("http://testsignedurl.com");
         Mockito.when(s3Client.generatePresignedUrl(Mockito.any(GeneratePresignedUrlRequest.class))).thenReturn(url);
 
-        //String user = "test-user-with-access@testing.com";
-        //Mockito.when(authorizer.validateJWT(Mockito.eq(authorizationToken))).thenReturn(user);
-
         Instant instant = Instant.now();
         Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+        
+        Mockito.when(headers.getPartitionId()).thenReturn("opendes");
+       
+       // Set up test credentials
+       CUT.setTestConnectionString("connectionstring");
 
         SignedUrl expected = new SignedUrl();
         expected.setUri(new URI(url.toString()));
         expected.setUrl(url);
+        expected.setConnectionString("connectionstring");
         expected.setCreatedAt(instant);
 
         // Act
-        SignedUrl actual = CUT.createSignedUrl(unsignedUrl, authorizationToken);
+        SignedUrl actual = CUT.createSignedUrl(srn,unsignedUrl, authorizationToken);
 
         // Assert
         Assert.assertEquals(expected, actual);
@@ -108,9 +127,10 @@ public class StorageServiceImplTest {
             // Arrange
             String unsignedUrl = "malformedUrlString";
             String authorizationToken = "testAuthorizationToken";
+            String srn="srn:file:-965274437";
 
             // Act
-            CUT.createSignedUrl(unsignedUrl, authorizationToken);
+            CUT.createSignedUrl(srn, unsignedUrl, authorizationToken);
 
             // Assert
             fail("Should not succeed!");
@@ -132,9 +152,6 @@ public class StorageServiceImplTest {
             Date testDate = new Date();
             Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
 
-            //String user = "test-user-with-access@testing.com";
-            //Mockito.when(authorizer.validateJWT(Mockito.eq(authorizationToken))).thenReturn(user);
-
             Instant instant = Instant.now();
             Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
 
@@ -146,10 +163,9 @@ public class StorageServiceImplTest {
             // Assert
             fail("Should not succeed!");
         } catch (AppException e) {
-            // Assert
-            assertEquals(HttpStatus.SC_SERVICE_UNAVAILABLE, e.getError().getCode());
-            assertEquals("Remote Service Unavailable", e.getError().getReason());
-            assertEquals( "There was an error communicating with the Amazon S3 SDK request for S3 URL signing.", e.getError().getMessage());
+        	 // Assert
+            assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getError().getCode());
+            assertEquals("Unsupported Operation Exception", e.getError().getReason());
         } catch (Exception e) {
             // Assert
             fail("Should not get different exception");

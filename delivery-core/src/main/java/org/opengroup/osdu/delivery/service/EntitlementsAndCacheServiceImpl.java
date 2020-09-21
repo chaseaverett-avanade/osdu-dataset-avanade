@@ -28,7 +28,6 @@ import org.opengroup.osdu.core.common.http.HttpResponse;
 import org.opengroup.osdu.core.common.logging.JaxRsDpsLog;
 import org.opengroup.osdu.core.common.entitlements.IEntitlementsAndCacheService;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -83,14 +82,15 @@ public class EntitlementsAndCacheServiceImpl implements IEntitlementsAndCacheSer
 	}
 
 	@Override
-	public boolean hasOwnerAccess(DpsHeaders dpsHeaders, String[] strings) {
-		throw new NotImplementedException(); // TODO: Implement later
+	public boolean hasOwnerAccess(DpsHeaders headers, String[] ownerList) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public List<RecordMetadata> hasValidAccess(List<RecordMetadata> list, DpsHeaders dpsHeaders) {
-		throw new NotImplementedException(); // TODO: Implement later
+	public List<RecordMetadata> hasValidAccess(List<RecordMetadata> recordsMetadata, DpsHeaders headers) {
+		throw new UnsupportedOperationException();
 	}
+
 
 	protected Groups getGroups(DpsHeaders headers) {
 		String cacheKey = this.getGroupCacheKey(headers);

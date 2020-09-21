@@ -21,7 +21,7 @@
     <parent>
         <artifactId>os-delivery</artifactId>
         <groupId>org.opengroup.osdu</groupId>
-        <version>0.0.1</version>
+        <version>0.0.2-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
@@ -31,16 +31,11 @@
     <packaging>jar</packaging>
 
 	<properties>
-		<os-core-lib-ibm.version>0.0.18</os-core-lib-ibm.version>
+		<os-core-lib-ibm.version>0.3.6-SNAPSHOT</os-core-lib-ibm.version>
+		<aws.version>1.11.637</aws.version>
 	</properties>
 
     <dependencies>
-        <!-- Remove this and refactor the test -->
-		<dependency>
-			<groupId>com.ibm.cos</groupId>
-			<artifactId>ibm-cos-java-sdk</artifactId>
-			<version>2.1.0</version>
-		</dependency>
 
         <dependency>
    			<groupId>org.opengroup.osdu</groupId>
@@ -50,7 +45,7 @@
         <dependency>
             <groupId>org.opengroup.osdu</groupId>
             <artifactId>delivery-core</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Third party Apache 2.0 license packages -->
@@ -66,6 +61,28 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
+         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
+       
+        
+     <!-- 
+         <dependency>
+         	<groupId>com.amazonaws</groupId>
+    		<artifactId>aws-java-sdk-sts</artifactId>
+    		<version>1.11.651</version>
+    		<exclusions>
+    			<exclusion>
+    				<groupId>com.amazonaws</groupId>
+    				<artifactId>aws-java-sdk-core</artifactId>
+    			</exclusion>
+    		</exclusions>
+        </dependency>
+        
+         -->   
+         
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
@@ -131,5 +148,21 @@
             </plugin>
         </plugins>
     </build>
+<!-- <repositories>
+		<repository>
+			<id>${gitlab-server}</id>
+			<url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</url>
+		</repository>
+	</repositories>
 
+	<distributionManagement>
+		<repository>
+			<id>${gitlab-server}</id>
+            <url>https://community.opengroup.org/api/v4/projects/118/packages/maven</url>
+		</repository>
+		<snapshotRepository>
+			<id>${gitlab-server}</id>
+            <url>https://community.opengroup.org/api/v4/projects/118/packages/maven</url>
+		</snapshotRepository>
+	</distributionManagement> -->
 </project>

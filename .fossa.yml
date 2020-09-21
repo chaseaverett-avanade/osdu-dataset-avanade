@@ -5,7 +5,7 @@ version: 2
 cli:
   server: https://app.fossa.com
   fetcher: custom
-  project: os-delivery
+  project: Delivery
 analyze:
   modules:
   - name: os-delivery
@@ -23,4 +23,12 @@ analyze:
   - name: delivery-ibm
     type: mvn
     target: provider/delivery-ibm/pom.xml
+    path: .
+  - name: delivery-gcp
+    type: mvn
+    target: provider/delivery-gcp/pom.xml
+    path: .
+  - name: delivery-azure
+    type: mvn
+    target: provider/delivery-azure/pom.xml
     path: .

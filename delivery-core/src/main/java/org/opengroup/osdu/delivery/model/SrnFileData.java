@@ -32,4 +32,7 @@ public class SrnFileData {
 
     @JsonProperty("kind")
     String kind;
+    
+    @JsonProperty("connectionString")
+    String connectionString;
 }

@@ -38,6 +38,15 @@ public class Steps extends RecordSteps {
 
     LegalTagUtilsAzure legalTagUtils = new LegalTagUtilsAzure();
 
+    @Override
+    protected String generateActualName(String rawName, String timeStamp) {
+        for (String tenant : tenantMap.keySet()) {
+            rawName = rawName.replaceAll(tenant, getTenantMapping(tenant));
+        }
+        rawName = rawName.replaceAll("<timestamp>", timeStamp);
+        return rawName.replaceAll("well", "file");
+    }
+
     @Before
     public void before(Scenario scenario) throws Exception {
         this.scenario = scenario;

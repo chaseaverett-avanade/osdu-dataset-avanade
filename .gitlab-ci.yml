@@ -7,6 +7,22 @@ variables:
   IBM_BUILD_SUBDIR: provider/delivery-ibm
   IBM_INT_TEST_SUBDIR: testing/delivery-test-ibm
 
+  AZURE_SERVICE: delivery
+  AZURE_BUILD_SUBDIR: provider/delivery-azure
+  AZURE_TEST_SUBDIR: testing/delivery-test-azure
+
+  # --- osdu gcp specific variables ---
+  # OSDU_BUILD_SUBDIR: provider/file-gcp-datastore
+  # OSDU_INT_TEST_SUBDIR: testing/file-test-core
+  OSDU_GCP_SERVICE: delivery
+  OSDU_GCP_VENDOR: gcp
+  OSDU_GCP_APPLICATION_NAME: os-delivery
+  OSDU_GCP_REDIS_HOST: 10.234.198.27
+  OSDU_GCP_SEARCH_QUERY_URL: https://os-search-dot-nice-etching-277309.uc.r.appspot.com//api/search/v2/query
+  OSDU_GCP_ENV_VARS: GCP_ENTITLEMENTS_URL=$OSDU_GCP_ENTITLEMENTS_URL,GCP_SEARCH_QUERY_URL=$OSDU_GCP_SEARCH_QUERY_URL,GCP_REDIS_HOST=$OSDU_GCP_REDIS_HOST --vpc-connector=$OSDU_GCP_VPC_CONNECTOR
+  OSDU_GCP_PORT: 8080
+  # --- end of osud gcp specific variables ---
+
 include:
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'standard-setup.yml'
@@ -24,10 +40,16 @@ include:
     file: 'publishing/pages.yml'
 
   - project: 'osdu/platform/ci-cd-pipelines'
-    file: 'cloud-providers/aws.yml'    
+    file: 'cloud-providers/aws.yml'
 
   - project: 'osdu/platform/ci-cd-pipelines'
     file: 'cloud-providers/ibm.yml'
+
+  - project: "osdu/platform/ci-cd-pipelines"
+    file: 'cloud-providers/osdu-gcp-cloudrun.yml'
+
+  - project: 'osdu/platform/ci-cd-pipelines'
+    file: 'cloud-providers/azure.yml'
 
 # disable the eslint scanner
 # I think this is being generated from the presence of an HTML file, but there

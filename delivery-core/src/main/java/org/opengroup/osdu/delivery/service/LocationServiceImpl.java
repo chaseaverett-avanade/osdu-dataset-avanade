@@ -58,7 +58,10 @@ public class LocationServiceImpl implements ILocationService {
       SignedUrl signedUrl = storageService.createSignedUrl(entry.getKey(), value.getUnsignedUrl(), headers.getAuthorization());
 
       if(signedUrl != null && signedUrl.getUrl() != null){
+    	if(!(entry.getKey().toLowerCase().contains("ovds"))){
         value.setSignedUrl(signedUrl.getUrl().toString());
+    	}
+        value.setConnectionString(signedUrl.getConnectionString());
         processed.put(entry.getKey(), value);
       } else {
         unprocessed.add(entry.getKey());

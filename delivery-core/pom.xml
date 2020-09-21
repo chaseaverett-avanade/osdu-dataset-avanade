@@ -20,14 +20,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.opengroup.osdu</groupId>
 	<artifactId>delivery-core</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<description>Core project for the Delivery Service</description>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.opengroup.osdu</groupId>
 		<artifactId>os-delivery</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
