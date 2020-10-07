@@ -157,6 +157,19 @@
             <artifactId>log4j-to-slf4j</artifactId>
             <version>2.11.2</version>
         </dependency>
+        <!--Utilising AzureServicePrinciple class from Core Lib Azure Library -->
+        <dependency>
+            <groupId>org.opengroup.osdu</groupId>
+            <artifactId>core-lib-azure</artifactId>
+            <version>0.0.28</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.azure</groupId>
+                    <artifactId>azure-core-http-netty</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
