@@ -17,6 +17,7 @@ buildNumber.properties
 .vscode/
 .DS_Store
 *.env
+.envrc
 /dist/
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)

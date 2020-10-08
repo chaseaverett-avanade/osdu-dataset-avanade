@@ -65,19 +65,19 @@ spec:
               key: ENV_KEYVAULT
         - name: AZURE_TENANT_ID
           valueFrom:
-            configMapKeyRef:
-              name: osdu-svc-properties
-              key: ENV_TENANT_ID
+            secretKeyRef:
+              name: active-directory
+              key: tenantid
         - name: AZURE_CLIENT_ID
           valueFrom:
             secretKeyRef:
-              name: clientid
-              key: clientid
+              name: active-directory
+              key: principal-clientid
         - name: AZURE_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
-              name: clientpassword
-              key: clientpassword
+              name: active-directory
+              key: principal-clientpassword
         - name: SEARCH_QUERY_LIMIT
           value: "1000"
         - name: BATCH_SIZE
