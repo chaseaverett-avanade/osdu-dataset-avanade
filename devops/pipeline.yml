@@ -34,7 +34,7 @@ resources:
   - repository: TemplateRepo
     type: git
     name: infra-azure-provisioning
-  
+
 variables:
   - group: 'Azure - OSDU'
   - group: 'Azure - OSDU Secrets'
@@ -48,7 +48,7 @@ variables:
   - name: 'MANIFEST_REPO'
     value: $[ resources.repositories['FluxRepo'].name ]
   - name: SKIP_TESTS
-    value: 'false'
+    value: 'true'
 
 
 stages:
@@ -79,4 +79,4 @@ stages:
       skipTest: ${{ variables.SKIP_TESTS }}
       providers:
         -  name: Azure
-           environments: ['dev']
+           environments: ['demo']
