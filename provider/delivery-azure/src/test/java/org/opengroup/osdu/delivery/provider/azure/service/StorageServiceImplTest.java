@@ -15,15 +15,17 @@
  */
 
 package org.opengroup.osdu.delivery.provider.azure.service;
+
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.opengroup.osdu.azure.blobstorage.IBlobServiceClientFactory;
 import org.opengroup.osdu.core.common.model.http.AppException;
+import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.delivery.DeliveryApplication;
 import org.opengroup.osdu.delivery.model.SignedUrl;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,9 +39,10 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-@SpringBootTest(classes={DeliveryApplication.class})
+@SpringBootTest(classes = {DeliveryApplication.class})
 public class StorageServiceImplTest {
 
     @InjectMocks
@@ -53,6 +56,12 @@ public class StorageServiceImplTest {
 
     @Mock
     private InstantHelper instantHelper;
+
+    @Mock
+    private IBlobServiceClientFactory blobServiceClientFactory;
+
+    @Mock
+    private DpsHeaders headers;
 
     private String containerName = "azure-osdu-demo-r2";
     private String key = "data/provided/tno/well-logs/7845_l0904s1_1989_comp.las";
@@ -72,20 +81,20 @@ public class StorageServiceImplTest {
     public void createSignedUrl() throws IOException, URISyntaxException {
         // Arrange
         Date testDate = new Date();
-        Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
-        String srn="srn:file:-965274437";
+        when(expirationDateHelper.getExpirationDate(anyInt())).thenReturn(testDate);
+        String srn = "srn:file:-965274437";
 
         URL url = new URL("http://testsignedurl.com");
 
         Instant instant = Instant.now();
-        Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+        when(instantHelper.getCurrentInstant()).thenReturn(instant);
 
         SignedUrl expected = new SignedUrl();
         expected.setUri(new URI(url.toString()));
         expected.setUrl(url);
         expected.setCreatedAt(instant);
 
-        Mockito.when(tokenService.sign(Mockito.any(String.class))).thenReturn(url.toString());
+        when(tokenService.sign(any(String.class), any(String.class))).thenReturn(url.toString());
 
         // Act
         SignedUrl actual = CUT.createSignedUrl(srn, unsignedUrl, authorizationToken);
@@ -98,13 +107,13 @@ public class StorageServiceImplTest {
     public void createSignedUrlForBlob() throws IOException, URISyntaxException {
         // Arrange
         Date testDate = new Date();
-        Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
-        String srn="srn:file:-965274437";
+        when(expirationDateHelper.getExpirationDate(anyInt())).thenReturn(testDate);
+        String srn = "srn:file:-965274437";
 
         URL url = new URL("http://testsignedurl.com");
 
         Instant instant = Instant.now();
-        Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+        when(instantHelper.getCurrentInstant()).thenReturn(instant);
 
 
         SignedUrl expected = new SignedUrl();
@@ -112,7 +121,7 @@ public class StorageServiceImplTest {
         expected.setUrl(url);
         expected.setCreatedAt(instant);
 
-        Mockito.when(tokenService.sign(Mockito.any(String.class))).thenReturn(url.toString());
+        when(tokenService.sign(any(String.class), any(String.class))).thenReturn(url.toString());
 
         // Act
         SignedUrl actual = CUT.createSignedUrl(srn, unsignedUrl, authorizationToken);
@@ -125,13 +134,13 @@ public class StorageServiceImplTest {
     public void createSignedUrlForContainer() throws IOException, URISyntaxException {
         // Arrange
         Date testDate = new Date();
-        Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
-        String srn="srn:file/ovds:-965274437";
+        when(expirationDateHelper.getExpirationDate(anyInt())).thenReturn(testDate);
+        String srn = "srn:file/ovds:-965274437";
 
         URL url = new URL("http://testsignedurl.com");
 
         Instant instant = Instant.now();
-        Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+        when(instantHelper.getCurrentInstant()).thenReturn(instant);
 
 
         SignedUrl expected = new SignedUrl();
@@ -139,7 +148,7 @@ public class StorageServiceImplTest {
         expected.setUrl(url);
         expected.setCreatedAt(instant);
 
-        Mockito.when(tokenService.signContainer(Mockito.any(String.class))).thenReturn(url.toString());
+        when(tokenService.signContainer(any(String.class), any(String.class))).thenReturn(url.toString());
 
         // Act
         SignedUrl actual = CUT.createSignedUrl(srn, unsignedUrl, authorizationToken);
@@ -154,9 +163,9 @@ public class StorageServiceImplTest {
             // Arrange
             String unsignedUrl = "testunsignedurl";
             String authorizationToken = "testAuthorizationToken";
-            String srn="srn:file/:-965274437";
+            String srn = "srn:file/:-965274437";
 
-            Mockito.when(tokenService.sign(Mockito.any(String.class))).thenReturn(unsignedUrl);
+            when(tokenService.sign(any(String.class), any(String.class))).thenReturn(unsignedUrl);
 
             // Act
             CUT.createSignedUrl(srn, unsignedUrl, authorizationToken);
@@ -167,9 +176,8 @@ public class StorageServiceImplTest {
             // Assert
             assertEquals(HttpStatus.SC_BAD_REQUEST, e.getError().getCode());
             assertEquals("Malformed URL", e.getError().getReason());
-            assertEquals( "Unsigned url invalid, needs to be full path", e.getError().getMessage());
-        }
-        catch (Exception e) {
+            assertEquals("Unsigned url invalid, needs to be full path", e.getError().getMessage());
+        } catch (Exception e) {
             // Assert
             fail("Should not get different exception");
         }
@@ -181,9 +189,9 @@ public class StorageServiceImplTest {
             // Arrange p
             String unsignedUrl = "http://testunsignedurl.com/";
             String authorizationToken = "testAuthorizationToken";
-            String srn="srn:file/:-965274437";
+            String srn = "srn:file/:-965274437";
 
-            Mockito.when(tokenService.sign(Mockito.any(String.class))).thenReturn(unsignedUrl);
+            when(tokenService.sign(any(String.class), any(String.class))).thenReturn(unsignedUrl);
 
             // Act
             CUT.createSignedUrl(srn, unsignedUrl, authorizationToken);
@@ -194,9 +202,8 @@ public class StorageServiceImplTest {
             // Assert
             assertEquals(HttpStatus.SC_BAD_REQUEST, e.getError().getCode());
             assertEquals("Malformed URL", e.getError().getReason());
-            assertEquals( "Unsigned url invalid, needs to be full path", e.getError().getMessage());
-        }
-        catch (Exception e) {
+            assertEquals("Unsigned url invalid, needs to be full path", e.getError().getMessage());
+        } catch (Exception e) {
             // Assert
             fail("Should not get different exception");
         }
@@ -206,11 +213,11 @@ public class StorageServiceImplTest {
     public void createSignedUrl_unsupportedOperationServiceError_throwsUnsupportedOperationException() {
         try {
             Date testDate = new Date();
-            Mockito.when(expirationDateHelper.getExpirationDate(Mockito.anyInt())).thenReturn(testDate);
+            when(expirationDateHelper.getExpirationDate(anyInt())).thenReturn(testDate);
 
 
             Instant instant = Instant.now();
-            Mockito.when(instantHelper.getCurrentInstant()).thenReturn(instant);
+            when(instantHelper.getCurrentInstant()).thenReturn(instant);
 
             // Act
             CUT.createSignedUrl(unsignedUrl, authorizationToken);
@@ -221,8 +228,7 @@ public class StorageServiceImplTest {
             // Assert
             assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getError().getCode());
             assertEquals("Unsupported Operation Exception", e.getError().getReason());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Assert
             fail("Should not get different exception");
         }

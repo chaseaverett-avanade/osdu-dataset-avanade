@@ -75,6 +75,8 @@ az keyvault secret show --vault-name $KEY_VAULT_NAME --name $KEY_VAULT_SECRET_NA
 | `JAVA_HEAP_MEMORY` | ex. `4096` | Java heap memory | no | -- |
 | `SEARCH_HOST` | ex. `foo-search.azurewebsites.net` | URI of search host | yes | output of infrastructure deployment |
 | `APPLICATION_PORT` | `8082` | Port of application. | no | -- |
+| `PARTITION_API` | ex `https//foo-partition.azurewebsites.net/api/partition/v1` | Partition API endpoint | no | output of infrastructure deployment |
+| `azure.activedirectory.app-resource-id` | `********` | AAD client application ID | yes | output of infrastructure deployment |
 
 **Required to run integration tests**
 
