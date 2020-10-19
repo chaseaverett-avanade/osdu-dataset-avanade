@@ -75,7 +75,7 @@ public class DatasetRegistryAccessServiceImplTest {
                 "        \"ResourceTypeID\": \"%s\",\n" +
                 "        \"ResourceID\": \"srn:file/json:936621344819546083016:\",\n" +
                 "        \"ResourceSecurityClassification\": \"srn:reference-data/ResourceSecurityClassification:RESTRICTED:\",\n" +
-                "        \"Data.GroupTypeProperties.PreLoadFilePath\": \"s3://some_s3_object_path/manifest.json\",\n" +
+                "        \"DatasetProperties.FileSourceInfo.PreLoadFilePath\": \"s3://some_s3_object_path/manifest.json\",\n" +
                 "        \"Data.GroupTypeProperties.FileSource\": \"\"\n" +
                 "    },\n" +
                 "    \"meta\": [],\n" +
@@ -111,7 +111,7 @@ public class DatasetRegistryAccessServiceImplTest {
                         "        \"ResourceTypeID\": \"%s\",\n" +
                         "        \"ResourceID\": \"srn:file/json:936621344819546083016:\",\n" +
                         "        \"ResourceSecurityClassification\": \"srn:reference-data/ResourceSecurityClassification:RESTRICTED:\",\n" +
-                        "        \"Data.GroupTypeProperties.PreLoadFilePath\": \"s3://some_s3_object_path/manifest.json\",\n" +
+                        "        \"DatasetProperties.FileSourceInfo.PreLoadFilePath\": \"s3://some_s3_object_path/manifest.json\",\n" +
                         "        \"Data.GroupTypeProperties.FileSource\": \"\"\n" +
                         "    },\n" +
                         "    \"meta\": [],\n" +
@@ -146,7 +146,7 @@ public class DatasetRegistryAccessServiceImplTest {
                         "    \"data\": {\n" +
                         "        \"ResourceID\": \"srn:file/json:936621344819546083016:\",\n" +
                         "        \"ResourceSecurityClassification\": \"srn:reference-data/ResourceSecurityClassification:RESTRICTED:\",\n" +
-                        "        \"Data.GroupTypeProperties.PreLoadFilePath\": \"s3://some_s3_object_path/manifest.json\",\n" +
+                        "        \"DatasetProperties.FileSourceInfo.PreLoadFilePath\": \"s3://some_s3_object_path/manifest.json\",\n" +
                         "        \"Data.GroupTypeProperties.FileSource\": \"\"\n" +
                         "    },\n" +
                         "    \"meta\": [],\n" +
@@ -199,6 +199,9 @@ public class DatasetRegistryAccessServiceImplTest {
         signedUrl.setConnectionString("test-connection-string");
         Mockito.doReturn(signedUrl).when(storageService)
                 .createSignedUrl(Mockito.any(), Mockito.any(), Mockito.any());
+
+        Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromDatasetRegistryRecordData(Mockito.any()))
+                .thenReturn("a-path");
 
         // Act
         sut.init();
