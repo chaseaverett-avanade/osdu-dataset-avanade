@@ -12,21 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.delivery.model;
+package org.opengroup.osdu.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.opengroup.osdu.delivery.model.UnsupportedAccessResponseItem;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class DatasetRegistryAccessResponseItem {
-    @JsonProperty("dataRegistryRecordId")
-    private String dataRegistryRecordId;
+public class TestingDatasetRegistryAccessResponse {
 
-    @JsonProperty("delivery")
-    private IDeliveryData delivery;
+    //NOTE: Had to make this class due to dynamic nature of delivery object and deserialization for testing
 
-    @JsonProperty("record")
-    private Records.Entity record;
+    @JsonProperty("processed")
+    private List<TestingDatasetRegistryAccessResponseItem> dataRegistryAccessItems;
+
+    @JsonProperty("unsupported")
+    private List<UnsupportedAccessResponseItem> unsupportedDataRegistryAccessItems;
+
+    @JsonProperty("failed")
+    private List<TestingDatasetRegistryAccessResponseItem> failedDataRegistryAccessItems;
 }

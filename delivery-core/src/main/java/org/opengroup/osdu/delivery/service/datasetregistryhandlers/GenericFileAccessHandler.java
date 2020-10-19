@@ -43,12 +43,13 @@ public class GenericFileAccessHandler implements IDatasetRegistryAccessHandler {
      */
     @Override
     public SignedUrl getAccess(Records.Entity record) throws DatasetRegistryAccessException {
-        String unsignedUrl = unsignedUrlLocationMapper.getUnsignedURLFromRecordData(record.getData());
-        SignedUrl signedUrl = storageService.createSignedUrl(record.getId(), unsignedUrl, headers.getAuthorization());
+        String unsignedUrl = unsignedUrlLocationMapper.getUnsignedURLFromDatasetRegistryRecordData(record.getData());
 
-        if(unsignedUrl == "" || signedUrl == null){
+        if(unsignedUrl == "" || unsignedUrl == null){
             throw new DatasetRegistryAccessException(String.format("Unable to get signed url for record: %s", record.getId()));
         }
+
+        SignedUrl signedUrl = storageService.createSignedUrl(record.getId(), unsignedUrl, headers.getAuthorization());
 
         return signedUrl;
     }

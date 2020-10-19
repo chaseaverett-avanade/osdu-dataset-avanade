@@ -1,0 +1,9 @@
+{
+    "kind": "KIND_VAL",
+    "schema": [{"path":"ResourceTypeID","kind":"string","ext":{}},
+        {"path":"ResourceID","kind":"string","ext":{}},
+        {"path":"ResourceSecurityClassification","kind":"string","ext":{}},
+        {"path":"ResourceName","kind":"string","ext":{}},
+        {"path":"ResourceDescription","kind":"string","ext":{}},
+        {"path":"ResourceSource","kind":"string","ext":{}}]
+}

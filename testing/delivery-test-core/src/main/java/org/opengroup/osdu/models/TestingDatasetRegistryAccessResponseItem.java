@@ -12,20 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.delivery.model;
+package org.opengroup.osdu.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.opengroup.osdu.delivery.model.IDeliveryData;
+import org.opengroup.osdu.delivery.model.Records;
+
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
-public class DatasetRegistryAccessResponseItem {
+public class TestingDatasetRegistryAccessResponseItem {
     @JsonProperty("dataRegistryRecordId")
     private String dataRegistryRecordId;
 
     @JsonProperty("delivery")
-    private IDeliveryData delivery;
+    @JsonDeserialize(using = TestingDeserializer.class)
+    private String delivery;
 
     @JsonProperty("record")
     private Records.Entity record;

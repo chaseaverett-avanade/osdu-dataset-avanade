@@ -59,7 +59,7 @@ public class GenericFileAccessHandlerTest {
         SignedUrl signedUrl = new SignedUrl();
         signedUrl.setConnectionString("test-signed-url");
 
-        Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromRecordData(Mockito.eq(recordData)))
+        Mockito.when(unsignedUrlLocationMapper.getUnsignedURLFromDatasetRegistryRecordData(Mockito.eq(recordData)))
                 .thenReturn(testPath);
 
         Mockito.doReturn(signedUrl).when(storageService)

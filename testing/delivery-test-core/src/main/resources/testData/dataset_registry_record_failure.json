@@ -1,0 +1,13 @@
+[
+  {
+    "data": {
+      "ResourceID": "srn:osdu:file:dc556e0e3a554105a80cfcb19372a62d:",
+      "ResourceTypeID": "srn:type:file/json:",
+      "ResourceSecurityClassification": "srn:reference-data/ResourceSecurityClassification:RESTRICTED:",
+      "ResourceSource": "Some Company App",
+      "ResourceName": "trajectories - 1000.json",
+      "ResourceDescription": "Trajectory For Wellbore xyz"
+    },
+    "id": "opendes:osdu:delivery-int-test4"
+  }
+]
