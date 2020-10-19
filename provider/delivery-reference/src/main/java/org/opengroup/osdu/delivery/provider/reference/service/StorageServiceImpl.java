@@ -76,6 +76,7 @@ public class StorageServiceImpl implements IStorageService {
 	@Override
 	public SignedUrl createSignedUrl(String unsignedUrl, String authorizationToken) {
 
+		
 		String[] miPathParts = unsignedUrl.split("s3://");
 		if (miPathParts.length < 2) {
 			throw new AppException(HttpStatus.BAD_REQUEST.value(), "Malformed URL", INVALID_MI_PATH_REASON);
