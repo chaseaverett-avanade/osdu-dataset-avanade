@@ -1,4 +1,4 @@
-// Copyright © Amazon Web Services
+// Copyright © 2020 Amazon Web Services
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.delivery.provider.interfaces;
+package org.opengroup.osdu.delivery.model;
 
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-public interface IUnsignedUrlLocationMapper {
-    /**
-     * Return the unsigned URL from the record based on kind.
-     * @param response
-     * @return
-     */
-    String getUnsignedURLFromSearchResponse(Map<String, Object> response);
+@Data
+@AllArgsConstructor
+public class UnsupportedAccessResponseItem {
 
-    String getUnsignedURLFromRecordData(Map<String, Object> recordData);
+    @JsonProperty("dataRegistryRecordId")
+    private String dataRegistryRecordId;
+
+    @JsonProperty("message")
+    private String message;
+
+    @JsonProperty("code")
+    private UnsupportedAccessErrorCode code;
+
+    @JsonProperty("record")
+    private Records.Entity record;
 }

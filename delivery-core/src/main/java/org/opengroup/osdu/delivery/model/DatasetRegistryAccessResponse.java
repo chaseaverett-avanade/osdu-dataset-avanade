@@ -12,19 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.delivery.service;
+package org.opengroup.osdu.delivery.model;
 
-import org.opengroup.osdu.delivery.model.UrlSigningResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.List;
 
-public interface ILocationService {
+@Data
+@AllArgsConstructor
+public class DatasetRegistryAccessResponse {
 
-  /**
-   * Gets signed urls from a list of srns
-   * @param srns
-   * @return
-   */
-  UrlSigningResponse getSignedUrlsBySrn(List<String> srns);
+    @JsonProperty("processed")
+    private List<DatasetRegistryAccessResponseItem> dataRegistryAccessItems;
 
+    @JsonProperty("unsupported")
+    private List<UnsupportedAccessResponseItem> unsupportedDataRegistryAccessItems;
+
+    @JsonProperty("failed")
+    private List<DatasetRegistryAccessResponseItem> failedDataRegistryAccessItems;
 }

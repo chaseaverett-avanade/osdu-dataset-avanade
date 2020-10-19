@@ -17,7 +17,6 @@ package org.opengroup.osdu.delivery.service;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import com.google.gson.Gson;
-import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.http.IUrlFetchService;
-import org.opengroup.osdu.core.common.model.http.AppException;
 import org.opengroup.osdu.core.common.model.http.HttpResponse;
 import org.opengroup.osdu.core.common.model.search.QueryResponse;
 import org.opengroup.osdu.delivery.DeliveryApplication;
@@ -42,8 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(classes={DeliveryApplication.class})

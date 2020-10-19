@@ -1,4 +1,4 @@
-// Copyright © Amazon Web Services
+// Copyright © 2020 Amazon Web Services
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.delivery.provider.interfaces;
+package org.opengroup.osdu.delivery.model;
 
-import java.util.Map;
-
-public interface IUnsignedUrlLocationMapper {
-    /**
-     * Return the unsigned URL from the record based on kind.
-     * @param response
-     * @return
-     */
-    String getUnsignedURLFromSearchResponse(Map<String, Object> response);
-
-    String getUnsignedURLFromRecordData(Map<String, Object> recordData);
+public interface IDeliveryData {
 }

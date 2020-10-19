@@ -42,4 +42,15 @@ public class UnsignedUrlLocationMapperDefault implements IUnsignedUrlLocationMap
 
         return unsignedUrl;
     }
+
+    @Override
+    public String getUnsignedURLFromRecordData(Map<String, Object> recordData) {
+        String unsignedUrl = null;
+
+        if(recordData != null) {
+            unsignedUrl = recordData.get(UNSIGNED_URL_PATH).toString();
+        }
+
+        return unsignedUrl;
+    }
 }
