@@ -56,5 +56,3 @@ eslint-sast:
 
 osdu-gcp-test:
   allow_failure: false
-
-  
