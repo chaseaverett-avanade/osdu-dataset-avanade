@@ -77,10 +77,10 @@ spec:
               name: active-directory
               key: principal-clientpassword
         - name: aad_client_id
-            valueFrom:
-              secretKeyRef:
-                name: active-directory
-                key: application-appid
+          valueFrom:
+            secretKeyRef:
+              name: active-directory
+              key: application-appid
         - name: SEARCH_QUERY_LIMIT
           value: "1000"
         - name: BATCH_SIZE
