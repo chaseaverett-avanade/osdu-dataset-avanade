@@ -63,6 +63,7 @@ stages:
         provider/delivery-azure/maven/settings.xml
         provider/delivery-azure/pom.xml
         provider/delivery-azure/target/*-spring-boot.jar
+        .mvn/community-maven.settings.xml
       copyFileContentsToFlatten: ''
       mavenSettingsFile: './maven/settings.xml'
       serviceBase: ${{ variables.serviceName }}
@@ -74,7 +75,7 @@ stages:
       chartPath: ${{ variables.chartPath }}
       valuesFile: ${{ variables.valuesFile }}
       testCoreMavenPomFile: 'testing/delivery-test-core/pom.xml'
-      testCoreMavenOptions: '--settings $(System.DefaultWorkingDirectory)/drop/deploy/testing/maven/settings.xml'
+      testCoreMavenOptions: '--settings $(System.DefaultWorkingDirectory)/drop/.mvn/community-maven.settings.xml'
       skipDeploy: ${{ variables.SKIP_DEPLOY }}
       skipTest: ${{ variables.SKIP_TESTS }}
       providers:
