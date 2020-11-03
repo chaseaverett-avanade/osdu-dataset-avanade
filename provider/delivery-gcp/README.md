@@ -32,12 +32,12 @@ In order to run the service locally, you will need to have the following environ
 | `TENANT` | `opendes` | Tenant name | no | - |
 | `DEFAULT_DATA_PARTITION_ID_TENANT1` | `opendes` | Data partition id | no | - |
 | `DEFAULT_DATA_PARTITION_ID_TENANT2` | `opendes` | Data partition id | no | - |
-| `SEARCH_INTEGRATION_TESTER` | `********` | Service account for API calls. Note: this user must have entitlements configured already | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
+| `SEARCH_INTEGRATION_TESTER` | `********` | Service account for API calls, passed as a filename or JSON content, plain or Base64 encoded.  Note: this user must have entitlements configured already | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
 | `INTEGRATION_TEST_AUDIENCE` | `********` | Client application ID | yes | https://console.cloud.google.com/apis/credentials |
 | `LEGAL_TAG` | ex `opendes-osdu-demo-legaltag` | Currently existing, not expired legal tag name| no | create one with  POST {{legal_url}}api/legal/v1/legaltags |
 | `OTHER_RELEVANT_DATA_COUNTRIES` | ex `US` | - | no | - |
 | `GCLOUD_PROJECT` | ex `osdu-cicd-epam` | Google cloud project id | no | - |
-| `GCP_DEPLOY_FILE` | `********` | Service account for test data tear down, must have cloud storage role configured | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
+| `GCP_DEPLOY_FILE` | `********` | Service account for test data tear down, passed as a filename or JSON content, plain or Base64 encoded. Must have cloud storage role configured | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
 
 **Entitlements configuration for integration accounts**
 
