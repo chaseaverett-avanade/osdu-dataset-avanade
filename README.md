@@ -21,6 +21,12 @@ All references on repositories settings are external to `pom.xml` and should be 
 To build against Community GitLab repositories, use `.mvn/community-maven.settings.xml` settings:
 `mvn clean compile test --settings .mvn/community-maven.settings.xml`
 
+## Running integration tests
+Integration tests are located in a separate project for each cloud in the ```testing``` directory under the project root directory. 
+
+### GCP
+Instructions for running the GCP integration tests can be found [here](./provider/delivery-gcp/README.md).
+
 ## Publish
 All references on Binary Storage required to publish Maven artifacts are external to `pom.xml` and should be configured through Maven `settings.xml` file.
 There are two profiles available in `.mvn/community-maven.settings.xml` that can be used to publish artifacts to Community GitLab:
@@ -29,3 +35,4 @@ There are two profiles available in `.mvn/community-maven.settings.xml` that can
 ```
 export COMMUNITY_MAVEN_TOKEN='Your personal GitLab access token'
 mvn deploy --settings .mvn/community-maven.settings.xml
+

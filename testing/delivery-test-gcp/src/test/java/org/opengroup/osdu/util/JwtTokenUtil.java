@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 Google LLC
  * Copyright 2020 EPAM Systems, Inc
  *
@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.opengroup.osdu.util;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -25,13 +24,8 @@ import com.google.api.client.json.webtoken.JsonWebToken;
 import com.google.api.client.util.Clock;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
+import lombok.extern.java.Log;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -42,13 +36,24 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+@Log
 class JwtTokenUtil {
 
+    public final static Predicate<String> CREDENTIALS_CONTENT_ACCEPTANCE_TESTER = s -> s.trim().startsWith("{");
 	private static String accessToken;
 
 	static String getAccessToken() throws IOException {
 
 		if (Strings.isNullOrEmpty(accessToken)) {
+			log.info("Get SEARCH_INTEGRATION_TESTER credentials");
 			accessToken = getServiceAccountAccessToken(getJwtForIntegrationTesterAccount());
 		}
 		return accessToken;
@@ -76,40 +81,43 @@ class JwtTokenUtil {
 	}
 
 	private static String getJwtForIntegrationTesterAccount() throws IOException {
-		String serviceAccountFile = Config.getKeyValue();
-		return getJwt(serviceAccountFile);
+		String serviceAccountValue = Config.getKeyValue();
+		return getJwt(serviceAccountValue);
 	}
 
-	private static String getJwt(String serviceAccountFile) throws IOException {
+	private static String getJwt(String serviceAccountValue) throws IOException {
 
 		String targetAudience = Config.getTargetAudience();
 		long currentTime = Clock.SYSTEM.currentTimeMillis();
 
-		InputStream stream = new FileInputStream(serviceAccountFile);
-		GoogleCredential credential = GoogleCredential.fromStream(stream);
+		serviceAccountValue = new DecodedContentExtractor(serviceAccountValue, CREDENTIALS_CONTENT_ACCEPTANCE_TESTER).getContent();
 
-		JsonWebSignature.Header header = new JsonWebSignature.Header();
-		header.setAlgorithm("RS256");
-		header.setType("JWT");
-		header.setKeyId(credential.getServiceAccountPrivateKeyId());
+		try (InputStream inputStream = new ByteArrayInputStream(serviceAccountValue.getBytes())) {
+			GoogleCredential credential = GoogleCredential.fromStream(inputStream);
 
-		JsonWebSignature.Payload payload = new JsonWebToken.Payload();
-		payload.setIssuedAtTimeSeconds(currentTime / 1000);
-		payload.setExpirationTimeSeconds(currentTime / 1000 + 3600);
-		payload.setAudience("https://www.googleapis.com/oauth2/v4/token");
-		payload.setIssuer(credential.getServiceAccountId());
-		payload.set("target_audience", targetAudience);
+			JsonWebSignature.Header header = new JsonWebSignature.Header();
+			header.setAlgorithm("RS256");
+			header.setType("JWT");
+			header.setKeyId(credential.getServiceAccountPrivateKeyId());
 
-		JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-		String signedJwt = null;
-		try {
-			signedJwt = JsonWebSignature
-				.signUsingRsaSha256(credential.getServiceAccountPrivateKey(), jsonFactory, header, payload);
-		} catch (GeneralSecurityException e) {
-			e.printStackTrace();
+			JsonWebSignature.Payload payload = new JsonWebToken.Payload();
+			payload.setIssuedAtTimeSeconds(currentTime / 1000);
+			payload.setExpirationTimeSeconds(currentTime / 1000 + 3600);
+			payload.setAudience("https://www.googleapis.com/oauth2/v4/token");
+			payload.setIssuer(credential.getServiceAccountId());
+			payload.set("target_audience", targetAudience);
+
+			JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+			String signedJwt = null;
+			try {
+				signedJwt = JsonWebSignature
+						.signUsingRsaSha256(credential.getServiceAccountPrivateKey(), jsonFactory, header, payload);
+			} catch (GeneralSecurityException e) {
+				e.printStackTrace();
+			}
+
+			return signedJwt;
 		}
-
-		return signedJwt;
 	}
 
 	@Data
