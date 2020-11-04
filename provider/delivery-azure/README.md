@@ -7,7 +7,7 @@ Copyright 2017-2020, Schlumberger, Microsoft Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at 
+You may obtain a copy of the License at
 
 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -95,8 +95,8 @@ az keyvault secret show --vault-name $KEY_VAULT_NAME --name $KEY_VAULT_SECRET_NA
 | `OTHER_RELEVANT_DATA_COUNTRIES` | ex. `US` | Used for testing | no | -- |
 | `LEGAL_TAG` | ex. `opendes-public-usa-dataset-1` | Legal tag | no | Created legal tag |
 | `SEARCH_HOST` | ex. `https://foo-search.azurewebsites.net/api/search/v2/` | The host where the search service is running | yes | -- |
-| `STORAGE_HOST` | ex. `foo-storage.azurewebsites.net/api/storage/v2/` | The URL where the storage service is running | yes | -- | 
-| `DELIVERY_HOST` | ex. `http://localhost:8082/api/delivery/v2/` | The URL where the delivery service is running | yes | -- | 
+| `STORAGE_HOST` | ex. `foo-storage.azurewebsites.net/api/storage/v2/` | The URL where the storage service is running | yes | -- |
+| `DELIVERY_HOST` | ex. `http://localhost:8082/api/delivery/v2/` | The URL where the delivery service is running | yes | -- |
 
 
 ### Configure Maven
@@ -110,67 +110,40 @@ Java version: 1.8.0_212, vendor: AdoptOpenJDK, runtime: /usr/lib/jvm/jdk8u212-b0
 ...
 ```
 
-You may need to configure access to the remote maven repository that holds the OSDU dependencies. A default file should live within `~/.m2/settings.xml`:
+### Build and run the application
+
+After configuring your environment as specified above, you can follow these steps to build and run the application. These steps should be invoked from the *repository root.*
+
 ```bash
-$ cat ~/.m2/settings.xml
-<settings>
-	<profiles>
-		<profile>
-			<!-- This profile uses the CI-Token to authenticate with the server, and is the default case -->
-			<id>Personal Maven Profile</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<repo.releases.id>community-maven-repo</repo.releases.id>
-				<publish.snapshots.id>community-maven-via-private-token</publish.snapshots.id>
-				<publish.releases.id>community-maven-via-private-token</publish.releases.id>
-				<repo.releases.url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</repo.releases.url>
-				<publish.snapshots.url>https://community.opengroup.org/api/v4/projects/118/packages/maven</publish.snapshots.url>
-				<publish.releases.url>https://community.opengroup.org/api/v4/projects/118/packages/maven</publish.releases.url>
-			</properties>
-		</profile>
-	</profiles>
-	<servers>
-		<server>
-			<id>community-maven-via-private-token</id>
-			<configuration>
-				<httpHeaders>
-					<property>
-						<name>Private-Token</name>
-						<value>${env.COMMUNITY_MAVEN_TOKEN}</value>
-					</property>
-				</httpHeaders>
-			</configuration>
-		</server>
-		<server>
-			<id>azure-auth</id>
-			<configuration>
-				<tenant>${env.AZURE_TENANT_ID}</tenant>
-				<client>${env.AZURE_CLIENT_ID}</client>
-				<key>${env.AZURE_CLIENT_SECRET}</key>
-				<environment>AZURE</environment>
-			</configuration>
-		</server>
-	</servers>
-</settings>
+# build + test + install core service code
+$ mvn clean install
+
+# build + test + package azure service code
+$ (cd provider/delivery-azure/ && mvn clean package)
+
+# run service
+#
+# Note: this assumes that the environment variables for running the service as outlined
+#       above are already exported in your environment.
+$ java -jar $(find provider/delivery-azure/target/ -name '*-spring-boot.jar')
+
+# Alternately you can run using the Mavan Task
+$ mvn spring-boot:run
 ```
 
-### Build, Run and Test the application Locally
+### Test the application
 
-After configuring your environment as specified above, you can follow these steps to build and run the application
+After the service has started it should be accessible via a web browser by visiting [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). If the request does not fail, you can then run the integration tests.
 
 ```bash
-# execute build + unit tests
-$ mvn clean package --settings .mvn/community-maven.settings.xml
-...
-[INFO] BUILD SUCCESS
+# build + install integration test core
+$ (cd testing/delivery-test-core/ && mvn clean install)
 
-# run service locally **REQUIRES SPECIFIC ENVIRONMENT VARIABLES SET**
-$ java -jar $(find ./target/ -name '*.jar')
-
-# Test the application  **REQUIRES SPECIFIC ENVIRONMENT VARIABLES SET**
-$ mvn clean test --settings .mvn/community-maven.settings.xml -f integration-tests/pom.xml
+# build + run Azure integration tests.
+#
+# Note: this assumes that the environment variables for integration tests as outlined
+#       above are already exported in your environment.
+$ (cd testing/delivery-test-azure/ && mvn clean test)
 ```
 
 
@@ -182,15 +155,15 @@ Jet Brains - the authors of Intellij IDEA, have written an [excellent guide](htt
 
 Here is how you can configure user entitlements via the Azure specific API.
 
-###Create a new user or service principal. 
+###Create a new user or service principal.
 
-The request body contains the user or service principal to create in JSON format. At a minimum, you must specify the required properties for the user or service principal. 
+The request body contains the user or service principal to create in JSON format. At a minimum, you must specify the required properties for the user or service principal.
 The required  properties for a user or service principal is the uid and one tenant with one group. The uid is either a user email or a service principal UUID.
 You can optionally specify any additional tenants and groups.
 
 ####Permissions
 
-The following permission is required to call this API. 
+The following permission is required to call this API.
 
 service.entitlements.admin
 
@@ -201,7 +174,7 @@ service.entitlements.admin
 | Content-Type | application/json | Yes |
 | Request body  |  In the request body, supply a JSON representation of user object. | Yes |
 
-The following table lists the properties that are required when you create a user. 
+The following table lists the properties that are required when you create a user.
 
 | Property	| Type	| Description | Required |
 | ---  | ---  | ---  | ---  |
@@ -236,19 +209,19 @@ Here is an example of the request.
 }
 ```
 
-In the request body, supply a JSON representation of user object. The following permission is required to call the delivery API. 
-                                                                   
+In the request body, supply a JSON representation of user object. The following permission is required to call the delivery API.
+
 service.delivery.viewer
 
-###Update a user or service principal. 
+###Update a user or service principal.
 
-The request body contains the user or service principal to update in JSON format. At a minimum, you must specify the required properties for the user or service principal. 
+The request body contains the user or service principal to update in JSON format. At a minimum, you must specify the required properties for the user or service principal.
 The required  properties for a user or service principal is the uid and one tenant with one group. The uid is either a user email or a service principal UUID.
 You can optionally specify any additional tenants and groups.
 
 ####Permissions
 
-The following permission is required to call this API. 
+The following permission is required to call this API.
 
 service.entitlements.admin
 
@@ -294,8 +267,8 @@ Here is an example of the request.
 }
 ```
 
-In the request body, supply a JSON representation of user object. The following permission is required to call the delivery API. 
-                                                                                                                                     
+In the request body, supply a JSON representation of user object. The following permission is required to call the delivery API.
+
 service.delivery.viewer
 
 ## Configuring User Entitlements (Deprecated)
