@@ -112,6 +112,11 @@ spec:
               secretKeyRef:
                 name: appid
                 key: appid
+        - name: appinsights_key
+            valueFrom:
+              secretKeyRef:
+                name: appinsights
+                key: appinsights
         - name: SEARCH_QUERY_LIMIT
           value: "1000"
         - name: BATCH_SIZE

@@ -81,6 +81,11 @@ spec:
             secretKeyRef:
               name: active-directory
               key: application-appid
+        - name: appinsights_key
+            valueFrom:
+              secretKeyRef:
+                name: central-logging
+                key: appinsights
         - name: SEARCH_QUERY_LIMIT
           value: "1000"
         - name: BATCH_SIZE
