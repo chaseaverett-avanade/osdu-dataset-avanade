@@ -77,12 +77,12 @@ spec:
               name: active-directory
               key: principal-clientpassword
         - name: appinsights_key
-            valueFrom:
-              secretKeyRef:
-                name: central-logging
-                key: appinsights
+          valueFrom:
+            secretKeyRef:
+              name: central-logging
+              key: appinsights
         - name: aad_client_id
-           valueFrom:
+          valueFrom:
             secretKeyRef:
               name: active-directory
               key: application-appid
