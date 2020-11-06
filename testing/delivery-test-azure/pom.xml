@@ -20,7 +20,7 @@
     <artifactId>os-delivery-test</artifactId>
     <groupId>org.opengroup.osdu</groupId>
     <version>0.0.5-SNAPSHOT</version>
-    <relativePath>..</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -170,13 +170,6 @@
       </exclusions>
     </dependency>
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>${gitlab-server}</id>
-      <url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>

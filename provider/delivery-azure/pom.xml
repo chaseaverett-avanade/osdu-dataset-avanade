@@ -23,7 +23,7 @@
         <artifactId>os-delivery</artifactId>
         <groupId>org.opengroup.osdu</groupId>
         <version>0.0.2-SNAPSHOT</version>
-        <relativePath>../..</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
