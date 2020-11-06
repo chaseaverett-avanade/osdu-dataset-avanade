@@ -82,7 +82,7 @@ spec:
                 name: central-logging
                 key: appinsights
         - name: aad_client_id
-          valueFrom:
+           valueFrom:
             secretKeyRef:
               name: active-directory
               key: application-appid
