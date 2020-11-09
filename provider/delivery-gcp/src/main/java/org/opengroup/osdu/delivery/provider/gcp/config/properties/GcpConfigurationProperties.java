@@ -15,22 +15,22 @@
  * limitations under the License.
  */
 
-package org.opengroup.osdu.delivery.provider.gcp.config;
+package org.opengroup.osdu.delivery.provider.gcp.config.properties;
 
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
-import org.opengroup.osdu.delivery.provider.gcp.config.properties.GcpConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(GcpConfigurationProperties.class)
-public class StorageConfiguration {
-
-	@Bean
-	public Storage storageDev() {
-		return StorageOptions.getDefaultInstance().getService();
-	}
-
+@ConfigurationProperties(prefix = "gcp")
+@Getter
+@Setter
+public class GcpConfigurationProperties {
+    private SignedUrl signedUrl = new SignedUrl();
+    @Getter
+    @Setter
+    public static class SignedUrl {
+        private int expirationDays = 1;
+    }
 }
