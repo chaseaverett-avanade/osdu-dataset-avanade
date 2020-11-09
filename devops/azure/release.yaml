@@ -127,3 +127,9 @@ spec:
           value: http://entitlements-azure/entitlements/v1
         - name: AUTHORIZE_API_KEY
           value: "OBSOLETE"
+        - name: partition_service_endpoint
+          value: http://partition/api/partition/v1
+        - name: azure_istioauth_enabled
+          value: "true"
+        - name: azure_activedirectory_AppIdUri
+          value: "api://$(aad_client_id)"

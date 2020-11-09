@@ -81,6 +81,13 @@
             <artifactId>azure-identity</artifactId>
             <version>1.0.6</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.microsoft.azure/azure-active-directory-spring-boot-starter -->
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-active-directory-spring-boot-starter</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
 
         <!-- Third party Apache 2.0 license packages -->
         <dependency>
