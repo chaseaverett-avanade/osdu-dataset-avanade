@@ -99,6 +99,6 @@ spec:
         - name: partition_service_endpoint
           value: http://partition/api/partition/v1
         - name: azure_istioauth_enabled
-          value: "false"
+          value: "true"
         - name: azure_activedirectory_AppIdUri
           value: "api://$(aad_client_id)"

@@ -12,26 +12,26 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-# apiVersion: security.istio.io/v1beta1
-# kind: AuthorizationPolicy
-# metadata:
-#   name: {{ .Chart.Name }}-jwt-authz
-#   namespace: osdu
-# spec:
-#   selector:
-#     matchLabels:
-#       app: {{ .Chart.Name }}
-#   action: DENY
-#   rules:
-#     - from:
-#         - source:
-#             notRequestPrincipals: ["*"]
-#       to:
-#         - operation:
-#             notPaths: ["/","*/index.html",
-#                        "*/v2/api-docs",
-#                        "*/swagger","*/swagger-resources","*/swagger-ui.html",
-#                        "*/actuator/health",
-#                        "*/configuration/ui","*/configuration/security",
-#                        "/api/{{ .Chart.Name }}/v2/swagger-resources/*",
-#                        "/api/{{ .Chart.Name }}/v2/webjars/*"]
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Chart.Name }}-jwt-authz
+  namespace: osdu
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  action: DENY
+  rules:
+    - from:
+        - source:
+            notRequestPrincipals: ["*"]
+      to:
+        - operation:
+            notPaths: ["/","*/index.html",
+                       "*/v2/api-docs",
+                       "*/swagger","*/swagger-resources","*/swagger-ui.html",
+                       "*/actuator/health",
+                       "*/configuration/ui","*/configuration/security",
+                       "/api/{{ .Chart.Name }}/v2/swagger-resources/*",
+                       "/api/{{ .Chart.Name }}/v2/webjars/*"]
