@@ -31,7 +31,7 @@ spec:
             notPaths: ["/","*/index.html",
                        "*/v2/api-docs",
                        "*/swagger","*/swagger-resources","*/swagger-ui.html",
-                       "*/actuator/health",
+                       "*/actuator/health", "*/health",
                        "*/configuration/ui","*/configuration/security",
                        "/api/{{ .Chart.Name }}/v2/swagger-resources/*",
                        "/api/{{ .Chart.Name }}/v2/webjars/*"]

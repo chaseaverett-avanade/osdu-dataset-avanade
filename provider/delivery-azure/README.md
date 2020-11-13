@@ -2,21 +2,6 @@
 The Delivery Service is responsible for authenticating an OSDU user, and, if they have access, returns a signed URL to download the data file.
 The Delivery Service is a [Spring Boot](https://spring.io/projects/spring-boot) service.
 
-## License
-Copyright 2017-2020, Schlumberger, Microsoft Corporation
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
 ## Build
 All references on repositories settings are external to `pom.xml` and should be configured through Maven `settings.xml` file.
 To build against Community GitLab repositories, use `.mvn/community-maven.settings.xml` settings:
@@ -96,7 +81,7 @@ az keyvault secret show --vault-name $KEY_VAULT_NAME --name $KEY_VAULT_SECRET_NA
 | `LEGAL_TAG` | ex. `opendes-public-usa-dataset-1` | Legal tag | no | Created legal tag |
 | `SEARCH_HOST` | ex. `https://foo-search.azurewebsites.net/api/search/v2/` | The host where the search service is running | yes | -- |
 | `STORAGE_HOST` | ex. `foo-storage.azurewebsites.net/api/storage/v2/` | The URL where the storage service is running | yes | -- |
-| `DELIVERY_HOST` | ex. `http://localhost:8082/api/delivery/v2/` | The URL where the delivery service is running | yes | -- |
+| `DELIVERY_HOST` | ex. `http://localhost:8085/api/delivery/v2/` | The URL where the delivery service is running | yes | -- |
 
 
 ### Configure Maven
