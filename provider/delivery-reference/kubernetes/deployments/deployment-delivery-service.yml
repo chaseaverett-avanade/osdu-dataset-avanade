@@ -1,0 +1,95 @@
+apiVersion: v1
+data:
+    GCP_SEARCH_QUERY_URL: ${GCP_SEARCH_QUERY_URL}
+    GCP_ENTITLEMENTS_URL: ${GCP_ENTITLEMENTS_URL}
+    MINIO_ENDPOINT_URL : ${MINIO_ENDPOINT_URL}
+    MINIO_REGION : ${MINIO_REGION}
+    GCP_REDIS_HOST: ${GCP_REDIS_HOST}
+kind: ConfigMap
+metadata:
+    labels:
+        app: delivery
+    name: delivery-config
+    namespace: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    generateName: delivery
+    labels:
+        app: delivery
+    name: delivery
+    namespace: default
+spec:
+    selector:
+        matchLabels:
+            app: delivery
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: delivery
+        spec:
+            containers:
+                -   env:
+                        -   name: GCP_SEARCH_QUERY_URL
+                            valueFrom:
+                                configMapKeyRef:
+                                    key: GCP_SEARCH_QUERY_URL
+                                    name: delivery-config
+                        -   name: GCP_ENTITLEMENTS_URL
+                            valueFrom:
+                                configMapKeyRef:
+                                    key: GCP_ENTITLEMENTS_URL
+                                    name: delivery-config
+                        -   name: MINIO_ENDPOINT_URL
+                            valueFrom:
+                                configMapKeyRef:
+                                    key: MINIO_ENDPOINT_URL
+                                    name: delivery-config
+                        -   name: MINIO_REGION
+                            valueFrom:
+                                configMapKeyRef:
+                                    key: MINIO_REGION
+                                    name: delivery-config
+                        -   name: GCP_REDIS_HOST
+                            valueFrom:
+                                configMapKeyRef:
+                                    key: GCP_REDIS_HOST
+                                    name: delivery-config
+                        -   name: MINIO_ACCESS_KEY
+                            valueFrom:
+                                secretKeyRef:
+                                    name: delivery-secret
+                                    key: minio.access_key
+                        -   name: MINIO_SECRET_KEY
+                            valueFrom:
+                                secretKeyRef:
+                                    name: delivery-secret
+                                    key: minio.secret_key
+                    image: us.gcr.io/osdu-anthos-02/os-delivery/anthos-delivery:latest
+                    name: os-delivery-1-sha256-1
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: delivery
+    namespace: default
+spec:
+    ports:
+        -   protocol: TCP
+            port: 80
+            targetPort: 8080
+    selector:
+        app: delivery
+    type: LoadBalancer
+---
+apiVersion: v1
+data:
+    minio.access_key : ${MINIO_ACCESS_KEY}
+    minio.secret_key : ${MINIO_SECRET_KEY}
+kind: Secret
+metadata:
+    name: delivery-secret
+    namespace: default
+type: Opaque
