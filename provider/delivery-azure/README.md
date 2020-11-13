@@ -116,10 +116,10 @@ After configuring your environment as specified above, you can follow these step
 
 ```bash
 # build + test + install core service code
-$ mvn clean install
+$ mvn clean install --settings .mvn/community-maven.settings.xml
 
 # build + test + package azure service code
-$ (cd provider/delivery-azure/ && mvn clean package)
+$ (cd provider/delivery-azure/ && mvn clean package --settings ../../.mvn/community-maven.settings.xml)
 
 # run service
 #
@@ -137,13 +137,13 @@ After the service has started it should be accessible via a web browser by visit
 
 ```bash
 # build + install integration test core
-$ (cd testing/delivery-test-core/ && mvn clean install)
+$ (cd testing/delivery-test-core/ && mvn clean install --settings ../../.mvn/community-maven.settings.xml)
 
 # build + run Azure integration tests.
 #
 # Note: this assumes that the environment variables for integration tests as outlined
 #       above are already exported in your environment.
-$ (cd testing/delivery-test-azure/ && mvn clean test)
+$ (cd testing/delivery-test-azure/ && mvn clean test --settings ../../.mvn/community-maven.settings.xml)
 ```
 
 

@@ -43,7 +43,7 @@ spec:
         - containerPort: 80
         readinessProbe:
           httpGet:
-            path: /api/delivery/v2/swagger-ui.html
+            path: /api/delivery/v2/health/readiness_check
             port: 80
         volumeMounts:
         - name: azure-keyvault
