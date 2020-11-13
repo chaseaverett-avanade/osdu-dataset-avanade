@@ -14,13 +14,16 @@
 
 package org.opengroup.osdu.delivery.provider.azure.service;
 
-import com.azure.identity.DefaultAzureCredential;
-import com.azure.identity.DefaultAzureCredentialBuilder;
-import com.azure.storage.blob.*;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobUrlParts;
 import com.azure.storage.blob.models.UserDelegationKey;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
 import lombok.extern.java.Log;
+import org.opengroup.osdu.azure.blobstorage.IBlobServiceClientFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -33,23 +36,13 @@ For a given blob object, generator a SAS Token that'll let bearers access the bl
 @Component
 public class AzureBlobSasTokenServiceImpl {
 
-    private DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder().build();
+    @Autowired
+    private IBlobServiceClientFactory blobServiceClientFactory;
 
-    public String signContainer(String containerUrl) {
+    public String signContainer(final String dataPartitionId, final String containerUrl) {
         BlobUrlParts parts = BlobUrlParts.parse(containerUrl);
-        String endpoint = calcBlobAccountUrl(parts);
-
-        BlobServiceClient rbacKeySource = new BlobServiceClientBuilder()
-                .endpoint(endpoint)
-                .credential(defaultCredential)
-                .buildClient();
-
-
-        BlobContainerClient blobContainerClient = new BlobContainerClientBuilder()
-                .credential(defaultCredential)
-                .endpoint(containerUrl)
-                .containerName(parts.getBlobContainerName())
-                .buildClient();
+        BlobServiceClient rbacKeySource = this.blobServiceClientFactory.getBlobServiceClient(dataPartitionId);
+        BlobContainerClient blobContainerClient = rbacKeySource.getBlobContainerClient(parts.getBlobContainerName());
 
         OffsetDateTime expiresInHalfADay = calcTokenExpirationDate();
         UserDelegationKey key = rbacKeySource.getUserDelegationKey(null, expiresInHalfADay);
@@ -58,34 +51,22 @@ public class AzureBlobSasTokenServiceImpl {
         BlobServiceSasSignatureValues tokenProps = new BlobServiceSasSignatureValues(expiresInHalfADay, readOnlyPerms);
 
         String sasToken = blobContainerClient.generateUserDelegationSas(tokenProps, key);
-
-        String sasUri = String.format("%s?%s", containerUrl, sasToken);
-        return sasUri;
+        return String.format("%s?%s", containerUrl, sasToken);
     }
 
-    public String sign(String blobUrl) {
+    public String sign(final String dataPartitionId, final String blobUrl) {
         BlobUrlParts parts = BlobUrlParts.parse(blobUrl);
-        String endpoint = calcBlobAccountUrl(parts);
-        BlobServiceClient rbacKeySource = new BlobServiceClientBuilder()
-                .endpoint(endpoint)
-                .credential(defaultCredential)
-                .buildClient();
-        BlobClient tokenSource = new BlobClientBuilder()
-                .credential(defaultCredential)
-                .endpoint(blobUrl)
-                .buildClient();
+        BlobServiceClient rbacKeySource = this.blobServiceClientFactory.getBlobServiceClient(dataPartitionId);
+        BlobContainerClient blobContainerClient = rbacKeySource.getBlobContainerClient(parts.getBlobContainerName());
+        BlobClient tokenSource = blobContainerClient.getBlobClient(blobUrl);
+
         OffsetDateTime expiresInHalfADay = calcTokenExpirationDate();
         UserDelegationKey key = rbacKeySource.getUserDelegationKey(null, expiresInHalfADay);
         BlobSasPermission readOnlyPerms = BlobSasPermission.parse("r");
         BlobServiceSasSignatureValues tokenProps = new BlobServiceSasSignatureValues(expiresInHalfADay, readOnlyPerms);
+
         String sasToken = tokenSource.generateUserDelegationSas(tokenProps, key);
-
-        String sasUri = String.format("%s?%s", blobUrl, sasToken);
-        return sasUri;
-    }
-
-    private String calcBlobAccountUrl(BlobUrlParts parts) {
-        return String.format("https://%s.blob.core.windows.net", parts.getAccountName());
+        return String.format("%s?%s", blobUrl, sasToken);
     }
 
     private OffsetDateTime calcTokenExpirationDate() {

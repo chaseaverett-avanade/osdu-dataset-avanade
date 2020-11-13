@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.opengroup.osdu.core.common.model.http.AppException;
+import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.delivery.model.SignedUrl;
 import org.opengroup.osdu.delivery.provider.interfaces.IStorageService;
 import org.springframework.stereotype.Service;
@@ -36,66 +37,68 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class StorageServiceImpl implements IStorageService {
 
-  @Inject
-  private AzureBlobSasTokenServiceImpl tokenService;
+    @Inject
+    private AzureBlobSasTokenServiceImpl tokenService;
 
-  private ExpirationDateHelper expirationDateHelper;
+    @Inject
+    private DpsHeaders headers;
 
-  private InstantHelper instantHelper;
+    private ExpirationDateHelper expirationDateHelper;
 
-  private final static String URI_EXCEPTION_REASON = "Exception creating signed url";
-  private final static String UNSUPPORTED_EXCEPTION_REASON = "Unsupported operation exception";
-  private final static String INVALID_AZURESTORAGESERVICE_PATH_REASON = "Unsigned url invalid, needs to be full path";
+    private InstantHelper instantHelper;
 
-  @PostConstruct
-  public void init() {
-    expirationDateHelper = new ExpirationDateHelper();
-    instantHelper = new InstantHelper();
-  }
+    private final static String URI_EXCEPTION_REASON = "Exception creating signed url";
+    private final static String UNSUPPORTED_EXCEPTION_REASON = "Unsupported operation exception";
+    private final static String INVALID_AZURESTORAGESERVICE_PATH_REASON = "Unsigned url invalid, needs to be full path";
 
-  @Override
-  public SignedUrl createSignedUrl(String srn, String unsignedUrl, String authorizationToken) {
-    String signedUrl;
-    String[] azureStoragePathParts = unsignedUrl.split("https://");
-    if (azureStoragePathParts.length < 2){
-      throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", INVALID_AZURESTORAGESERVICE_PATH_REASON);
+    @PostConstruct
+    public void init() {
+        expirationDateHelper = new ExpirationDateHelper();
+        instantHelper = new InstantHelper();
     }
 
-    String[] azureStorageObjectKeyParts = azureStoragePathParts[1].split("/");
-    if (azureStorageObjectKeyParts.length < 1){
-      throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", INVALID_AZURESTORAGESERVICE_PATH_REASON);
+    @Override
+    public SignedUrl createSignedUrl(String srn, String unsignedUrl, String authorizationToken) {
+        String signedUrl;
+        String[] azureStoragePathParts = unsignedUrl.split("https://");
+        if (azureStoragePathParts.length < 2) {
+            throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", INVALID_AZURESTORAGESERVICE_PATH_REASON);
+        }
+
+        String[] azureStorageObjectKeyParts = azureStoragePathParts[1].split("/");
+        if (azureStorageObjectKeyParts.length < 1) {
+            throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", INVALID_AZURESTORAGESERVICE_PATH_REASON);
+        }
+
+        if (isSrnForContainer(srn)) {
+            signedUrl = tokenService.signContainer(this.headers.getPartitionId(), unsignedUrl);
+        } else {
+            signedUrl = tokenService.sign(this.headers.getPartitionId(), unsignedUrl);
+        }
+        SignedUrl url = new SignedUrl();
+        try {
+            url.setUri(new URI(signedUrl));
+            url.setUrl(new URL(signedUrl));
+            url.setCreatedAt(instantHelper.getCurrentInstant());
+        } catch (URISyntaxException | MalformedURLException e) {
+            log.error("There was an error generating the URI.", e);
+            throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", URI_EXCEPTION_REASON, e);
+        }
+
+        return url;
     }
 
-    if (isSrnForContainer(srn)) {
-      signedUrl = tokenService.signContainer(unsignedUrl);
-    }
-    else {
-      signedUrl = tokenService.sign(unsignedUrl);
-    }
-    SignedUrl url = new SignedUrl();
-    try {
-      url.setUri(new URI(signedUrl));
-      url.setUrl(new URL(signedUrl));
-      url.setCreatedAt(instantHelper.getCurrentInstant());
-    } catch(URISyntaxException | MalformedURLException e) {
-      log.error("There was an error generating the URI.",e);
-      throw new AppException(HttpStatus.SC_BAD_REQUEST, "Malformed URL", URI_EXCEPTION_REASON, e);
+    @Override
+    public SignedUrl createSignedUrl(String unsignedUrl, String authorizationToken) {
+        throw new AppException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "Unsupported Operation Exception", UNSUPPORTED_EXCEPTION_REASON);
     }
 
-    return url;
-  }
+    private boolean isSrnForContainer(String srn) {
+        boolean result = false;
 
-  @Override
-  public SignedUrl createSignedUrl(String unsignedUrl, String authorizationToken) {
-    throw new AppException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "Unsupported Operation Exception",UNSUPPORTED_EXCEPTION_REASON);
-  }
-
-  private boolean isSrnForContainer(String srn) {
-    boolean result = false;
-
-    if (srn != null && srn.contains("ovds")) {
-      result = true;
+        if (srn != null && srn.contains("ovds")) {
+            result = true;
+        }
+        return result;
     }
-    return result;
-  }
 }
