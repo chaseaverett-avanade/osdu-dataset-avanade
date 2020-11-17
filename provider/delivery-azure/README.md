@@ -40,7 +40,7 @@ This project uses [Lombok](https://projectlombok.org/) for code generation. You 
  - [Intellij configuration](https://projectlombok.org/setup/intellij)
  - [VSCode configuration](https://projectlombok.org/setup/vscode)
 
-### Understanding Environment Variables
+### Environment Variables
 
 In order to run the service locally, you will need to have the following environment variables defined.
 
@@ -48,6 +48,8 @@ In order to run the service locally, you will need to have the following environ
 ```bash
 az keyvault secret show --vault-name $KEY_VAULT_NAME --name $KEY_VAULT_SECRET_NAME --query value -otsv
 ```
+
+**Required to run service**
 
 | name | value | description | sensitive? | source |
 | ---  | ---   | ---         | ---        | ---    |
@@ -136,17 +138,18 @@ $ (cd testing/delivery-test-azure/ && mvn clean test --settings ../../.mvn/commu
 
 Jet Brains - the authors of Intellij IDEA, have written an [excellent guide](https://www.jetbrains.com/help/idea/debugging-your-first-java-application.html) on how to debug java programs.
 
-## Configuring User Entitlements
+
+## Configuring User Entitlements for Delivery
 
 Here is how you can configure user entitlements via the Azure specific API.
 
-###Create a new user or service principal.
+### Create a new user or service principal.
 
 The request body contains the user or service principal to create in JSON format. At a minimum, you must specify the required properties for the user or service principal.
 The required  properties for a user or service principal is the uid and one tenant with one group. The uid is either a user email or a service principal UUID.
 You can optionally specify any additional tenants and groups.
 
-####Permissions
+#### Permissions
 
 The following permission is required to call this API.
 
@@ -198,13 +201,13 @@ In the request body, supply a JSON representation of user object. The following 
 
 service.delivery.viewer
 
-###Update a user or service principal.
+### Update a user or service principal.
 
 The request body contains the user or service principal to update in JSON format. At a minimum, you must specify the required properties for the user or service principal.
 The required  properties for a user or service principal is the uid and one tenant with one group. The uid is either a user email or a service principal UUID.
 You can optionally specify any additional tenants and groups.
 
-####Permissions
+#### Permissions
 
 The following permission is required to call this API.
 
@@ -239,7 +242,7 @@ Here is an example of the request.
 ```json
 {
     "id": "",
-    "uid": "erik.leckner@wipro.com",
+    "uid": "user.email@mail.com",
     "tenants": [
         {
             "name": "$SOME_OSDU_TENANT",
@@ -255,110 +258,6 @@ Here is an example of the request.
 In the request body, supply a JSON representation of user object. The following permission is required to call the delivery API.
 
 service.delivery.viewer
-
-## Configuring User Entitlements (Deprecated)
-
-Here is how you can configure user entitlements manually.
-
- - Identify the correct CosmosDB account. This can be found in the output of the infrastructure template. Alternatively, you should be able to identify it as the singular CosmosDB account that is provisioned in the resource group that hosts the this service
- - Use the `Data Explorer` tool in the CosmosDB UI and navigate to the `UserInfo` container
- - Identify if there already exists a `User` record in the table by applying a filter equal to `WHERE c.id = '$IDENTITY_ID'`. `$IDENTITY_ID` will be one of: (1) Object ID of a user (i.e., `974cb327-1406-76b9-91de-cbd6eb7ec949`) or (2) Application ID of a system assigned identity (i.e., `930b212b-e21f-478f-b993-af9b41abe836`)
- - If the user exists, verify that the permissions are correct. If the user needs to be added to a group, you can edit the document directly and click `Save`
- - If the user does not exist, you can add a document that has the following schema. The exact groups you wish to provision to the user will most likely be different, so be sure to add/remove the appropriate roles. The below listing represents a user with full access to all services.
-```json
-{
-    "id": "$OBJECT_ID",
-    "uid": "$IDENTITY_ID",
-    "tenants": [
-        {
-            "name": "$SOME_OSDU_TENANT",
-            "groups": [
-                "service.delivery.viewer",
-                ...
-            ]
-        }
-    ]
-}
-```
-
-## Deploying the Service
-
-Service deployments into Azure are standardized to make the process the same for all services if using ADO and are closely related to the infrastructure deployed. The steps to deploy into Azure can be [found here](https://github.com/azure/osdu-infrastructure)
-
-The default ADO pipeline is /devops/azure-pipelines.yml
-
-### Manual Deployment Steps
-
-__Environment Settings__
-
-The following environment variables are necessary to properly deploy a service to an Azure OSDU Environment.
-
-```bash
-# Group Level Variables
-export AZURE_TENANT_ID=""
-...
-
-# Pipeline Level Variable
-export AZURE_SERVICE="entitlements"
-export AZURE_BUILD_SUBDIR="."
-export AZURE_TEST_SUBDIR="testing"
-export AZURE_OSDU_TENANT="opendes"
-export AZURE_COMPANY_DOMAIN="contoso.com"
-export AZURE_VALID_GROUPNAME="integ.test.data.creator"
-export AZURE_INVALID_GROUPNAME="InvalidTestAdmin"
-
-# Required for Azure Deployment
-export AZURE_CLIENT_ID="${AZURE_PRINCIPAL_ID}"
-export AZURE_CLIENT_SECRET="${AZURE_PRINCIPAL_SECRET}"
-export AZURE_RESOURCE_GROUP="${AZURE_BASENAME}-osdu-r2-app-rg"
-export AZURE_APPSERVICE_PLAN="${AZURE_BASENAME}-osdu-r2-sp"
-export AZURE_APPSERVICE_NAME="${AZURE_BASENAME_21}-au-${AZURE_SERVICE}"
-
-# Required for Testing
-...
-```
-
-__Azure Service Deployment__
-
-
-1. Deploy the service using the Maven Plugin  _(azure_deploy)_
-
-```bash
-cd $AZURE_BUILD_SUBDIR
-mvn azure-webapp:deploy \
-  -DAZURE_DEPLOY_TENANT=$AZURE_TENANT_ID \
-  -Dazure.appservice.subscription=$AZURE_SUBSCRIPTION_ID \
-  -DAZURE_DEPLOY_CLIENT_ID=$AZURE_CLIENT_ID \
-  -DAZURE_DEPLOY_CLIENT_SECRET=$AZURE_CLIENT_SECRET \
-  -Dazure.appservice.resourcegroup=$AZURE_RESOURCE_GROUP \
-  -Dazure.appservice.plan=$AZURE_APPSERVICE_PLAN \
-  -Dazure.appservice.appname=$AZURE_APPSERVICE_NAME
-```
-
-2. Configure the Web App to start the SpringBoot Application _(azure_config)_
-
-
-```bash
-az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-
-# Set the JAR FILE as required
-TARGET=$(find ./target/ -name '*.jar')
-JAR_FILE=${TARGET##*/}
-
-JAVA_COMMAND="java -jar /home/site/wwwroot/${JAR_FILE}"
-JSON_TEMPLATE='{"appCommandLine":"%s"}'
-JSON_FILE="config.json"
-echo $(printf "$JSON_TEMPLATE" "$JAVA_COMMAND") > $JSON_FILE
-
-az webapp config set --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_APPSERVICE_NAME --generic-configurations @$JSON_FILE
-```
-
-3. Execute the Integration Tests against the Service Deployment _(azure_test)_
-
-
-```bash
-mvn clean test --settings .mvn/community-maven.settings.xml -f $AZURE_TEST_SUBDIR/pom.xml
-```
 
 
 ## License
