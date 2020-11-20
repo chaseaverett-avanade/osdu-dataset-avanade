@@ -71,6 +71,7 @@ public class LocationServiceImpl implements ILocationService {
                 processed.put(entry.getKey(), value);
             } else if (signedUrl != null && isOvds && signedUrl.getConnectionString() != null) {
                 log.debug("process signedUrl. processed as \"ovds && connectionString\"");
+                value.setSignedUrl(signedUrl.getUrl().toString());
                 value.setConnectionString(signedUrl.getConnectionString());
                 processed.put(entry.getKey(), value);
             } else {
