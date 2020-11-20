@@ -77,6 +77,7 @@ public class StorageServiceImpl implements IStorageService {
         try {
             url.setUri(new URI(signedUrl));
             url.setUrl(new URL(signedUrl));
+            url.setConnectionString("");
             url.setCreatedAt(instantHelper.getCurrentInstant());
         } catch(URISyntaxException | MalformedURLException e) {
             log.error("There was an error generating the URI.",e);

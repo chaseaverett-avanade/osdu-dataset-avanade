@@ -18,6 +18,7 @@ import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.UserDelegationKey;
+import com.azure.storage.blob.sas.BlobContainerSasPermission;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
 import lombok.extern.java.Log;
@@ -59,10 +60,13 @@ public class AzureBlobSasTokenServiceImpl {
         OffsetDateTime expiresInHalfADay = calcTokenExpirationDate();
         UserDelegationKey key = rbacKeySource.getUserDelegationKey(null, expiresInHalfADay);
 
-        BlobSasPermission readOnlyPerms = BlobSasPermission.parse("r");
-        BlobServiceSasSignatureValues tokenProps = new BlobServiceSasSignatureValues(expiresInHalfADay, readOnlyPerms);
+        OffsetDateTime expiryTime = OffsetDateTime.now().plusDays(1);
+        BlobContainerSasPermission readOnlyPerms = new BlobContainerSasPermission().setReadPermission(true);
+        readOnlyPerms.setListPermission(true);
+        BlobServiceSasSignatureValues values = new BlobServiceSasSignatureValues(expiryTime, readOnlyPerms)
+                .setStartTime(OffsetDateTime.now());
 
-        String sasToken = blobContainerClient.generateUserDelegationSas(tokenProps, key);
+        String sasToken = blobContainerClient.generateUserDelegationSas(values, key);
 
         String sasUri = String.format("%s?%s", containerUrl, sasToken);
         return sasUri;

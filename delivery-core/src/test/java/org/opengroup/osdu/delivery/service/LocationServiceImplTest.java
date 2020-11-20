@@ -104,6 +104,7 @@ public class LocationServiceImplTest {
         signedUrl3.setConnectionString(connectionString);
 
         SignedUrl signedUrlOvds = new SignedUrl();
+        signedUrlOvds.setUrl(new URL(unsignedUrlOvds));
         signedUrlOvds.setCreatedAt(Instant.now());
         signedUrlOvds.setConnectionString(connectionStringOvds);
 
