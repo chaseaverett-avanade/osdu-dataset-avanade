@@ -47,20 +47,6 @@ public class Steps extends RecordSteps {
         return rawName.replaceAll("well", "file");
     }
 
-    @Before
-    public void before(Scenario scenario) throws Exception {
-        this.scenario = scenario;
-        this.httpClient = new AzureHTTPClient();
-        ClientResponse resp = legalTagUtils.create(Config.getLegalTag());
-        Assert.assertTrue("Creating LegalTag", resp.getStatus() == 201 || resp.getStatus() == 409);
-    }
-
-    @After
-    public void after() throws Exception {
-        ClientResponse resp = legalTagUtils.delete(Config.getLegalTag());
-        Assert.assertTrue("Deleted LegalTag", resp.getStatus() == 200 || resp.getStatus() == 204);
-    }
-
     @Given("^the schema is created with the following kind$")
     public void the_schema_is_created_with_the_following_kind(DataTable dataTable) {
         super.the_schema_is_created_with_the_following_kind(dataTable);

@@ -493,7 +493,7 @@ The following software have components provided under the terms of this license:
 - ThreeTen backport (from https://www.threeten.org/threetenbp)
 
 ========================================================================
-CC-BY-3.0
+CC-BY-2.5
 ========================================================================
 The following software have components provided under the terms of this license:
 
@@ -523,7 +523,6 @@ The following software have components provided under the terms of this license:
 
 - HK2 API module (from git://java.net/hk2~git/hk2-api)
 - HK2 Implementation Utilities (from )
-- JavaBeans(TM) Activation Framework (from http://java.sun.com/javase/technologies/desktop/javabeans/jaf/index.jsp)
 - ServiceLocator Default Implementation (from git://java.net/hk2~git/hk2-locator)
 - aopalliance-repackaged (from )
 - javax.annotation-api (from http://jcp.org/en/jsr/detail?id=250)
@@ -538,17 +537,24 @@ CDDL-1.1
 The following software have components provided under the terms of this license:
 
 - JavaBeans Activation Framework (from )
+- JavaBeans(TM) Activation Framework (from http://java.sun.com/javase/technologies/desktop/javabeans/jaf/index.jsp)
 - JavaMail API (from )
 - OSGi resource locator (from )
 - tomcat-embed-core (from http://tomcat.apache.org/)
 - tomcat-embed-core (from http://tomcat.apache.org/)
 
 ========================================================================
-EPL-1.0
+CPL-1.0
 ========================================================================
 The following software have components provided under the terms of this license:
 
 - JUnit (from http://junit.org)
+
+========================================================================
+EPL-1.0
+========================================================================
+The following software have components provided under the terms of this license:
+
 - Logback Classic Module (from )
 - Logback Core Module (from )
 - Microsoft Application Insights Java SDK Core (from https://github.com/Microsoft/ApplicationInsights-Java)
@@ -630,7 +636,6 @@ LGPL-2.1-or-later
 ========================================================================
 The following software have components provided under the terms of this license:
 
-- Java Native Access (from https://github.com/java-native-access/jna)
 - Java Native Access Platform (from https://github.com/java-native-access/jna)
 - Javassist (from http://www.javassist.org/)
 - SnakeYAML (from http://www.snakeyaml.org)
@@ -757,5 +762,6 @@ unknown
 The following software have components provided under the terms of this license:
 
 - Byte Buddy (without dependencies) (from )
+- JUnit (from http://junit.org)
 
 
