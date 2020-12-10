@@ -18,9 +18,11 @@ import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.UserDelegationKey;
+import com.azure.storage.blob.sas.BlobContainerSasPermission;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -34,8 +36,11 @@ For a given blob object, generator a SAS Token that'll let bearers access the bl
 public class AzureBlobSasTokenServiceImpl {
 
     private DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder().build();
+    @Autowired
+    private DefaultAzureCredential defaultAzureCredential;
 
-    public String signContainer(String containerUrl) {
+
+    public String signContainer(final String containerUrl) {
         BlobUrlParts parts = BlobUrlParts.parse(containerUrl);
         String endpoint = calcBlobAccountUrl(parts);
 
@@ -51,16 +56,21 @@ public class AzureBlobSasTokenServiceImpl {
                 .containerName(parts.getBlobContainerName())
                 .buildClient();
 
+
         OffsetDateTime expiresInHalfADay = calcTokenExpirationDate();
         UserDelegationKey key = rbacKeySource.getUserDelegationKey(null, expiresInHalfADay);
 
-        BlobSasPermission readOnlyPerms = BlobSasPermission.parse("r");
-        BlobServiceSasSignatureValues tokenProps = new BlobServiceSasSignatureValues(expiresInHalfADay, readOnlyPerms);
+        OffsetDateTime expiryTime = OffsetDateTime.now().plusDays(1);
+        BlobContainerSasPermission readOnlyPerms = new BlobContainerSasPermission().setReadPermission(true);
+        readOnlyPerms.setListPermission(true);
+        BlobServiceSasSignatureValues values = new BlobServiceSasSignatureValues(expiryTime, readOnlyPerms)
+                .setStartTime(OffsetDateTime.now());
 
-        String sasToken = blobContainerClient.generateUserDelegationSas(tokenProps, key);
+        String sasToken = blobContainerClient.generateUserDelegationSas(values, key);
 
         String sasUri = String.format("%s?%s", containerUrl, sasToken);
         return sasUri;
+
     }
 
     public String sign(String blobUrl) {

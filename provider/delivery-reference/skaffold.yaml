@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+metadata:
+  name: delivery-reference
+build:
+  artifacts:
+  - image: us.gcr.io/osdu-anthos-02/os-delivery/anthos-delivery
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes/deployments/deployment-delivery-service.yml

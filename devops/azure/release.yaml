@@ -87,8 +87,6 @@ spec:
           value: /api/delivery/v2/
         - name: server_port
           value: "80"
-        - name: ACCEPT_HTTP  # TEMPORARY UNTIL HTTPS
-          value: "true"
         - name: KEYVAULT_URI
           valueFrom:
             configMapKeyRef:
@@ -109,13 +107,29 @@ spec:
             secretKeyRef:
               name: clientpassword
               key: clientpassword
+        - name: aad_client_id
+            valueFrom:
+              secretKeyRef:
+                name: appid
+                key: appid
+        - name: appinsights_key
+            valueFrom:
+              secretKeyRef:
+                name: appinsights
+                key: appinsights
         - name: SEARCH_QUERY_LIMIT
           value: "1000"
         - name: BATCH_SIZE
           value: "100"
         - name: SEARCH_QUERY_RECORD_HOST
-          value: http://search-service/api/search/v2
+          value: http://search-service/api/search/v2/query
         - name: AUTHORIZE_API
           value: http://entitlements-azure/entitlements/v1
         - name: AUTHORIZE_API_KEY
           value: "OBSOLETE"
+        - name: partition_service_endpoint
+          value: http://partition/api/partition/v1
+        - name: azure_istioauth_enabled
+          value: "true"
+        - name: azure_activedirectory_AppIdUri
+          value: "api://$(aad_client_id)"

@@ -59,21 +59,27 @@ public class LocationServiceImplTest {
         String srn1 = "srn:file/csv:7344999246049527:";
         String srn2 = "srn:file/csv:69207556434748899880399:";
         String srn3 = "srn:file/csv:59158134479121976019:";
+        String srnOvds = "srn:type:file/ovds:12345::";
         String unsignedUrl1 = "http://unsignedurl1.com";
         String unsignedUrl2 = "http://unsignedurl2.com";
         String unsignedUrl3 = "http://unsignedurl3.com";
+        String unsignedUrlOvds = "http://unsignedurlOvds.com";
         String kind = "opendes:osdu:file:0.0.4";
+        String kindOvds = "opendes:osdu:file:0.2.0";
         String connectionString = "connectionString";
+        String connectionStringOvds = "connectionStringOvds";
 
         List<String> srns = new ArrayList<>();
         srns.add(srn1);
         srns.add(srn2);
         srns.add(srn3);
+        srns.add(srnOvds);
 
         Map<String, SrnFileData> processed = new HashMap<>();
         processed.put(srn1, new SrnFileData(null, unsignedUrl1, kind, connectionString));
         processed.put(srn2, new SrnFileData(null, unsignedUrl2, kind, connectionString));
         processed.put(srn3, new SrnFileData(null, unsignedUrl3, kind, connectionString));
+        processed.put(srnOvds, new SrnFileData(null, unsignedUrlOvds, kindOvds, connectionStringOvds));
         List<String> unprocessed = new ArrayList<>();
 
         UrlSigningResponse unsignedUrlsResponse = UrlSigningResponse.builder().processed(processed).unprocessed(unprocessed).build();
@@ -89,17 +95,23 @@ public class LocationServiceImplTest {
         signedUrl2.setUri(new URI(unsignedUrl2));
         signedUrl2.setUrl(new URL(unsignedUrl2));
         signedUrl2.setCreatedAt(Instant.now());
-        signedUrl1.setConnectionString(connectionString);
+        signedUrl2.setConnectionString(connectionString);
 
         SignedUrl signedUrl3 = new SignedUrl();
         signedUrl3.setUri(new URI(unsignedUrl3));
         signedUrl3.setUrl(new URL(unsignedUrl3));
         signedUrl3.setCreatedAt(Instant.now());
-        signedUrl1.setConnectionString(connectionString);
+        signedUrl3.setConnectionString(connectionString);
+
+        SignedUrl signedUrlOvds = new SignedUrl();
+        signedUrlOvds.setUrl(new URL(unsignedUrlOvds));
+        signedUrlOvds.setCreatedAt(Instant.now());
+        signedUrlOvds.setConnectionString(connectionStringOvds);
 
         Mockito.when(storageService.createSignedUrl(Mockito.eq(srn1), Mockito.eq(unsignedUrl1), Mockito.any())).thenReturn(signedUrl1);
         Mockito.when(storageService.createSignedUrl(Mockito.eq(srn2), Mockito.eq(unsignedUrl2), Mockito.any())).thenReturn(signedUrl2);
         Mockito.when(storageService.createSignedUrl(Mockito.eq(srn3), Mockito.eq(unsignedUrl3), Mockito.any())).thenReturn(signedUrl3);
+        Mockito.when(storageService.createSignedUrl(Mockito.eq(srnOvds), Mockito.eq(unsignedUrlOvds), Mockito.any())).thenReturn(signedUrlOvds);
 
         ReflectionTestUtils.setField(CUT, "headers", new DpsHeaders());
 
