@@ -42,12 +42,12 @@ public class STSHelper {
     sts = config.amazonSTS();
   }
 
-  public TemporaryCredentials getCredentials(String identifier, S3Location fileLocation,
+  public TemporaryCredentials getCredentials(String srn, S3Location fileLocation,
                                              String roleArn, String user, Date expiration) {
 
     Instant now = instantHelper.now();
     String roleSessionName = String.format("%s_%s", user, now.toEpochMilli());
-    Policy policy = createPolicy(identifier, fileLocation);
+    Policy policy = createPolicy(srn, fileLocation);
 
     Long duration = ((expiration.getTime() - now.toEpochMilli()) / 1000);
     duration = duration > MAX_DURATION_IN_SECONDS ? MAX_DURATION_IN_SECONDS : duration;

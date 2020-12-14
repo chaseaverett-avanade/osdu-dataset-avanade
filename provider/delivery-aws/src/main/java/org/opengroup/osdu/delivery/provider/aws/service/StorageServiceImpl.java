@@ -74,7 +74,7 @@ public class StorageServiceImpl implements IStorageService {
   }
 
   @Override
-  public SignedUrl createSignedUrl(String identifier, String unsignedUrl, String authorizationToken) {
+  public SignedUrl createSignedUrl(String srn, String unsignedUrl, String authorizationToken) {
     SignedUrl url = new SignedUrl();
     URL s3SignedUrl;
     TemporaryCredentials credentials;
@@ -95,7 +95,7 @@ public class StorageServiceImpl implements IStorageService {
       throw new AppException(HttpStatus.SC_SERVICE_UNAVAILABLE, "S3 Error", URI_EXCEPTION_REASON, e);
     }
     try {
-      credentials = stsHelper.getCredentials(identifier, fileLocation, roleArn, this.headers.getUserEmail(), expiration);
+      credentials = stsHelper.getCredentials(srn, fileLocation, roleArn, this.headers.getUserEmail(), expiration);
     } catch (SdkClientException e) {
       log.error("STS Exception " + e.getMessage());
       credentials = TemporaryCredentials.builder().accessKeyId("").secretAccessKey("").expiration(new Date()).sessionToken("").build();

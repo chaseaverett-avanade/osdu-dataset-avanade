@@ -23,6 +23,4 @@ public interface IUnsignedUrlLocationMapper {
      * @return
      */
     String getUnsignedURLFromSearchResponse(Map<String, Object> response);
-
-    String getUnsignedURLFromRecordData(Map<String, Object> recordData);
 }

@@ -109,9 +109,9 @@ public class SearchServiceImpl implements ISearchService {
 
             String unsignedURL = unsignedUrlLocationMapper.getUnsignedURLFromSearchResponse(searchResult);
 
-            SrnFileData srnFileData = new SrnFileData(null, unsignedURL, kind, null);
+            SrnFileData srnData = new SrnFileData(null, unsignedURL, kind, null);
             if(unsignedURL != null) {
-                parsed.put(srn, srnFileData);
+                parsed.put(srn, srnData);
             } else {
                 notFound.add(srn);
             }

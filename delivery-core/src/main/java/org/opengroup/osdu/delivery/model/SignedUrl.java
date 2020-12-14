@@ -26,7 +26,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class SignedUrl implements IDeliveryData {
+public class SignedUrl {
 
   @JsonProperty("uri")
   URI uri;

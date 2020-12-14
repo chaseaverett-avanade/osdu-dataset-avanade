@@ -16,11 +16,8 @@ package org.opengroup.osdu.delivery.api;
 
 import org.opengroup.osdu.core.common.logging.JaxRsDpsLog;
 import org.opengroup.osdu.delivery.DeliveryRole;
-import org.opengroup.osdu.delivery.model.DatasetRegistryAccessRequest;
-import org.opengroup.osdu.delivery.model.DatasetRegistryAccessResponse;
 import org.opengroup.osdu.delivery.model.UrlSigningRequest;
 import org.opengroup.osdu.delivery.model.UrlSigningResponse;
-import org.opengroup.osdu.delivery.service.IDatasetRegistryAccessService;
 import org.opengroup.osdu.delivery.service.ILocationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,9 +40,6 @@ public class DeliveryApi {
     private ILocationService locationService;
 
     @Inject
-    private IDatasetRegistryAccessService dataRegistryAccessService;
-
-    @Inject
     private JaxRsDpsLog logger;
 
     /**
@@ -60,20 +54,6 @@ public class DeliveryApi {
     public ResponseEntity<UrlSigningResponse> getFileSignedURL(@RequestBody UrlSigningRequest signingRequest) {
         UrlSigningResponse urls = locationService.getSignedUrlsBySrn(signingRequest.getSrns());
         return new ResponseEntity<>(urls, HttpStatus.OK);
-    }
-
-    /**
-     * For a provided data registry id (being a specific type of record), retrieve the record, determine the best access option,
-     * request signing, and return access to that data registry
-     * @param datasetRegistryAccessRequest - A record id pertaining to the data registry record
-     * @return A web response with access tokens to data registry files
-     */
-    @PostMapping(value = "/GetDataRegistryAccess", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("@authorizationFilter.hasRole('" + DeliveryRole.VIEWER + "')")
-    public ResponseEntity<DatasetRegistryAccessResponse> getDataRegistryAccess(@RequestBody DatasetRegistryAccessRequest datasetRegistryAccessRequest) {
-        DatasetRegistryAccessResponse datasetRegistryAccessResponse = dataRegistryAccessService.getDataRegistryAccess(datasetRegistryAccessRequest.getDataRegistryRecordIds());
-        return new ResponseEntity<>(datasetRegistryAccessResponse, HttpStatus.OK);
     }
 
     /**
