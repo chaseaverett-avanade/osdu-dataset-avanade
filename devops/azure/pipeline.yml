@@ -28,13 +28,13 @@ pr:
 
 resources:
   repositories:
-  - repository: FluxRepo
-    type: git
-    name: k8-gitops-manifests
-  - repository: TemplateRepo
-    type: git
-    name: infra-azure-provisioning
-  
+    - repository: FluxRepo
+      type: git
+      name: k8-gitops-manifests
+    - repository: TemplateRepo
+      type: git
+      name: infra-azure-provisioning
+
 variables:
   - group: 'Azure - OSDU'
   - group: 'Azure - OSDU Secrets'
@@ -80,4 +80,4 @@ stages:
       skipTest: ${{ variables.SKIP_TESTS }}
       providers:
         -  name: Azure
-           environments: ['dev']
+           environments: ['demo']

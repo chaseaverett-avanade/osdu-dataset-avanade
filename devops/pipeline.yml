@@ -34,7 +34,7 @@ resources:
   - repository: TemplateRepo
     type: git
     name: infra-azure-provisioning
-  
+
 variables:
   - group: 'Azure - OSDU'
   - group: 'Azure - OSDU Secrets'

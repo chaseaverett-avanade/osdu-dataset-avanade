@@ -16,79 +16,96 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.opengroup.osdu</groupId>
-	<artifactId>os-delivery</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
-	<description>Root Delivery Service project</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opengroup.osdu</groupId>
+  <artifactId>os-delivery</artifactId>
+  <version>0.0.2-SNAPSHOT</version>
+  <description>Root Delivery Service project</description>
 
-	<properties>
-		<java.version>1.8</java.version>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<docker.image.prefix>opendes</docker.image.prefix>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <docker.image.prefix>opendes</docker.image.prefix>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-	<packaging>pom</packaging>
+  <packaging>pom</packaging>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.1.7.RELEASE</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.1.7.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.8</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.8</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-	<modules>
-		<module>delivery-core</module>
-		<module>provider/delivery-aws</module>
-		<module>provider/delivery-ibm</module>
-		<module>provider/delivery-gcp</module>
-		<module>provider/delivery-azure</module>
-        <module>provider/delivery-reference</module>
-    </modules>
+  <modules>
+    <module>delivery-core</module>
+    <module>provider/delivery-aws</module>
+    <module>provider/delivery-ibm</module>
+    <module>provider/delivery-gcp</module>
+    <module>provider/delivery-azure</module>
+    <module>provider/delivery-reference</module>
+  </modules>
 
-	<repositories>
-		<repository>
-			<id>${repo.releases.id}</id>
-			<url>${repo.releases.url}</url>
-		</repository>
-	</repositories>
+  <repositories>
+    <repository>
+      <id>${repo.releases.id}</id>
+      <url>${repo.releases.url}</url>
+    </repository>
+  </repositories>
 
-	<distributionManagement>
-		<repository>
-			<id>${publish.releases.id}</id>
-			<url>${publish.releases.url}</url>
-		</repository>
-		<snapshotRepository>
-			<id>${publish.snapshots.id}</id>
-			<url>${publish.snapshots.url}</url>
-		</snapshotRepository>
-	</distributionManagement>
+  <distributionManagement>
+    <repository>
+      <id>${publish.releases.id}</id>
+      <url>${publish.releases.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>${publish.snapshots.id}</id>
+      <url>${publish.snapshots.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <profiles>
+    <profile>
+      <id>Default</id>
+      <activation>
+        <property>
+          <name>!repo.releases.id</name>
+        </property>
+      </activation>
+      <properties>
+        <repo.releases.id>community-maven-repo</repo.releases.id>
+        <publish.snapshots.id>community-maven-via-job-token</publish.snapshots.id>
+        <publish.releases.id>community-maven-via-job-token</publish.releases.id>
+        <repo.releases.url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</repo.releases.url>
+        <publish.snapshots.url>https://community.opengroup.org/api/v4/projects/118/packages/maven</publish.snapshots.url>
+        <publish.releases.url>https://community.opengroup.org/api/v4/projects/118/packages/maven</publish.releases.url>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>

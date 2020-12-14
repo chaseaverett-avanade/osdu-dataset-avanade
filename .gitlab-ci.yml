@@ -65,3 +65,5 @@ eslint-sast:
 
 osdu-gcp-test:
   allow_failure: false
+  variables:
+    DEFAULT_DATA_PARTITION_ID_TENANT2: osdu
