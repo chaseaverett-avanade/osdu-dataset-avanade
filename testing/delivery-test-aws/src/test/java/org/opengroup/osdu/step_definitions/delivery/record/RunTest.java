@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = {"classpath:features.deliveryrecord/"},
+        features = "classpath:features.deliveryrecord/DeliveryRecord.feature",
         glue = {"classpath:org.opengroup.osdu.step_definitions.delivery.record"},
         plugin = {"pretty", "junit:target/cucumber-reports/os-delivery-junit-report.xml"}
 )

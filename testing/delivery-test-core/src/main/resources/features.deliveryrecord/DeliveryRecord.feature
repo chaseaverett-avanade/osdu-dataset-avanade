@@ -27,4 +27,3 @@ Feature: Delivery of the documents
     Examples:
       | kind                                      | recordFile        | number | expected | acl                                   |
       | "tenant1:testindex<timestamp>:well:2.0.0" | "index_records_2" | 5      | 0 | "data.default.viewers@${tenant}.${domain}" |
-

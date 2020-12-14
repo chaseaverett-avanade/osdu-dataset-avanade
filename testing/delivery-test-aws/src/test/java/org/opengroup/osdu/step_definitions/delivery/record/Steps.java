@@ -60,46 +60,9 @@ public class Steps extends RecordSteps {
         super.the_schema_is_created_with_the_following_kind(dataTable);
     }
 
-    @When("^I ingest records with the \"([^\"]*)\" with \"([^\"]*)\" for a given \"([^\"]*)\"$")
+    @When("^I ingest records with the \"(.*?)\" with \"(.*?)\" for a given \"(.*?)\"$")
     public void i_ingest_records_with_the_for_a_given(String record, String dataGroup, String kind) {
         super.i_ingest_records_with_the_for_a_given(record, dataGroup, kind);
-    }
-
-    @When("^I ingest records with the \"([^\"]*)\" with \"([^\"]*)\" with record \"([^\"]*)\" for a given \"([^\"]*)\"$")
-    public void i_ingest_records_with_the_record_with_data_group_with_record_id_for_a_given_kind(String record, String dataGroup, String recordId, String kind) throws Throwable {
-        super.i_ingest_records_with_the_record_with_data_group_with_record_id_for_a_given_kind(record, dataGroup, recordId, kind);
-    }
-
-    @When("^I ingest records with the \"([^\"]*)\" with \"([^\"]*)\" with record \"([^\"]*)\" for a given \"([^\"]*)\" incorrectly$")
-    public void i_ingest_records_with_the_record_with_data_group_with_record_id_for_a_given_kind_incorrectly(String record, String dataGroup, String recordId, String kind) throws Throwable {
-        super.i_ingest_records_with_the_record_with_data_group_with_record_id_for_a_given_kind_incorrectly(record, dataGroup, recordId, kind);
-    }
-
-
-
-    @Then("^I should get the (\\d+) documents for the record \"([^\"]*)\" in the Storage Service")
-    public void i_shoud_get_the_documents_for_the_record_id_from_storage(int expectedCount, String recordId) throws Throwable {
-        super.i_shoud_get_the_documents_for_the_record_id_from_storage(expectedCount, recordId);
-    }
-
-    @Then("^I should get a signed url for the \"([^\"]*)\" from the Delivery Service")
-    public void i_should_get_a_signed_url_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        super.i_should_get_a_signed_url_for_the_record_id_from_delivery(recordId);
-    }
-
-    @Then("^I should get an unsupported message with no handler error code for the \"([^\"]*)\" from the Delivery Service")
-    public void i_should_get_an_unsupported_message_with_no_handler_error_code_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        super.i_should_get_an_unsupported_message_with_no_handler_error_code_for_the_record_id_from_delivery(recordId);
-    }
-
-    @Then("^I should get an unsupported message with no resource type error code for the \"([^\"]*)\" from the Delivery Service")
-    public void i_should_get_an_unsupported_message_with_no_resource_type_error_code_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        super.i_should_get_an_unsupported_message_with_no_resource_type_error_code_for_the_record_id_from_delivery(recordId);
-    }
-
-    @Then("^I should get a failure message for the \"([^\"]*)\" from the Delivery Service")
-    public void i_should_get_a_failure_message_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        super.i_should_get_a_failure_message_for_the_record_id_from_delivery(recordId);
     }
 
     @Then("^I should get the (\\d+) documents for the \"([^\"]*)\" in the Search Service$")

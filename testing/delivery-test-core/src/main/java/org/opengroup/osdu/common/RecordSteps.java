@@ -14,7 +14,6 @@
 
 package org.opengroup.osdu.common;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
@@ -27,9 +26,8 @@ import org.apache.commons.text.StringSubstitutor;
 import org.opengroup.osdu.core.common.model.entitlements.Acl;
 import org.opengroup.osdu.core.common.model.search.QueryRequest;
 import org.opengroup.osdu.core.common.model.search.QueryResponse;
-import org.opengroup.osdu.delivery.model.*;
-import org.opengroup.osdu.models.TestingDatasetRegistryAccessResponse;
-import org.opengroup.osdu.models.TestingDatasetRegistryAccessResponseItem;
+import org.opengroup.osdu.delivery.model.UrlSigningRequest;
+import org.opengroup.osdu.delivery.model.UrlSigningResponse;
 import org.opengroup.osdu.models.Setup;
 import org.opengroup.osdu.models.TestIndex;
 import org.opengroup.osdu.util.CloudStorageUtils;
@@ -43,7 +41,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.opengroup.osdu.util.Config.*;
 
 @Log
@@ -166,123 +165,6 @@ public class RecordSteps extends TestsBase {
         assertEquals(500, response.getStatus());
     }
 
-    public void i_ingest_records_with_the_record_with_data_group_with_record_id_for_a_given_kind(String record, String dataGroup,
-                                                                                                 String recordId, String kind) throws Throwable {
-        String actualKind = generateActualName(kind, timeStamp);
-        try {
-            String fileContent = FileHandler.readFile(String.format("%s.%s", record, "json"));
-            StringSubstitutor stringSubstitutor = new StringSubstitutor(
-                    ImmutableMap.of(
-                            "tenant", Config.getTenant(),
-                            "domain",Config.getEntitlementsDomain())
-            );
-            records = new Gson().fromJson(fileContent, new TypeToken<List<Map<String, Object>>>() {}.getType());
-
-            cloudStorageUtils.createBucket();
-
-            for (Map<String, Object> testRecord : records) {
-                String filePath = cloudStorageUtils.createCloudFile(recordId);
-                Map<String,Map> data = (Map<String, Map>) testRecord.get("data");
-                Map<String,Map> dataSetProperties = new HashMap<>();
-                Map<String,String> fileSourceInfo = new HashMap<>();
-                fileSourceInfo.put("PreLoadFilePath", filePath);
-                dataSetProperties.put("FileSourceInfo", fileSourceInfo);
-                data.put("DatasetProperties", dataSetProperties);
-                testRecord.put("data", data);
-                testRecord.put("id", recordId);
-                testRecord.put("kind", actualKind);
-                testRecord.put("legal", generateLegalTag());
-                String[] x_acl = {stringSubstitutor.replace(generateActualName(dataGroup,timeStamp))};
-                Acl acl = Acl.builder().viewers(x_acl).owners(x_acl).build();
-                testRecord.put("acl", acl);
-            }
-            String payLoad = new Gson().toJson(records);
-            ClientResponse clientResponse = httpClient.send(HttpMethod.PUT, getStorageBaseURL() + "records", payLoad, headers, httpClient.getAccessToken());
-            assertEquals(201, clientResponse.getStatus());
-        } catch (Exception ex) {
-            throw new AssertionError(ex.getMessage());
-        }
-    }
-
-    public void i_ingest_records_with_the_record_with_data_group_with_record_id_for_a_given_kind_incorrectly(String record, String dataGroup, String recordId, String kind) throws Throwable {
-        String actualKind = generateActualName(kind, timeStamp);
-        try {
-            String fileContent = FileHandler.readFile(String.format("%s.%s", record, "json"));
-            StringSubstitutor stringSubstitutor = new StringSubstitutor(
-                    ImmutableMap.of(
-                            "tenant", Config.getTenant(),
-                            "domain",Config.getEntitlementsDomain())
-            );
-            records = new Gson().fromJson(fileContent, new TypeToken<List<Map<String, Object>>>() {}.getType());
-
-            for (Map<String, Object> testRecord : records) {
-                Map<String,Map> data = (Map<String, Map>) testRecord.get("data");
-                testRecord.put("data", data);
-                testRecord.put("id", recordId);
-                testRecord.put("kind", actualKind);
-                testRecord.put("legal", generateLegalTag());
-                String[] x_acl = {stringSubstitutor.replace(generateActualName(dataGroup,timeStamp))};
-                Acl acl = Acl.builder().viewers(x_acl).owners(x_acl).build();
-                testRecord.put("acl", acl);
-            }
-            String payLoad = new Gson().toJson(records);
-            ClientResponse clientResponse = httpClient.send(HttpMethod.PUT, getStorageBaseURL() + "records", payLoad, headers, httpClient.getAccessToken());
-            assertEquals(201, clientResponse.getStatus());
-        } catch (Exception ex) {
-            throw new AssertionError(ex.getMessage());
-        }
-    }
-
-    public void i_shoud_get_the_documents_for_the_record_id_from_storage(int expectedCount, String recordId) throws Throwable {
-        ClientResponse clientResponse = httpClient.send(HttpMethod.GET, getStorageBaseURL() + "records/" + recordId,
-                null, headers, httpClient.getAccessToken());
-        assertEquals(200, clientResponse.getStatus());
-    }
-
-    public void i_should_get_a_signed_url_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        Map datasetRegistryAccessResponse = retrieveDatasetRegistryAccessResponse(recordId);
-        List<Object> dataRegistryAccessItems = (List) datasetRegistryAccessResponse.get("processed");
-        Map<String, Object> processed = mapper.convertValue(dataRegistryAccessItems.get(0), Map.class);
-        assertEquals((String) processed.get("dataRegistryRecordId"), recordId);
-
-        Map delivery = (Map) processed.get("delivery");
-        assertNotNull(delivery.get("url"));
-        assertNotNull(delivery.get("connectionString"));
-    }
-
-    public void i_should_get_an_unsupported_message_with_no_handler_error_code_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        Map datasetRegistryAccessResponse = retrieveDatasetRegistryAccessResponse(recordId);
-        List<Object> unsupportedItems = (List) datasetRegistryAccessResponse.get("unsupported");
-        Map<String, Object> unsupported = mapper.convertValue(unsupportedItems.get(0), Map.class);
-        assertEquals(unsupported.get("code"), UnsupportedAccessErrorCode.RESOURCE_TYPE_HANDLER_NOT_FOUND.toString());
-    }
-
-    public void i_should_get_an_unsupported_message_with_no_resource_type_error_code_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        Map datasetRegistryAccessResponse = retrieveDatasetRegistryAccessResponse(recordId);
-        List<Object> unsupportedItems = (List) datasetRegistryAccessResponse.get("unsupported");
-        Map<String, Object> unsupported = mapper.convertValue(unsupportedItems.get(0), Map.class);
-        assertEquals(unsupported.get("code"), UnsupportedAccessErrorCode.RESOURCE_TYPE_FIELD_NOT_FOUND.toString());
-    }
-
-    public void i_should_get_a_failure_message_for_the_record_id_from_delivery(String recordId) throws Throwable {
-        Map datasetRegistryAccessResponse = retrieveDatasetRegistryAccessResponse(recordId);
-        List<Object> failedItems = (List) datasetRegistryAccessResponse.get("failed");
-        assertEquals(failedItems.size(), 1);
-    }
-
-    private Map retrieveDatasetRegistryAccessResponse(String recordId) throws JsonProcessingException {
-        DatasetRegistryAccessRequest request = new DatasetRegistryAccessRequest();
-        List recordIds = new ArrayList();
-        recordIds.add(recordId);
-        request.setDataRegistryRecordIds(recordIds);
-        String payload = mapper.writeValueAsString(request);
-
-        ClientResponse clientResponse = httpClient.send(HttpMethod.POST, getDeliveryBaseURL() + "GetDataRegistryAccess", payload, headers, httpClient.getAccessToken());
-
-        String responseBody = clientResponse.getEntity(String.class);
-        Map<String, Object> response = mapper.readValue(responseBody, Map.class);
-        return response;
-    }
 
     private ClientResponse retrieveSignedResponse() throws IOException {
         String payload = mapper.writeValueAsString(urlSigningRequest);

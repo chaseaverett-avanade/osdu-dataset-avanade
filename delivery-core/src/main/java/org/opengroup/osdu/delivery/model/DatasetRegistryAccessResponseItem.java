@@ -25,7 +25,7 @@ public class DatasetRegistryAccessResponseItem {
     private String dataRegistryRecordId;
 
     @JsonProperty("delivery")
-    private IDeliveryData delivery;
+    private Object delivery;
 
     @JsonProperty("record")
     private Records.Entity record;

@@ -46,7 +46,6 @@ public class TestIndex {
     private String[] dataGroup;
     private String[] viewerGroup;
     private String[] ownerGroup;
-    private String recordId;
     private HTTPClient httpClient;
     private Map<String, String> headers;
     private Gson gson = new Gson();
@@ -61,7 +60,7 @@ public class TestIndex {
 
     public void setupSchema() {
         String schema = this.getStorageSchemaFromJson();
-        ClientResponse clientResponse = this.httpClient.send(HttpMethod.POST, getStorageBaseURL() + "schemas", schema, headers, httpClient.getAccessToken());
+        ClientResponse clientResponse = this.httpClient.send(HttpMethod.POST, getStorageBaseURL() + "schemas", this.getStorageSchemaFromJson(), headers, httpClient.getAccessToken());
         if (clientResponse.getType() != null)
             LOGGER.info(String.format("Response status: %s, type: %s", clientResponse.getStatus(), clientResponse.getType().toString()));
     }
