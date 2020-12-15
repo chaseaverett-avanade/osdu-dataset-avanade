@@ -49,15 +49,16 @@ variables:
     value: $[ resources.repositories['FluxRepo'].name ]
   - name: SKIP_TESTS
     value: 'false'
-
+  - name: 'MAVEN_CACHE_FOLDER'
+    value: $(Pipeline.Workspace)/.m2/repository
 
 stages:
   - template: /devops/build-stage.yml@TemplateRepo
     parameters:
       mavenGoal: 'package'
       mavenPublishJUnitResults: true
-      serviceCoreMavenOptions: '-P delivery-core'
-      mavenOptions: '-P delivery-azure'
+      serviceCoreMavenOptions: '-P delivery-core --settings .mvn/community-maven.settings.xml -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+      mavenOptions: '-P delivery-azure --settings .mvn/community-maven.settings.xml -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
       copyFileContents: |
         pom.xml
         provider/delivery-azure/maven/settings.xml
