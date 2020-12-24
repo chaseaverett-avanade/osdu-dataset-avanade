@@ -20,14 +20,14 @@ steps:
             'build',
             '--build-arg', 'PROVIDER_NAME=${_PROVIDER_NAME}',
             '--build-arg', 'PORT=${_PORT}',
-            '-t', 'gcr.io/$PROJECT_ID/os-delivery/delivery-${_PROVIDER_NAME}:${_SHORT_SHA}',
-            '-t', 'gcr.io/$PROJECT_ID/os-delivery/delivery-${_PROVIDER_NAME}:latest',
+            '-t', 'gcr.io/$PROJECT_ID/${_APPLICATION_NAME}/${_GCP_SERVICE}-${_PROVIDER_NAME}:${_SHORT_SHA}',
+            '-t', 'gcr.io/$PROJECT_ID/${_APPLICATION_NAME}/${_GCP_SERVICE}-${_PROVIDER_NAME}:latest',
             '-f', 'provider/delivery-${_PROVIDER_NAME}/cloudbuild/Dockerfile.cloudbuild',
             '.'
     ]
 
 images:
-  - 'gcr.io/$PROJECT_ID/os-delivery/delivery-${_PROVIDER_NAME}'
+  - 'gcr.io/$PROJECT_ID/${_APPLICATION_NAME}/${_GCP_SERVICE}-${_PROVIDER_NAME}'
 
 
 
