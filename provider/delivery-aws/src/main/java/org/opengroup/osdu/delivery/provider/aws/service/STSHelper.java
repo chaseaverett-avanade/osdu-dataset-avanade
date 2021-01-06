@@ -1,5 +1,6 @@
 package org.opengroup.osdu.delivery.provider.aws.service;
 
+import com.amazonaws.auth.policy.Condition;
 import com.amazonaws.auth.policy.Policy;
 import com.amazonaws.auth.policy.Resource;
 import com.amazonaws.auth.policy.Statement;
@@ -74,19 +75,47 @@ public class STSHelper {
 
   private Policy createPolicy(String srn, S3Location fileLocation) {
     Policy policy = new Policy();
-    Statement statement = new Statement(Statement.Effect.Allow);
-    String resource;
+    
 
-    if (srn.toLowerCase().contains("ovds")) {
-      // map to bucket
-      resource = String.format("arn:aws:s3:::%s/%s/*", fileLocation.bucket, fileLocation.key);
-    } else {
-      resource = String.format("arn:aws:s3:::%s/%s", fileLocation.bucket, fileLocation.key);
-    }
+    //Statement 1: Allow Listing files at the file location
+    Statement listBucketStatement = new Statement(Statement.Effect.Allow);
+    String resource = String.format("arn:aws:s3:::%s", fileLocation.bucket);    
+    Condition condition = new Condition().withType("StringEquals").withConditionKey("s3:prefix").withValues(fileLocation.key);
+    
+    listBucketStatement = listBucketStatement
+      .withResources(new Resource(resource))
+      .withConditions(condition)
+      .withActions(S3Actions.ListObjects, S3Actions.ListObjectVersions);
+      
+    //Statement 2: Allow Listing files under the file location
+    Statement listBucketSubpathStatement = new Statement(Statement.Effect.Allow);
+    String resource2 = String.format("arn:aws:s3:::%s", fileLocation.bucket);    
+    Condition condition2 = new Condition()
+      .withType("StringLike")
+      .withConditionKey("s3:prefix")
+      .withValues(String.format("%s/*", fileLocation.key));
 
-    statement.withActions(S3Actions.GetObject).withResources(new Resource(resource));
-    policy.withStatements(statement);
+    listBucketSubpathStatement = listBucketSubpathStatement
+        .withResources(new Resource(resource2))
+        .withConditions(condition2)
+        .withActions(S3Actions.AllS3Actions);
 
-    return policy;
+    //Statement 3: Allow Downloading files at the file location
+    Statement AllowDownloadStatement = new Statement(Statement.Effect.Allow);
+    String resource3 = String.format("arn:aws:s3:::%s/%s", fileLocation.bucket, fileLocation.key);    
+    
+    AllowDownloadStatement = AllowDownloadStatement
+        .withResources(new Resource(resource3))        
+        .withActions(S3Actions.GetObject, S3Actions.GetObjectVersion);
+
+    //Statement 4: Allow Downloading files under the file location
+    Statement AllowDownloadSubpathStatement = new Statement(Statement.Effect.Allow);
+    String resource4 = String.format("arn:aws:s3:::%s/%s/*", fileLocation.bucket, fileLocation.key);    
+    
+    AllowDownloadSubpathStatement = AllowDownloadSubpathStatement
+        .withResources(new Resource(resource4))        
+        .withActions(S3Actions.GetObject, S3Actions.GetObjectVersion);
+
+    return policy.withStatements(listBucketStatement, listBucketSubpathStatement, AllowDownloadStatement, AllowDownloadSubpathStatement);
   }
 }

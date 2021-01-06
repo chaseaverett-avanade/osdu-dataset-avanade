@@ -60,7 +60,7 @@ public class STSHelperTest {
   @Test
   public void should_getFolderCredentials_for_SingleFileTypes() throws JSONException {
     String srn = "opendes:doc:a6d1cc3605e649d1a01575be868412c7";
-    String expectedArn = "arn:aws:s3:::bucket/path/key";
+    String expectedArn = "arn:aws:s3:::bucket";
     Instant now = instantHelper.now();
     String expectedRoleSessionName = String.format("%s_%s", user, now.toEpochMilli());
     Date expirationDate = Date.from(now.plusSeconds(3600));
@@ -93,7 +93,7 @@ public class STSHelperTest {
   @Test
   public void should_getFolderCredentials_for_OVDSTypes() throws JSONException {
     String srn = "opendes:ovds:a6d1cc3605e649d1a01575be868412c7";
-    String expectedArn = "arn:aws:s3:::bucket/path/key/*";
+    String expectedArn = "arn:aws:s3:::bucket";
     Instant now = instantHelper.now();
     String expectedRoleSessionName = String.format("%s_%s", user, now.toEpochMilli());
     Date expirationDate = Date.from(now.plusSeconds(3600));
