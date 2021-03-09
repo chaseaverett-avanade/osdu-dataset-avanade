@@ -8,21 +8,27 @@ variables:
 
 include:
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.7"
     file: "standard-setup.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.7"
     file: "build/maven.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.7"
     file: "scanners/fossa.yml"
 
   - project: 'osdu/platform/ci-cd-pipelines'
+    ref: "release/0.7"
     file: 'cloud-providers/aws.yml'
 
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.7"
     file: "cloud-providers/ibm-deploy-only.yml"
 
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.7"
     file: "scanners/gitlab-ultimate.yml"
 
 # disable the eslint scanner
