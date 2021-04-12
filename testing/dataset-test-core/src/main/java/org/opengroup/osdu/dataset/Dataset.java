@@ -211,7 +211,7 @@ public abstract class Dataset extends TestBase {
 		Record datasetRegistry = new Record();
 
 		datasetRegistry.setId(id);
-		datasetRegistry.setKind(String.format("%s:wks:dataset--File.Generic:1.0.0", TenantUtils.getTenantName()));		
+		datasetRegistry.setKind(String.format("%s:wks:dataset--File.Generic:1.0.0", TestUtils.getSchemaAuthority()));		
 		
 		//set legal
 		Legal legal = new Legal();

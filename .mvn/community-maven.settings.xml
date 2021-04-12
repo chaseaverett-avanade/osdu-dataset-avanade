@@ -12,9 +12,9 @@
         <publish.releases.id>community-maven-via-job-token</publish.releases.id>
 
         <repo.releases.url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</repo.releases.url>
-        <publish.snapshots.url>https://community.opengroup.org/api/v4/projects/378/packages/maven
+        <publish.snapshots.url>https://community.opengroup.org/api/v4/projects/118/packages/maven
         </publish.snapshots.url>
-        <publish.releases.url>https://community.opengroup.org/api/v4/projects/378/packages/maven
+        <publish.releases.url>https://community.opengroup.org/api/v4/projects/118/packages/maven
         </publish.releases.url>
       </properties>
     </profile>
@@ -35,9 +35,9 @@
         <publish.releases.id>community-maven-via-private-token</publish.releases.id>
 
         <repo.releases.url>https://community.opengroup.org/api/v4/groups/17/-/packages/maven</repo.releases.url>
-        <publish.snapshots.url>https://community.opengroup.org/api/v4/projects/378/packages/maven
+        <publish.snapshots.url>https://community.opengroup.org/api/v4/projects/118/packages/maven
         </publish.snapshots.url>
-        <publish.releases.url>https://community.opengroup.org/api/v4/projects/378/packages/maven
+        <publish.releases.url>https://community.opengroup.org/api/v4/projects/118/packages/maven
         </publish.releases.url>
       </properties>
     </profile>
