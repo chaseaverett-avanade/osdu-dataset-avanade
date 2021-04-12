@@ -51,6 +51,9 @@ public abstract class TestUtils {
     public static final String datasetBaseUrl = System.getenv("DATASET_BASE_URL");
     public static final String entitlementsBaseUrl = System.getenv("ENTITLEMENTS_BASE_URL");
     public static final String providerKey = System.getenv("PROVIDER_KEY");
+    private static final String schemaAuthority = System.getenv("SCHEMA_AUTHORITY");
+
+    private static final String DEFAULT_SCHEMA_AUTHORITY = "osdu";
 
     public static final String getDomain() {
         return domain;
@@ -58,6 +61,14 @@ public abstract class TestUtils {
 
     public static final String getProviderKey() {
         return providerKey;
+    }
+
+    public static final String getSchemaAuthority() {
+        if (schemaAuthority == null) {
+            return DEFAULT_SCHEMA_AUTHORITY;
+        }
+
+        return schemaAuthority;
     }
 
     public static String getApiPath(String api) throws Exception {
