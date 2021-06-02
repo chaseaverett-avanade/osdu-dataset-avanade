@@ -21,19 +21,19 @@
     <parent>
         <artifactId>os-dataset</artifactId>
         <groupId>org.opengroup.osdu</groupId>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>0.9.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dataset-ibm</artifactId>
     <description>Dataset Registry service on IBM</description>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <os-core-lib-ibm.version>0.7.0</os-core-lib-ibm.version>
-        <version.number>0.9.0-SNAPSHOT</version.number>
+        <version.number>0.9.1-SNAPSHOT</version.number>
         <start-class>org.opengroup.osdu.dataset.provider.ibm.IBMDatasetRegistry</start-class>
         <!--<os-core-common.version>0.3.28</os-core-common.version>-->
     </properties>
