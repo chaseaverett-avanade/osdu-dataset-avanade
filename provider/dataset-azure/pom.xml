@@ -37,7 +37,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <osdu.corelibazure.version>0.10.0-rc8</osdu.corelibazure.version>
+        <osdu.corelibazure.version>0.10.0</osdu.corelibazure.version>
         <nimbus-jose-jwt.version>7.9</nimbus-jose-jwt.version>
     </properties>
 
