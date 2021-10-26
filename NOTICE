@@ -310,7 +310,7 @@ The following software have components provided under the terms of this license:
 - Byte Buddy Java agent (from https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-agent)
 - ClassMate (from http://github.com/cowtowncoder/java-classmate)
 - Cloud Key Management Service (KMS) API v1-rev20210820-1.32.1 (from https://repo1.maven.org/maven2/com/google/apis/google-api-services-cloudkms)
-- Cloud Storage JSON API v1-rev20200814-1.30.10 (from https://repo1.maven.org/maven2/com/google/apis/google-api-services-storage)
+- Cloud Storage JSON API v1-rev20210918-1.32.1 (from https://repo1.maven.org/maven2/com/google/apis/google-api-services-storage)
 - CloudWatch Metrics for AWS Java SDK (from https://aws.amazon.com/sdkforjava)
 - Converter: Jackson (from https://repo1.maven.org/maven2/com/squareup/retrofit2/converter-jackson)
 - Core functionality for the Reactor Netty library (from https://github.com/reactor/reactor-netty)
@@ -327,7 +327,7 @@ The following software have components provided under the terms of this license:
 - Google Cloud Datastore (from https://github.com/googleapis/java-datastore)
 - Google Cloud Logging (from https://github.com/googleapis/java-logging)
 - Google Cloud Pub/Sub (from https://github.com/googleapis/google-cloud-java/tree/master/google-cloud-clients/google-cloud-pubsub)
-- Google Cloud Storage (from https://github.com/googleapis/google-cloud-java/tree/master/google-cloud-clients/google-cloud-storage)
+- Google Cloud Storage (from https://github.com/googleapis/java-storage)
 - Google HTTP Client Library for Java (from https://repo1.maven.org/maven2/com/google/http-client/google-http-client)
 - Google OAuth Client Library for Java (from https://repo1.maven.org/maven2/com/google/oauth-client/google-oauth-client)
 - Gson (from http://code.google.com/p/google-gson/)
@@ -404,8 +404,8 @@ The following software have components provided under the terms of this license:
 - Lucene Highlighter (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter)
 - Lucene Join (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-join)
 - Lucene Join (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-join)
-- Lucene Memory (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-backward-codecs)
 - Lucene Memory (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-memory)
+- Lucene Memory (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-backward-codecs)
 - Lucene Memory (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-memory)
 - Lucene Memory (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-backward-codecs)
 - Lucene Miscellaneous (from https://repo1.maven.org/maven2/org/apache/lucene/lucene-misc)
@@ -558,8 +558,8 @@ The following software have components provided under the terms of this license:
 - java-cloudant (from https://cloudant.com)
 - java-cloudant (from https://cloudant.com)
 - javatuples (from http://www.javatuples.org)
-- javax.inject (from http://code.google.com/p/atinject/)
 - javax.inject (from https://repo1.maven.org/maven2/org/glassfish/hk2/external/javax.inject)
+- javax.inject (from http://code.google.com/p/atinject/)
 - javax.ws.rs-api (from http://jax-rs-spec.java.net)
 - jersey-repackaged-guava (from https://repo1.maven.org/maven2/org/glassfish/jersey/bundles/repackaged/jersey-guava)
 - jose4j (from https://bitbucket.org/b_c/jose4j/)
@@ -592,14 +592,14 @@ The following software have components provided under the terms of this license:
 - proton-j (from https://repo1.maven.org/maven2/org/apache/qpid/proton-j)
 - rank-eval (from https://github.com/elastic/elasticsearch)
 - rank-eval (from https://github.com/elastic/elasticsearch)
-- resilience4j (from https://github.com/resilience4j/resilience4j)
-- resilience4j (from https://github.com/resilience4j/resilience4j)
-- resilience4j (from https://github.com/resilience4j/resilience4j)
+- resilience4j (from https://resilience4j.readme.io)
 - resilience4j (from https://resilience4j.readme.io)
 - resilience4j (from https://resilience4j.readme.io)
 - resilience4j (from https://github.com/resilience4j/resilience4j)
 - resilience4j (from https://github.com/resilience4j/resilience4j)
-- resilience4j (from https://resilience4j.readme.io)
+- resilience4j (from https://github.com/resilience4j/resilience4j)
+- resilience4j (from https://github.com/resilience4j/resilience4j)
+- resilience4j (from https://github.com/resilience4j/resilience4j)
 - rest (from https://github.com/elastic/elasticsearch)
 - rest (from https://github.com/elastic/elasticsearch)
 - rest-high-level (from https://github.com/elastic/elasticsearch)
@@ -1029,13 +1029,6 @@ Public-Domain
 The following software have components provided under the terms of this license:
 
 - Spongy Castle (from http://rtyley.github.io/spongycastle/)
-
-========================================================================
-SPL-1.0
-========================================================================
-The following software have components provided under the terms of this license:
-
-- Checker Qual (from https://checkerframework.org)
 
 ========================================================================
 SunPro
