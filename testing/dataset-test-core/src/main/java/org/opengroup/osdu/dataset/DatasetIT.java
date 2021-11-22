@@ -82,6 +82,7 @@ public abstract class DatasetIT extends TestBase {
         Record datasetRegistry = createDatasetRegistry(datasetRegistryId, fileName, fileSource);
 
         ClientResponse datasetRegistryResponse = testRegisterDatasetRequest(Collections.singletonList(datasetRegistry));
+        System.out.println("Registry response " + datasetRegistryResponse.getEntity(String.class));
         Assert.assertEquals(201, datasetRegistryResponse.getStatus());
 
         registeredDatasetRegistryIds.add(datasetRegistryId);
