@@ -4,18 +4,18 @@
     <parent>
         <artifactId>os-dataset</artifactId>
         <groupId>org.opengroup.osdu</groupId>
-        <version>0.12.1-SNAPSHOT</version>
+        <version>0.12.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dataset-ibm</artifactId>
     <description>Dataset Registry service on IBM</description>
-    <version>0.12.1-SNAPSHOT</version>
+    <version>0.12.1</version>
     <packaging>jar</packaging>
 
     <properties>
-        <version.number>0.12.1-SNAPSHOT</version.number>
+        <version.number>0.12.1</version.number>
         <os-core-lib-ibm.version>0.12.1</os-core-lib-ibm.version>
         <start-class>org.opengroup.osdu.dataset.provider.ibm.IBMDatasetRegistry</start-class>
         <log4j2.version>2.16.0</log4j2.version>
