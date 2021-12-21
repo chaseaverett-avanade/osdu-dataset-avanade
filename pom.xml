@@ -17,7 +17,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.opengroup.osdu</groupId>
 	<artifactId>os-dataset</artifactId>
-	<version>0.12.2-SNAPSHOT</version>
+	<version>0.12.3-SNAPSHOT</version>
 	<description>Root Dataset Registry Service project</description>
 
 	<properties>
