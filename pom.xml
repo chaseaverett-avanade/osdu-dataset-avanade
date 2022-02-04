@@ -34,6 +34,7 @@
 		<nimbusds.version>7.9</nimbusds.version>
 		<log4j2.version>2.17.1</log4j2.version>
 		<springfox.version>3.0.0</springfox.version>
+		<json-smart.version>2.4.7</json-smart.version>
 	</properties>
 
 	<licenses>
@@ -102,6 +103,11 @@
 				<artifactId>snakeyaml</artifactId>
 				<version>${snakeyaml.version}</version>
 			</dependency> -->
+			<dependency>
+				<groupId>net.minidev</groupId>
+				<artifactId>json-smart</artifactId>
+				<version>${json-smart.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
