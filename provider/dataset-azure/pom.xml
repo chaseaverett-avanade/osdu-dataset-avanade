@@ -22,13 +22,13 @@
     <parent>
         <artifactId>os-dataset</artifactId>
         <groupId>org.opengroup.osdu</groupId>
-        <version>0.13.0-SNAPSHOT</version>
+        <version>0.13.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>dataset-azure</artifactId>
     <description>Azure implementation of Dataset service APIs</description>
-    <version>0.13.0-SNAPSHOT</version>
+    <version>0.13.0</version>
     <packaging>jar</packaging>
 
     <name>dataset-azure</name>
