@@ -42,7 +42,7 @@
             <dependency>
                 <groupId>org.opengroup.osdu</groupId>
                 <artifactId>os-core-common</artifactId>
-                <version>0.13.0-rc7</version>
+                <version>0.13.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>org.opengroup.osdu.core.aws</groupId>
             <artifactId>os-core-lib-aws</artifactId>
-            <version>0.13.0-rc4</version>
+            <version>0.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.opengroup.osdu</groupId>

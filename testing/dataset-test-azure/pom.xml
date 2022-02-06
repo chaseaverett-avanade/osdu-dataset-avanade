@@ -18,7 +18,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.main.basedir>${project.basedir}</project.main.basedir>
-        <os-core-common.version>0.13.0-rc7</os-core-common.version>
+        <os-core-common.version>0.13.0</os-core-common.version>
     </properties>
 
     <dependencies>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.opengroup.osdu</groupId>
             <artifactId>core-lib-azure</artifactId>
-            <version>0.13.0-rc10</version>
+            <version>0.13.0-rc6</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
