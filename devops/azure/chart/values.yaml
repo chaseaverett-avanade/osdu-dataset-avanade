@@ -19,3 +19,13 @@ image:
   repository: community.opengroup.org:5555/osdu/platform/system/dataset
   branch: master
   tag: latest
+
+################################################################################
+# Specify the Rate limit Settings
+#
+envoyFilter:
+  enabled: false
+  rateLimit:
+    max_tokens: 100
+    tokens_per_fill: 100
+    fill_interval: 60
