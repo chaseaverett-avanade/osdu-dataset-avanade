@@ -1,0 +1,6 @@
+FROM community.opengroup.org:5555/osdu/platform/deployment-and-operations/base-containers-azure/alpine-zulu8:0.0.4
+ARG JAR_FILE=target/dataset-azure*spring-boot.jar
+COPY ${JAR_FILE} app.jar
+ENV DEFAULT_JVM_OPTS="-XX:InitialRAMPercentage=25.0 -XX:MaxRAMPercentage=50.0 -XX:+HeapDumpOnOutOfMemoryError -DAPPINSIGHTS_LOGGING_ENABLED=false -Dlog4j2.formatMsgNoLookups=true"
+ENV JAVA_OPTS="${DEFAULT_JVM_OPTS} ${JAVA_OPTS}"
+ENTRYPOINT java ${JAVA_OPTS} -jar /app.jar
