@@ -5,7 +5,7 @@
     * [Common properties for all environments](#Common-properties-for-all-environments)
     * [For OSM Postgres](#For-OSM-Postgres)
     * [For OBM MinIO](#For-OBM-MinIO)
-        * [Bucket configuration](#Bucket-configuration)
+        * [Object store configuration](#ObjectStoreConfig)
 
 ## Environment variables
 
@@ -161,13 +161,26 @@ curl -L -X PATCH 'https:///api/partition/v1/partitions/opendes' -H 'data-partiti
 
 </details>
 
-#### Bucket configuration
+### Object store configuration <a name="ObjectStoreConfig"></a>
 
-At Minio should be created bucket:
+#### Used Technology
+MinIO (or any other supported by OBM)
 
-**name:** `project-id + partition-id + GCP_FILE_DMS_BUCKET` ex `osdu-cicd-epam-opendes-file-dms-bucket`
+#### Per-tenant buckets configuration
+These buckets must be defined in tenants’ dedicated object store servers. OBM connection properties of these servers (url, etc.) are defined as specific properties in tenants’ PartitionInfo registration objects at the Partition service as described in accordant sections of this document.
 
-It can be overridden by:
+<table>
+  <tr>
+   <td>Bucket Naming template 
+   </td>
+   <td>Permissions required
+   </td>
+  </tr>
+  <tr>
+   <td>&lt;PartitionInfo.projectId>-&lt;PartitionInfo.name>-$FILE_DMS_BUCKET:<strong>file-dms-bucket</strong>
+   </td>
+   <td>ListObjects, CRUDObject
+   </td>
+  </tr>
+</table>
 
-- through the Spring Boot property `file-dms-bucket`
-- environment variable `FILE_DMS_BUCKET`

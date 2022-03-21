@@ -4,7 +4,7 @@
 * [Environment variables](#Environment-variables)
 * [Common properties for all environments](#Common-properties-for-all-environments)
 * [Datastore configuration](#Datastore-configuration)
-* [GCS configuration](#GCS-configuration)
+* [GCS configuration](#ObjectStoreConfig)
 * [Google cloud service account configuration](#Google-cloud-service-account-configuration)
 
 ## Environment variables
@@ -57,17 +57,27 @@ Example:
 | `name=dataset--File.*` |   | `https://community.gcp.gnrg-osdu.projects.epam.com/api/file/v2/files` | `true` | `true` |
 | `name=dataset--File.*` |   |  | `false` | `true` |
 
+## GCS configuration <a name="ObjectStoreConfig"></a>
 
-## GCS configuration
+### Per-tenant buckets configuration
+These buckets must be defined in tenants’ “data” GCP projects that names are pointed in tenants’ PartitionInfo registration objects’ “projectId” property at the Partition service.
 
-At Google cloud storage should be created bucket:
+<table>
+  <tr>
+   <td>Bucket Naming template 
+   </td>
+   <td>Permissions required
+   </td>
+  </tr>
+  <tr>
+   <td>&lt;PartitionInfo.projectId>-&lt;PartitionInfo.name>-$FILE_DMS_BUCKET:<strong>file-dms-bucket</strong>
+   </td>
+   <td>ListObjects, CRUDObject
+   </td>
+  </tr>
+</table>
 
-**name:** `project-id + partition-id + GCP_FILE_DMS_BUCKET` ex `osdu-cicd-epam-opendes-file-dms-bucket`
 
-It can be overridden by:
-
-- through the Spring Boot property `file-dms-bucket`
-- environment variable `FILE_DMS_BUCKET`
 
 ## Google cloud service account configuration
 TBD
