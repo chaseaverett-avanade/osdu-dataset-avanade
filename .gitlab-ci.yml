@@ -42,27 +42,11 @@ include:
     ref: release/0.13
 
   - project: "osdu/platform/ci-cd-pipelines"
-    file: "cloud-providers/aws-global.yml"
-    ref: release/0.13
-
-  - project: "osdu/platform/ci-cd-pipelines"
-    file: "cloud-providers/aws-maven.yml"
-    ref: release/0.13
-
-  - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/azure.yml"
     ref: release/0.13
 
   - project: "osdu/platform/ci-cd-pipelines"
-    file: "cloud-providers/ibm.yml"
-    ref: release/0.13
-
-  - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/gitlab-ultimate.yml"
-    ref: release/0.13
-
-  - project: "osdu/platform/ci-cd-pipelines"
-    file: "cloud-providers/osdu-gcp-gke.yml"
     ref: release/0.13
 
 # disable the eslint scanner
@@ -71,30 +55,3 @@ include:
 eslint-sast:
   rules:
     - when: never
-
-osdu-gcp-test:
-  variables:
-    STORAGE_BASE_URL: $OSDU_GCP_STORAGE_EXTERNAL_URL
-    LEGAL_BASE_URL: $OSDU_GCP_LEGAL_EXTERNAL_URL
-    DATASET_BASE_URL: $OSDU_GCP_DATASET_EXTERNAL_URL
-    SCHEMA_API: $OSDU_GCP_SCHEMA_URL
-    PROVIDER_KEY: GCP
-    KIND_SUBTYPE: DatasetTest
-    LEGAL_TAG: datatest-int-tag
-    LEGAL_HOST: $OSDU_GCP_LEGAL_EXTERNAL_URL
-    GCP_STORAGE_PERSISTENT_AREA: persistent-area
-    GCP_DEPLOY_FILE: $OSDU_GCP_DEPLOY_FILE
-
-
-osdu-gcp-dev2-test:
-  variables:
-    STORAGE_BASE_URL: $OSDU_GCP_STORAGE_EXTERNAL_URL
-    LEGAL_BASE_URL: $OSDU_GCP_LEGAL_EXTERNAL_URL
-    DATASET_BASE_URL: $OSDU_GCP_DATASET_EXTERNAL_URL
-    SCHEMA_API: $OSDU_GCP_SCHEMA_URL
-    PROVIDER_KEY: GCP
-    KIND_SUBTYPE: DatasetTest
-    LEGAL_TAG: datatest-int-tag
-    LEGAL_HOST: $OSDU_GCP_LEGAL_EXTERNAL_URL
-    GCP_STORAGE_PERSISTENT_AREA: persistent-area
-    GCP_DEPLOY_FILE: $OSDU_GCP_DEPLOY_FILE
