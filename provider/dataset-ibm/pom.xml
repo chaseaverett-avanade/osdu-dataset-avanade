@@ -19,6 +19,7 @@
         <os-core-lib-ibm.version>0.13.0</os-core-lib-ibm.version>
         <start-class>org.opengroup.osdu.dataset.provider.ibm.IBMDatasetRegistry</start-class>
         <log4j2.version>2.17.1</log4j2.version>
+        <jackson-dataformat-cbor.version>2.13.0</jackson-dataformat-cbor.version>
         <!--<os-core-common.version>0.3.28</os-core-common.version>-->
     </properties>
 
@@ -44,7 +45,16 @@
             		<groupId>org.apache.lucene</groupId>
             		<artifactId>lucene-core</artifactId>
             	</exclusion>
+            	<exclusion>
+            		<groupId>com.fasterxml.jackson.dataformat</groupId>
+            		<artifactId>jackson-dataformat-cbor</artifactId>
+            	</exclusion>
             </exclusions>
+      </dependency>
+      <dependency>
+	      <groupId>com.fasterxml.jackson.dataformat</groupId>
+	      <artifactId>jackson-dataformat-cbor</artifactId>
+	      <version>${jackson-dataformat-cbor.version}</version>
       </dependency>
       <dependency>
 		 <groupId>org.apache.lucene</groupId>
