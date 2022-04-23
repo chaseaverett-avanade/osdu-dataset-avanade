@@ -190,6 +190,14 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.3</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*org/opengroup/osdu/dataset/provider/azure/cache/**</exclude>
+                        <exclude>**/*org/opengroup/osdu/dataset/provider/azure/di/**Config.class</exclude>
+                        <exclude>**/*org/opengroup/osdu/dataset/provider/azure/security/**</exclude>
+                        <exclude>**/*org/opengroup/osdu/dataset/provider/azure/DatasetAzureApplication.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
