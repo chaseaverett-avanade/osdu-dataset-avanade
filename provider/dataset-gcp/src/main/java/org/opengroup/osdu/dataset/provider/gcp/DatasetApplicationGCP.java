@@ -1,6 +1,6 @@
 /*
- * Copyright 2021 Google LLC
- * Copyright 2021 EPAM Systems, Inc
+ * Copyright 2021-2022 Google LLC
+ * Copyright 2021-2022 EPAM Systems, Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 
 package org.opengroup.osdu.dataset.provider.gcp;
 
-import org.opengroup.osdu.core.gcp.multitenancy.IStorageFactory;
 import org.opengroup.osdu.dataset.DatasetApplication;
 import org.opengroup.osdu.dataset.di.DmsClientFactory;
 import org.springframework.boot.SpringApplication;
@@ -29,11 +28,11 @@ import org.springframework.context.annotation.FilterType;
 @SpringBootApplication
 @ConfigurationPropertiesScan(basePackages = "org.opengroup")
 @ComponentScan(value = {"org.opengroup.osdu"}, excludeFilters = {
-	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {DmsClientFactory.class,
-		DatasetApplication.class, IStorageFactory.class})})
+    @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {DmsClientFactory.class,
+        DatasetApplication.class})})
 public class DatasetApplicationGCP {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DatasetApplicationGCP.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(DatasetApplicationGCP.class, args);
+  }
 }

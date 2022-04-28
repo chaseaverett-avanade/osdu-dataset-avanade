@@ -1,6 +1,6 @@
 /*
- * Copyright 2021 Google LLC
- * Copyright 2021 EPAM Systems, Inc
+ * Copyright 2021-2022 Google LLC
+ * Copyright 2021-2022 EPAM Systems, Inc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package org.opengroup.osdu.dataset.provider.gcp.config;
 
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import org.opengroup.osdu.core.gcp.multitenancy.GcsMultiTenantAccess;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,8 +32,4 @@ public class GcpGoogleCloudStorageConfig {
 		return StorageOptions.getDefaultInstance().getService();
 	}
 
-	@Bean
-	public GcsMultiTenantAccess gcsMultiTenantAccess() {
-		return new GcsMultiTenantAccess();
-	}
 }
