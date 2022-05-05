@@ -579,5 +579,4 @@ public class DatasetRegistryServiceImplTest {
         data.put("dataset--file", new DmsServiceProperties(URL, true, API_KEY, true));
         return data;
     }
-
 }

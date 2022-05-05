@@ -15,7 +15,6 @@
 package org.opengroup.osdu.dataset.api;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -34,7 +33,6 @@ import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.core.common.model.tenant.TenantInfo;
 import org.opengroup.osdu.dataset.logging.AuditLogger;
 import org.opengroup.osdu.dataset.model.request.DeliveryRole;
-import org.opengroup.osdu.dataset.model.response.DatasetRetrievalDeliveryItem;
 import org.opengroup.osdu.dataset.model.response.GetDatasetStorageInstructionsResponse;
 import org.opengroup.osdu.dataset.service.DatasetDmsService;
 import org.springframework.http.ResponseEntity;
@@ -91,8 +89,4 @@ public class DatasetDmsApiTest {
 
         assertTrue(annotation.value().contains(DeliveryRole.VIEWER));
     }
-
-
-
-    
 }

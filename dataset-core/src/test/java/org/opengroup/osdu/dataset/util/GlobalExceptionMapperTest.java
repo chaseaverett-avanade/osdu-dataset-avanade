@@ -25,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -49,7 +50,6 @@ public class GlobalExceptionMapperTest {
         m.setAccessible(true);
         AppException e = new AppException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 String.format(DmsValidationDoc.KIND_SUB_TYPE_NOT_REGISTERED_ERROR, "error"));
-
         ResponseEntity<Object> response = (ResponseEntity<Object>) m.invoke(globalExceptionMapper, e);
     }
 
@@ -59,7 +59,7 @@ public class GlobalExceptionMapperTest {
         m.setAccessible(true);
         ValidationException e = new ValidationException(HttpStatus.NOT_ACCEPTABLE.toString());
         ResponseEntity<Object> response = (ResponseEntity<Object>) m.invoke(globalExceptionMapper, e);
-
+        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class GlobalExceptionMapperTest {
         m.setAccessible(true);
         NotFoundException e = new NotFoundException("Not Found");
         ResponseEntity<Object> response = (ResponseEntity<Object>) m.invoke(globalExceptionMapper, e);
-
+        assertEquals(response.getStatusCode(),HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class GlobalExceptionMapperTest {
         UnrecognizedPropertyException e = new UnrecognizedPropertyException(jsonParser, message, jsonLocation, null,
                 "Prop Name", null);
         ResponseEntity<Object> response = (ResponseEntity<Object>) m.invoke(globalExceptionMapper, e);
-
+        assertEquals(response.getStatusCode(),HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -90,6 +90,7 @@ public class GlobalExceptionMapperTest {
         m.setAccessible(true);
         AccessDeniedException e = new AccessDeniedException("Access Denied");
         ResponseEntity<Object> response = (ResponseEntity<Object>) m.invoke(globalExceptionMapper, e);
+        assertEquals(response.getStatusCode(),HttpStatus.FORBIDDEN);
 
     }
 
@@ -104,6 +105,7 @@ public class GlobalExceptionMapperTest {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         WebRequest request = mock(WebRequest.class);
         ResponseEntity<Object> response = (ResponseEntity<Object>) m.invoke(globalExceptionMapper,e,headers,status, request);
+        assertEquals(response.getStatusCode().value(),org.apache.http.HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
 }

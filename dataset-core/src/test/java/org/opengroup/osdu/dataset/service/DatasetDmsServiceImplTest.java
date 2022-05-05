@@ -21,11 +21,18 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(DatasetDmsServiceImpl.class)
@@ -191,5 +198,4 @@ public class DatasetDmsServiceImplTest {
         assertEquals(expectedResponse.getProviderKey(), actualResponse.getProviderKey());
 
     }
-
 }
