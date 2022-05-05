@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.opengroup.osdu.dataset.util;
+package org.opengroup.osdu.dataset.dms.util;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.dataset.util;
+package org.opengroup.osdu.dataset.dms.util;
 
 import javax.inject.Inject;
 
@@ -25,7 +25,7 @@ import org.springframework.web.context.annotation.RequestScope;
 @Component("authorizationFilter")
 @RequestScope
 public class AuthorizationFilter {
-    
+
     @Inject
     private IEntitlementsAndCacheService entitlementsAndCacheService;
 
