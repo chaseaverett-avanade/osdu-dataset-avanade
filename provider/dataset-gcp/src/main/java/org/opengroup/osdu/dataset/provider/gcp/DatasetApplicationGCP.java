@@ -17,7 +17,6 @@
 
 package org.opengroup.osdu.dataset.provider.gcp;
 
-import org.opengroup.osdu.core.gcp.multitenancy.IStorageFactory;
 import org.opengroup.osdu.dataset.DatasetApplication;
 import org.opengroup.osdu.dataset.di.DmsClientFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +29,7 @@ import org.springframework.context.annotation.FilterType;
 @ConfigurationPropertiesScan(basePackages = "org.opengroup")
 @ComponentScan(value = {"org.opengroup.osdu"}, excludeFilters = {
 	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {DmsClientFactory.class,
-		DatasetApplication.class, IStorageFactory.class})})
+		DatasetApplication.class})})
 public class DatasetApplicationGCP {
 
 	public static void main(String[] args) {
