@@ -17,18 +17,13 @@
 
 package org.opengroup.osdu.dataset.provider.gcp.config;
 
-import java.util.ArrayList;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties
 @Data
 public class GcpConfigProperties {
-	private String fileDmsBucket;
-	private Integer expirationDays;
-	private ArrayList<String> fileLocationSequence;
-	private ArrayList<String> fileCollectionLocationSequence;
-	private String redisGroupHost;
-	private Integer redisGroupPort;
-	private String dmsApiBase;
+    private String redisGroupHost;
+    private Integer redisGroupPort;
+    private String dmsApiBase;
 }

@@ -4,8 +4,6 @@
 * [Environment variables](#Environment-variables)
     * [Common properties for all environments](#Common-properties-for-all-environments)
     * [For OSM Postgres](#For-OSM-Postgres)
-    * [For OBM MinIO](#For-OBM-MinIO)
-        * [Bucket configuration](#Bucket-configuration)
 
 ## Environment variables
 
@@ -17,7 +15,6 @@ Must have:
 | ---  | ---   | ---         | ---        | ---    |
 | `SPRING_PROFILES_ACTIVE` | ex `anthos` | Spring profile that activate default configuration for GCP environment | false | - |
 | `<POSTGRES_PASSWORD_ENV_VARIABLE_NAME>` | ex `POSTGRES_PASS_OSDU` | Postgres password env name, name of that variable not defined at the service level, the name will be received through partition service. Each tenant can have it's own ENV name value, and it must be present in ENV of Dataset service | yes | - |
-| `<MINIO_SECRETKEY_ENV_VARIABLE_NAME>` | ex `MINIO_SECRET_OSDU` | Minio secret env name, name of that variable not defined at the service level, the name will be received through partition service. Each tenant can have it's own ENV name value, and it must be present in ENV of Dataset service| yes | - |
 
 ### Common properties for all environments
 
@@ -29,9 +26,6 @@ Must have:
 | `PARTITION_API` | ex `http://localhost:8081/api/partition/v1` | Partition service endpoint | no | - |
 | `STORAGE_API` | ex `http://storage/api/legal/v1` | Storage API endpoint | no | output of infrastructure deployment |
 | `SCHEMA_API` | ex `http://schema/api/legal/v1` | Schema API endpoint | no | output of infrastructure deployment |
-| `GOOGLE_APPLICATION_CREDENTIALS` | ex `/path/to/directory/service-key.json` | Service account credentials, you only need this if running locally | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
-| `FILE_DMS_BUCKET` | ex `file-dms-bucket` | File bucket name postfix (full name represent by project-id + partition-id + GCP_FILE_DMS_BUCKET ex `osdu-cicd-epam-opendes-file-dms-bucket`) | no | output of infrastructure deployment |
-| `EXPIRATION_DAYS` | ex `1` | expiration for signed urls & connection strings | no |  |
 | `REDIS_GROUP_HOST` |  ex `127.0.0.1` | Redis host for groups | no | https://console.cloud.google.com/memorystore/redis/instances |
 | `REDIS_GROUP_PORT` |  ex `1111` | Redis port | no | https://console.cloud.google.com/memorystore/redis/instances |
 | `DMS_API_BASE` | ex `http://localhost:8081/api/file/v2/files` | *Only for local usage.* Allows to override DMS service base url value from Datastore.  | no | - |
@@ -43,42 +37,9 @@ Usage of spring profiles is preferred.
 | ---  | ---   | ---         | ---        | ---    |
 | `PARTITION_AUTH_ENABLED` | ex `true` or `false` | Disable or enable auth token provisioning for requests to Partition service | no | - |
 | `OSMDRIVER` | `postgres`| Osm driver mode that defines which KV storage will be used | no | - |
-| `OBMDRIVER` | `minio` | Obm driver mode that defines which object storage will be used | no | - |
 | `OQMDRIVER` | `rabbitmq` | Oqm driver mode that defines which message broker will be used | no | - |
 | `SERVICE_TOKEN_PROVIDER` | `GCP` or `OPENID` |Service account token provider, `GCP` means use Google service account `OPEIND` means use OpenId provider like `Keycloak` | no | - |
 
-## Datastore configuration
-
-There must be a kind `DmsServiceProperties` in default namespace, with DMS configuration,
-Example:
-
-| name | apiKey | dmsServiceBaseUrl | isStagingLocationSupported | isStorageAllowed |
-| ---  | ---   |---| ---        | ---    |
-| `name=dataset--File.*` |   | `https://osdu-anthos.osdu.club/api/file/v2/files` | `true` | `true` |
-| `name=dataset--FileCollection.*` |   | `https://osdu-anthos.osdu.club/api/file/v2/file-collections` | `true` | `true` |
-
-You can use the `INSERT` script below to bootstrap the data with valid records: 
-```roomsql
-INSERT INTO public."DmsServiceProperties"(id, data)
-	VALUES 
-	('dataset--File.*', 
-	'{
-	  "apiKey": "",
-	  "datasetKind": "dataset--File.*",
-	  "isStorageAllowed": true,
-	  "dmsServiceBaseUrl": "https://osdu-anthos.osdu.club/api/file/v2/files",
-	  "isStagingLocationSupported": true
-	}'),
-	
-	('dataset--FileCollection.*', 
-	'{
-	  "apiKey": "",
-	  "datasetKind": "dataset--FileCollection.*",
-	  "isStorageAllowed": true,
-	  "dmsServiceBaseUrl": "https://osdu-anthos.osdu.club/api/file/v2/file-collections",
-	  "isStagingLocationSupported": true
-	}');
-```
 
 ### Properties set in Partition service:
 
@@ -110,6 +71,37 @@ CONSTRAINT DmsServiceProperties_id UNIQUE (id)
 );
 CREATE INDEX DmsServiceProperties_datagin ON public."DmsServiceProperties" USING GIN (data);
 
+```
+
+There must be a table `DmsServiceProperties` in default schema, with DMS configuration,
+Example:
+
+| name | apiKey | dmsServiceBaseUrl | isStagingLocationSupported | isStorageAllowed |
+| ---  | ---   |---| ---        | ---    |
+| `name=dataset--File.*` |   | `https://osdu-anthos.osdu.club/api/file/v2/files` | `true` | `true` |
+| `name=dataset--FileCollection.*` |   | `https://osdu-anthos.osdu.club/api/file/v2/file-collections` | `true` | `true` |
+
+You can use the `INSERT` script below to bootstrap the data with valid records:
+```roomsql
+INSERT INTO public."DmsServiceProperties"(id, data)
+	VALUES 
+	('dataset--File.*', 
+	'{
+	  "apiKey": "",
+	  "datasetKind": "dataset--File.*",
+	  "isStorageAllowed": true,
+	  "dmsServiceBaseUrl": "https://osdu-anthos.osdu.club/api/file/v2/files",
+	  "isStagingLocationSupported": true
+	}'),
+	
+	('dataset--FileCollection.*', 
+	'{
+	  "apiKey": "",
+	  "datasetKind": "dataset--FileCollection.*",
+	  "isStorageAllowed": true,
+	  "dmsServiceBaseUrl": "https://osdu-anthos.osdu.club/api/file/v2/file-collections",
+	  "isStagingLocationSupported": true
+	}');
 ```
 
 **prefix:** `osm.postgres`
@@ -150,56 +142,3 @@ curl -L -X PATCH 'https://api/partition/v1/partitions/opendes' -H 'data-partitio
 ```
 
 </details>
-
-
-### For OBM MinIO
-
-**prefix:** `obm.minio`
-It can be overridden by:
-
-- through the Spring Boot property `osm.postgres.partition-properties-prefix`
-- environment variable `OBM_MINIO_PARTITION_PROPERTIES_PREFIX`
-
-**Propertyset:**
-
-| Property            | Description            |
-|---------------------|------------------------|
-| obm.minio.endpoint  | server URL             |
-| obm.minio.accessKey | credentials access key |
-| obm.minio.secretKey | credentials secret key |
-
-<details><summary>Example of a definition for a single tenant</summary>
-
-```
-
-curl -L -X PATCH 'https:///api/partition/v1/partitions/opendes' -H 'data-partition-id: opendes' -H 'Authorization: Bearer ...' -H 'Content-Type: application/json' --data-raw '{
-  "properties": {
-    "obm.minio.endpoint": {
-      "sensitive": false,
-      "value": "http://localhost:9000"
-    },
-    "obm.minio.accessKey": {
-      "sensitive": false,
-      "value": "minioadmin"
-    },
-    "obm.minio.secretKey": {
-      "sensitive": true,
-      "value": "<MINIO_SECRETKEY_ENV_VARIABLE_NAME>" <- (Not actual value, just name of env variable)
-    }
-  }
-}'
-
-```
-
-</details>
-
-#### Bucket configuration
-
-At Minio should be created bucket:
-
-**name:** `project-id + partition-id + GCP_FILE_DMS_BUCKET` ex `osdu-cicd-epam-opendes-file-dms-bucket`
-
-It can be overridden by:
-
-- through the Spring Boot property `file-dms-bucket`
-- environment variable `FILE_DMS_BUCKET`
