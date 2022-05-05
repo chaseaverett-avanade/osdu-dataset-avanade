@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.opengroup.osdu.dataset.dms.util;
+package org.opengroup.osdu.dataset.util;
 
 import javax.inject.Inject;
 import javax.validation.ValidationException;

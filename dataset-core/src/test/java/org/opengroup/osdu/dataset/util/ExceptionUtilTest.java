@@ -8,7 +8,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.http.HttpResponse;
 import org.opengroup.osdu.core.common.model.http.AppException;
 import org.opengroup.osdu.dataset.dms.DmsException;
-import org.opengroup.osdu.dataset.dms.util.ExceptionUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExceptionUtilTest {

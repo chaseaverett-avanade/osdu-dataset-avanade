@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.entitlements.IEntitlementsAndCacheService;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
-import org.opengroup.osdu.dataset.dms.util.AuthorizationFilter;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;

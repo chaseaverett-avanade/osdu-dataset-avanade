@@ -37,7 +37,7 @@ import org.opengroup.osdu.dataset.provider.interfaces.IDatasetDmsServiceMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static org.opengroup.osdu.dataset.dms.util.ExceptionUtils.handleDmsException;
+import static org.opengroup.osdu.dataset.util.ExceptionUtils.handleDmsException;
 
 @Service
 @RequiredArgsConstructor

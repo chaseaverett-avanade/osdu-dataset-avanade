@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.logging.JaxRsDpsLog;
 import org.opengroup.osdu.core.common.model.http.AppException;
-import org.opengroup.osdu.dataset.dms.util.GlobalExceptionMapper;
 import org.opengroup.osdu.dataset.model.validation.DmsValidationDoc;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

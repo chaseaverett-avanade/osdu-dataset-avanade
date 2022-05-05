@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.opengroup.osdu.dataset.dms.util;
+package org.opengroup.osdu.dataset.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
