@@ -221,7 +221,6 @@ public class DatasetRegistryServiceImplTest {
         verify(upsertRecords, times(1)).getRecordIds();
     }
 
-
     @Test
     public void createOrUpdateDatasetRegistryAppExceptionInUpsertRecord() throws DpsException, HttpResponseBodyParsingException {
         when(schemaService.getSchema(KIND)).thenReturn(schemaObject);

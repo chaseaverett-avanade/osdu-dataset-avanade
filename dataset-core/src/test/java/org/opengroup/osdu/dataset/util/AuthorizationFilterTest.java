@@ -10,6 +10,8 @@ import org.opengroup.osdu.core.common.entitlements.IEntitlementsAndCacheService;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,6 +39,6 @@ public class AuthorizationFilterTest {
     public void tesHasRole() {
         boolean hasRole = authorizationFilter.hasRole(requiredRoles);
         assertEquals(hasRole, true);
-
+        verify(entitlementsAndCacheService, times(1)).authorize(headers,requiredRoles);
     }
 }

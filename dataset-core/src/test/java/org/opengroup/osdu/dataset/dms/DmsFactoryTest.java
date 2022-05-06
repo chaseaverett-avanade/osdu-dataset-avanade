@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.opengroup.osdu.dataset.schema.dms;
+package org.opengroup.osdu.dataset.dms;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +31,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
 import org.opengroup.osdu.dataset.di.DatasetConfig;
-import org.opengroup.osdu.dataset.dms.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DmsFactoryTest {

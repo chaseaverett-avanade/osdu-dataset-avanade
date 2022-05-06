@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.opengroup.osdu.dataset.schema.dms;
+package org.opengroup.osdu.dataset.dms;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.opengroup.osdu.dataset.dms.DmsServiceProperties;
 
 @RunWith(MockitoJUnitRunner.class)
 

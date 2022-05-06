@@ -14,6 +14,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @RunWith(MockitoJUnitRunner.class)
 public class DatasetFilterTest {
 
@@ -34,6 +37,7 @@ public class DatasetFilterTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
         datasetFilter.doFilter(request,response,filterChain);
-
+        verify(dpsHeaders,times(1)).getCorrelationId();
+        verify(dpsHeaders,times(1)).addCorrelationIdIfMissing();
     }
 }

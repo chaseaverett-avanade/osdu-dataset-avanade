@@ -3,22 +3,18 @@ package org.opengroup.osdu.dataset.logging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.logging.audit.AuditAction;
 import org.opengroup.osdu.core.common.logging.audit.AuditPayload;
 import org.opengroup.osdu.core.common.logging.audit.AuditStatus;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(AuditEvents.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AuditEventsTest {
 
     private static final String READ_STORAGE_INSTRUCTIONS_ACTION_ID = "DS001";
@@ -40,25 +36,23 @@ public class AuditEventsTest {
     @Before
     public void setup() {
 
-        auditEvents = PowerMockito.spy(new AuditEvents("dummyUser"));
+        auditEvents = new AuditEvents("dummyUser");
     }
 
     @Test
     public void testGetReadStorageInstructionsEvent() throws Exception {
-
-
         List<String> resourceList = new ArrayList();
         resourceList.add("dummyValue");
 
         AuditStatus status = AuditStatus.SUCCESS;
 
-        when(auditEvents, "getStatusMessage", status, "message").thenReturn("message");
-
-        AuditPayload expectedPayload = AuditPayload.builder().action(AuditAction.READ).status(status).user(this.user).actionId(READ_STORAGE_INSTRUCTIONS_ACTION_ID).message("message").resources(new ArrayList<>()).build();
+        AuditPayload expectedPayload = AuditPayload.builder().action(AuditAction.READ).status(status).user(this.user).
+                actionId(READ_STORAGE_INSTRUCTIONS_ACTION_ID).message(READ_STORAGE_INSTRUCTIONS_MESSAGE + " - " + status.name().toLowerCase()).
+                resources(new ArrayList<>()).build();
 
         AuditPayload actualAuditPayload = auditEvents.getReadStorageInstructionsEvent(status, resourceList);
 
-        assertEquals(actualAuditPayload.size(), expectedPayload.size());
+        assertEquals(actualAuditPayload.get("message"), expectedPayload.get("message"));
 
     }
 
