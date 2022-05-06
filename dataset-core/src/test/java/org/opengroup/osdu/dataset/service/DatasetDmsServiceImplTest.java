@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.opengroup.osdu.core.common.dms.model.RetrievalInstructionsResponse;
 import org.opengroup.osdu.core.common.model.http.AppException;
 import org.opengroup.osdu.core.common.model.http.DpsHeaders;
@@ -13,13 +14,9 @@ import org.opengroup.osdu.dataset.dms.DmsServiceProperties;
 import org.opengroup.osdu.dataset.dms.IDmsFactory;
 import org.opengroup.osdu.dataset.dms.IDmsProvider;
 import org.opengroup.osdu.dataset.model.request.GetDatasetRegistryRequest;
-import org.opengroup.osdu.dataset.model.response.DatasetRetrievalDeliveryItem;
 import org.opengroup.osdu.dataset.model.response.GetDatasetRetrievalInstructionsResponse;
 import org.opengroup.osdu.dataset.model.response.GetDatasetStorageInstructionsResponse;
 import org.opengroup.osdu.dataset.provider.interfaces.IDatasetDmsServiceMap;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 
 import java.util.ArrayList;
@@ -27,15 +24,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(DatasetDmsServiceImpl.class)
+@RunWith(MockitoJUnitRunner.class)
 public class DatasetDmsServiceImplTest {
 
 
@@ -72,7 +70,6 @@ public class DatasetDmsServiceImplTest {
         initMocks(this);
         kindSubTypeToDmsServiceMap = new HashMap<>();
         kindSubTypeToDmsServiceMap.put(KIND, dmsServiceProperties);
-        datasetDmsService = PowerMockito.spy(datasetDmsService);
         when(headers.getPartitionId()).thenReturn(DATA_PARTITION_ID);
     }
 
@@ -107,27 +104,12 @@ public class DatasetDmsServiceImplTest {
     public void testGetDatasetRetrievalInstructions() throws Exception {
 
         datasetRegistryIds = Collections.singletonList(RECORD_ID);
-        GetDatasetRetrievalInstructionsResponse expectedResponse = new GetDatasetRetrievalInstructionsResponse();
-        List<DatasetRetrievalDeliveryItem> datasetRetrievalDeliveryItemList = new ArrayList<>();
-        datasetRetrievalDeliveryItemList.add((new DatasetRetrievalDeliveryItem()));
-        expectedResponse.setDelivery(datasetRetrievalDeliveryItemList);
-        HashMap<String, GetDatasetRegistryRequest> datasetRegistryRequestMap = new HashMap<>();
-        datasetRegistryRequestMap.put("dummyKey", new GetDatasetRegistryRequest());
-        when(dmsServiceMap.getResourceTypeToDmsServiceMap()).thenReturn(kindSubTypeToDmsServiceMap);
-        when(datasetDmsService, "segregateDatasetIdsToDms", datasetRegistryIds, kindSubTypeToDmsServiceMap).
-                thenReturn(datasetRegistryRequestMap);
-
-        GetDatasetRetrievalInstructionsResponse mergedResponse = new GetDatasetRetrievalInstructionsResponse(new ArrayList<>());
-        Set<Map.Entry<String, GetDatasetRegistryRequest>> datasetRegistryRequestEntrySet = datasetRegistryRequestMap.entrySet();
-        Map.Entry<String, GetDatasetRegistryRequest> datasetRegistryRequestEntry = datasetRegistryRequestEntrySet.iterator().next();
-        when(dmsFactory.create(headers, kindSubTypeToDmsServiceMap.get(datasetRegistryRequestEntry.getKey()))).
-                thenReturn(dmsProvider);
-        GetDatasetRetrievalInstructionsResponse entryResponse = new GetDatasetRetrievalInstructionsResponse();
-        entryResponse.setDelivery(datasetRetrievalDeliveryItemList);
-        when(dmsProvider.getDatasetRetrievalInstructions(datasetRegistryRequestEntry.getValue())).thenReturn(entryResponse);
-        GetDatasetRetrievalInstructionsResponse actualResponse = datasetDmsService.getDatasetRetrievalInstructions(datasetRegistryIds);
-        assertEquals(expectedResponse.getDelivery().size(), actualResponse.getDelivery().size());
-
+        GetDatasetRegistryRequest request = mock(GetDatasetRegistryRequest.class);
+        GetDatasetRetrievalInstructionsResponse entryResponse = new GetDatasetRetrievalInstructionsResponse(new ArrayList<>());
+        injectWhenClauseForDmsServiceMapAndDmsFactory();
+        when(dmsProvider.getDatasetRetrievalInstructions(any())).thenReturn(entryResponse);
+        GetDatasetRetrievalInstructionsResponse actualResponse = datasetDmsService. getDatasetRetrievalInstructions(datasetRegistryIds);
+        verifydmsServiceMapAndDmsFactory();
     }
 
     @Test
@@ -164,38 +146,30 @@ public class DatasetDmsServiceImplTest {
 
     private void testGetStorageInstructions() throws DmsException {
 
-        when(dmsServiceMap.getResourceTypeToDmsServiceMap()).thenReturn(kindSubTypeToDmsServiceMap);
-        when(dmsFactory.create(headers, dmsServiceProperties)).thenReturn(dmsProvider);
-        GetDatasetStorageInstructionsResponse response = new GetDatasetStorageInstructionsResponse();
+        injectWhenClauseForDmsServiceMapAndDmsFactory();
         when(dmsServiceProperties.isAllowStorage()).thenReturn(true);
-        response.setProviderKey("dummyProvider");
-        when(dmsProvider.getStorageInstructions()).thenReturn(response);
         GetDatasetStorageInstructionsResponse actualResponse = datasetDmsService.getStorageInstructions(KIND);
         GetDatasetStorageInstructionsResponse expectedResponse = new GetDatasetStorageInstructionsResponse();
-        expectedResponse.setProviderKey("dummyProvider");
-        assertEquals(actualResponse.getProviderKey(), expectedResponse.getProviderKey());
+        verifydmsServiceMapAndDmsFactory();
+        verify(dmsProvider, times(1)).getStorageInstructions();
     }
 
     private void testRetrievalInstructions() throws Exception {
-
-        RetrievalInstructionsResponse expectedResponse = new RetrievalInstructionsResponse();
-        expectedResponse.setProviderKey("dummyKey");
-        HashMap<String, GetDatasetRegistryRequest> datasetRegistryRequestMap = new HashMap<>();
-        datasetRegistryRequestMap.put("key", new GetDatasetRegistryRequest());
-        when(dmsServiceMap.getResourceTypeToDmsServiceMap()).thenReturn(kindSubTypeToDmsServiceMap);
-        when(datasetDmsService, "segregateDatasetIdsToDms", datasetRegistryIds, kindSubTypeToDmsServiceMap).
-                thenReturn(datasetRegistryRequestMap);
-        RetrievalInstructionsResponse response = new RetrievalInstructionsResponse();
-
-        Set<Map.Entry<String, GetDatasetRegistryRequest>> datasetRegistryRequestEntrySet = datasetRegistryRequestMap.entrySet();
-        Map.Entry<String, GetDatasetRegistryRequest> datasetRegistryRequestEntry = datasetRegistryRequestEntrySet.iterator().next();
-        when(dmsFactory.create(headers, kindSubTypeToDmsServiceMap.get(datasetRegistryRequestEntry.getKey()))).
-                thenReturn(dmsProvider);
         RetrievalInstructionsResponse entryResponse = new RetrievalInstructionsResponse();
-        entryResponse.setProviderKey("dummyKey");
-        when(dmsProvider.getRetrievalInstructions(datasetRegistryRequestEntry.getValue())).thenReturn(entryResponse);
+        injectWhenClauseForDmsServiceMapAndDmsFactory();
+        when(dmsProvider.getRetrievalInstructions(any())).thenReturn(entryResponse);
         RetrievalInstructionsResponse actualResponse = datasetDmsService.getRetrievalInstructions(datasetRegistryIds);
-        assertEquals(expectedResponse.getProviderKey(), actualResponse.getProviderKey());
+        verifydmsServiceMapAndDmsFactory();
+        verify(dmsProvider, times(1)).getRetrievalInstructions(any());
+    }
 
+    private void verifydmsServiceMapAndDmsFactory() {
+        verify(dmsServiceMap,times(1)).getResourceTypeToDmsServiceMap();
+        verify(dmsFactory, times(1)).create(headers,dmsServiceProperties);
+    }
+
+    private void injectWhenClauseForDmsServiceMapAndDmsFactory() {
+        when(dmsServiceMap.getResourceTypeToDmsServiceMap()).thenReturn(kindSubTypeToDmsServiceMap);
+        when(dmsFactory.create(headers,dmsServiceProperties)).thenReturn(dmsProvider);
     }
 }

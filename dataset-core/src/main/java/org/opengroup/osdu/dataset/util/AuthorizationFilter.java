@@ -25,7 +25,6 @@ import org.springframework.web.context.annotation.RequestScope;
 @Component("authorizationFilter")
 @RequestScope
 public class AuthorizationFilter {
-
     @Inject
     private IEntitlementsAndCacheService entitlementsAndCacheService;
 
