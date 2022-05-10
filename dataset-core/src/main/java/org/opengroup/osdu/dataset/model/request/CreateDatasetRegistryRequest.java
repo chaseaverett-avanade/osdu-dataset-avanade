@@ -19,9 +19,9 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.opengroup.osdu.dataset.model.validation.DatasetRegistryValidationDoc;
 import org.opengroup.osdu.core.common.model.storage.Record;
 import org.opengroup.osdu.core.common.model.storage.validation.ValidNotNullCollection;
-import org.opengroup.osdu.dataset.model.validation.DatasetRegistryValidationDoc;
 
 public class CreateDatasetRegistryRequest {
     
