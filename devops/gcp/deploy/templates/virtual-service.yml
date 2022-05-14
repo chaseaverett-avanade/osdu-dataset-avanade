@@ -6,7 +6,7 @@ metadata:
 spec:
   hosts:
     {{- if .Values.conf.domain }}
-    - "{{ .Values.conf.domain }}"
+    - {{ printf "osdu.%s" .Values.conf.domain | quote }}
     {{- else }}
     - "*"
     {{- end }}
