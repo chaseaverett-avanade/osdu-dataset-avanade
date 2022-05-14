@@ -16,3 +16,4 @@ conf:
   postgres_secret_name: ""
   app_name: "dataset"
   on_prem_enabled: false
+  domain: ""
