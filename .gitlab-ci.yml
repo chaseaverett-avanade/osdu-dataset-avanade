@@ -66,8 +66,6 @@ include:
 
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/osdu-gcp-gke.yml"
-    # fixme remove before merge
-    ref: GONRG-4833-Release-pipieline
 
 
 # disable the eslint scanner
