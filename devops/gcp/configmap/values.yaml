@@ -4,16 +4,15 @@
 
 data:
   # common
-  log_level: "INFO"
-  spring_profiles_active: "gcp"
-  file_dms_bucket: "file-dms-bucket"
-  expiration_days: 1
-  redis_group_host: ""
-  redis_group_port: 6379
+  logLevel: "INFO"
+  springProfilesActive: "gcp"
+  expirationDays: 1
+  redisGroupHost: ""
+  redisGroupPort: 6379
   # gcp
-  google_audiences: ""
+  googleAudiences: ""
 
 conf:
   configmap: "dataset-config"
-  app_name: "dataset"
-  on_prem_enabled: false
+  appName: "dataset"
+  onPremEnabled: false
