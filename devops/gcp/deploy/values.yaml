@@ -13,7 +13,7 @@ data:
 
 conf:
   configmap: "dataset-config"
-  postgres_secret_name: ""
+  postgres_secret_name: "dataset-postgres-secret"
   app_name: "dataset"
   on_prem_enabled: false
   domain: ""
