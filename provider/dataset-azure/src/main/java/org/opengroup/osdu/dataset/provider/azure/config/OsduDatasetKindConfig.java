@@ -13,4 +13,5 @@ public class OsduDatasetKindConfig {
 
     private String file;
     private String fileCollection;
+    private String connectedSource;
 }

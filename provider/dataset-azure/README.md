@@ -52,6 +52,7 @@ az keyvault secret show --vault-name $KEY_VAULT_NAME --name $KEY_VAULT_SECRET_NA
 | `aad_client_id` | `********` | AAD client application ID | yes | output of infrastructure deployment |
 | `azure_istioauth_enabled` | `true` | Flag to Disable AAD auth | no | -- |
 | `server_port` | `8089` | The port on which server should be started | no | |
+| `external_dataset_service_endpoint` | ex `https//foo-edsdms.azurewebsites.net/eds/dms/v1` | External dataset endpoint for ConnectedSource.Generic types of datasets | no | output of infrastructure deployment |
 
 **Run the service in intellij**
 

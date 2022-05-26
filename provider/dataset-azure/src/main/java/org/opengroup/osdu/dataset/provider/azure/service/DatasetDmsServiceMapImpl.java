@@ -46,6 +46,7 @@ public class DatasetDmsServiceMapImpl implements IDatasetDmsServiceMap {
         //TODO: replace this with static or dynamic registration of DMS
         resourceTypeToDmsServiceMap.put(osduDatasetKindConfig.getFile(), fileDmsProperties);
         resourceTypeToDmsServiceMap.put(osduDatasetKindConfig.getFileCollection(), getDmsServicePropertyForFileCollection());
+        resourceTypeToDmsServiceMap.put(osduDatasetKindConfig.getConnectedSource(), getDmsServicePropertyForConnectedSource());
     }
 
     @Override
@@ -57,5 +58,11 @@ public class DatasetDmsServiceMapImpl implements IDatasetDmsServiceMap {
         DmsServiceProperties fileCollectionDmsProperties = new DmsServiceProperties(osduApiConfig.getFileCollection());
         fileCollectionDmsProperties.setStagingLocationSupported(true);
         return fileCollectionDmsProperties;
+    }
+
+    private DmsServiceProperties getDmsServicePropertyForConnectedSource() {
+        DmsServiceProperties connectedSourceDmsProperties = new DmsServiceProperties(osduApiConfig.getConnectedSource());
+        connectedSourceDmsProperties.setStagingLocationSupported(true);
+        return connectedSourceDmsProperties;
     }
 }

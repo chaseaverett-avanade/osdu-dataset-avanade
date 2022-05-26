@@ -13,4 +13,5 @@ public class OsduApiConfig {
 
     String file;
     String fileCollection;
+    String connectedSource;
 }
