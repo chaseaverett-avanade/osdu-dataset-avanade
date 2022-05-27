@@ -2,16 +2,15 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    app: "{{ .Values.conf.app_name }}"
+    app: "{{ .Values.conf.appName }}"
   name: "{{ .Values.conf.configmap }}"
   namespace: "{{ .Release.Namespace }}"
 data:
-  LOG_LEVEL: "{{ .Values.data.log_level }}"
-  FILE_DMS_BUCKET: "{{ .Values.data.file_dms_bucket }}"
-  EXPIRATION_DAYS: "{{ .Values.data.expiration_days }}"
-  REDIS_GROUP_HOST: "{{ .Values.data.redis_group_host }}"
-  REDIS_GROUP_PORT: "{{ .Values.data.redis_group_port }}"
-  SPRING_PROFILES_ACTIVE: "{{ .Values.data.spring_profiles_active }}"
-  {{- if not .Values.conf.on_prem_enabled }}
-  GOOGLE_AUDIENCES: "{{ .Values.data.google_audiences }}"
+  LOG_LEVEL: "{{ .Values.data.logLevel }}"
+  EXPIRATION_DAYS: "{{ .Values.data.expirationDays }}"
+  REDIS_GROUP_HOST: "{{ .Values.data.redisGroupHost }}"
+  REDIS_GROUP_PORT: "{{ .Values.data.redisGroupPort }}"
+  SPRING_PROFILES_ACTIVE: "{{ .Values.data.springProfilesActive }}"
+  {{- if not .Values.onPremEnabled }}
+  GOOGLE_AUDIENCES: "{{ .Values.data.googleAudiences }}"
   {{- end }}
