@@ -4,8 +4,6 @@ variables:
   OSDU_GCP_HELM_CONFIG_SERVICE_VARS_DEV2: >
     --set data.googleAudiences=$GOOGLE_AUDIENCE
     --set data.redisGroupHost=$REDIS_GROUP_HOST
-  OSDU_GCP_HELM_CONFIG_SERVICE: $OSDU_GCP_SERVICE-config
-  OSDU_GCP_HELM_DEPLOYMENT_SERVICE: $OSDU_GCP_SERVICE-deploy
 
 osdu-gcp-test:
   variables:
