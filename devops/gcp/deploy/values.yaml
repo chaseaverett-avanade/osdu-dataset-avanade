@@ -14,6 +14,5 @@ data:
 conf:
   configmap: "dataset-config"
   postgres_secret_name: ""
-  minio_secret_name: ""
   app_name: "dataset"
   on_prem_enabled: false
