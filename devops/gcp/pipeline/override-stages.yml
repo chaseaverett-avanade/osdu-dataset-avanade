@@ -1,9 +1,7 @@
 variables:
   OSDU_GCP_SERVICE: dataset
   OSDU_GCP_VENDOR: gcp
-  OSDU_GCP_APPLICATION_NAME: dataset
   OSDU_GCP_TEST_SUBDIR: testing/$OSDU_GCP_SERVICE-test-$OSDU_GCP_VENDOR
-  OSDU_GCP_HELM_PACKAGE_CHARTS: "devops/gcp/deploy devops/gcp/configmap"
   OSDU_GCP_HELM_CONFIG_SERVICE_VARS: >
     --set data.googleAudiences=$GOOGLE_AUDIENCE
     --set data.redisGroupHost=$REDIS_GROUP_HOST
