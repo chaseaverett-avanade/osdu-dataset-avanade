@@ -332,6 +332,7 @@ The following software have components provided under the terms of this license:
 - ClassMate (from http://github.com/cowtowncoder/java-classmate)
 - Cloud Key Management Service (KMS) API v1-rev20220407-1.32.1 (from https://repo1.maven.org/maven2/com/google/apis/google-api-services-cloudkms)
 - Cloud Storage JSON API v1-rev20220604-1.32.1 (from https://repo1.maven.org/maven2/com/google/apis/google-api-services-storage)
+- Cloud Storage JSON API v1-rev20220608-1.32.1 (from https://repo1.maven.org/maven2/com/google/apis/google-api-services-storage)
 - CloudWatch Metrics for AWS Java SDK (from https://aws.amazon.com/sdkforjava)
 - Converter: Jackson (from https://github.com/square/retrofit, https://repo1.maven.org/maven2/com/squareup/retrofit2/converter-jackson)
 - Core functionality for the Reactor Netty library (from https://github.com/reactor/reactor-netty)
@@ -353,6 +354,7 @@ The following software have components provided under the terms of this license:
 - Google OAuth Client Library for Java (from https://repo1.maven.org/maven2/com/google/oauth-client/google-oauth-client)
 - Gson (from http://code.google.com/p/google-gson/, https://repo1.maven.org/maven2/com/google/code/gson/gson)
 - Guava InternalFutureFailureAccess and InternalFutures (from https://repo1.maven.org/maven2/com/google/guava/failureaccess)
+- Guava ListenableFuture only (from https://repo1.maven.org/maven2/com/google/guava/listenablefuture)
 - Guava: Google Core Libraries for Java (from http://code.google.com/p/guava-libraries, https://github.com/google/guava, https://repo1.maven.org/maven2/com/google/guava/guava)
 - HK2 Implementation Utilities (from https://repo1.maven.org/maven2/org/glassfish/hk2/hk2-utils)
 - HPPC Collections (from https://repo1.maven.org/maven2/com/carrotsearch/hppc)
@@ -671,7 +673,10 @@ The following software have components provided under the terms of this license:
 - PostgreSQL JDBC Driver
 - Protocol Buffer Java API (from http://code.google.com/p/protobuf, https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java)
 - Protocol Buffers [Util] (from https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java-util)
+<<<<<<< HEAD
 - Redisson (from http://redisson.org)
+=======
+>>>>>>> master
 - Reflections (from http://code.google.com/p/reflections/, http://github.com/ronmamo/reflections)
 - SnakeYAML (from http://code.google.com/p/snakeyaml/, http://www.snakeyaml.org, https://bitbucket.org/snakeyaml/snakeyaml)
 - Spring Core (from http://www.springframework.org, https://github.com/spring-projects/spring-framework, https://repo1.maven.org/maven2/org/springframework/spring-core)
