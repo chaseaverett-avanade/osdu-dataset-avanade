@@ -1,0 +1,76 @@
+{
+	"schemaInfo": {
+		"schemaIdentity": {
+			"authority": "${tenant}",
+			"source": "wks-test",
+			"entityType": "dataset--FileCollection.${kind-subtype}",
+			"schemaVersionMajor": 1,
+			"schemaVersionMinor": 0,
+			"schemaVersionPatch": 0
+		},
+		"status": "DEVELOPMENT",
+		"scope": "INTERNAL"
+	},
+	"schema": {
+		"x-osdu-license": "Copyright 2021, The Open Group \\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+		"x-osdu-review-status": "Accepted",
+		"$id": "https://schema.osdu.opengroup.org/json/abstract/AbstractFileCollection.1.0.0.json",
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"x-osdu-schema-source": "osdu:wks:AbstractFileCollection:1.0.0",
+		"title": "AbstractFileCollection",
+		"description": "The schema fragment representing file collections.",
+		"type": "object",
+		"properties": {
+			"DatasetProperties": {
+				"type": "object",
+				"title": "Dataset Properties",
+				"description": "The dataset properties for a file collection.",
+				"properties": {
+					"FileCollectionPath": {
+						"type": "string",
+						"title": "File Collection Path",
+						"description": "An optional path to the file collection.",
+						"example": "s3://default_bucket/opendes/data/vds-dataset/"
+					},
+					"IndexFilePath": {
+						"type": "string",
+						"title": "Index File Path",
+						"description": "An optional path to an index file.",
+						"example": "s3://default_bucket/opendes/data/vds-dataset/vds-dataset.index"
+					},
+					"FileSourceInfos": {
+						"type": "array",
+						"title": "File Source Info Array",
+						"description": "Array of file collection members as FileSourceInfo.",
+						"example": [
+							{
+								"FileSource": "s3://default_bucket/opendes/data/vds-dataset/vds-file-1",
+								"PreloadFilePath": "s3://staging-area/r7/raw-data/provided/documents/vds-file-1",
+								"Name": "vds-file-1",
+								"FileSize": "439452464"
+							},
+							{
+								"FileSource": "s3://default_bucket/opendes/data/vds-dataset/vds-file-2",
+								"PreloadFilePath": "s3://staging-area/r7/raw-data/provided/documents/vds-file-2",
+								"Name": "vds-file-2",
+								"FileSize": "433645463"
+							}
+						]
+					},
+					"Checksum": {
+						"type": "string",
+						"title": "MD5 Checksum",
+						"description": "MD5 checksum of file bytes - a 32 byte hexadecimal number.",
+						"example": "d41d8cd98f00b204e9800998ecf8427e",
+						"pattern": "^[0-9a-fA-F]{32}"
+					}
+				}
+			}
+		},
+		"required": [
+			"DatasetProperties"
+		],
+		"x-osdu-inheriting-from-kind": []
+	}
+
+}

@@ -36,7 +36,8 @@
 		<module>dataset-test-aws</module>
 		<module>dataset-test-gcp</module>
 		<module>dataset-test-ibm</module>
-	</modules>
+        <module>dataset-test-anthos</module>
+    </modules>
 
 	<profiles>
 		<profile>

@@ -1,0 +1,46 @@
+{
+	"datasetRegistries": [
+		{
+			"kind": "${tenant}:wks-test:dataset--File.${kind-subtype}:1.0.0",
+			"acl": {
+				"owners": [
+					"data.default.owners@${tenant}.${domain}"
+				],
+				"viewers": [
+					"data.default.viewers@${tenant}.${domain}"
+				]
+			},
+			"data": {
+				"ResourceId": "srn:osdu:file:dc556e0e3a554105a80cfcb19372a62d:",
+				"ResourceTypeID": "srn:type:file/json:",
+				"ResourceSecurityClassification": "srn:reference-data/ResourceSecurityClassification:RESTRICTED:",
+				"ResourceSource": "Some Company App",
+				"ResourceName": "trajectories - 1000.json",
+				"ResourceDescription": "Trajectory For Wellbore xyz",
+				"DatasetProperties": {
+					"FileSourceInfo": {
+						"FileSource": "${filepath}",
+						"PreLoadFilePath": "${filepath}"
+					}
+				}
+			},
+			"legal": {
+				"legaltags": [
+					"${tenant}-${legal-tag}"
+				],
+				"otherRelevantDataCountries": [
+					"US"
+				],
+				"status": "compliant"
+			},
+			"meta": [
+				{
+					"additionalProp1": {},
+					"additionalProp2": {},
+					"additionalProp3": {}
+				}
+			],
+			"ancestry": null
+		}
+	]
+}

@@ -17,11 +17,15 @@
 
 package org.opengroup.osdu.dataset.configuration;
 
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.junit.Assert.assertThat;
+
 import com.google.common.collect.ImmutableMap;
 import com.sun.jersey.api.client.ClientResponse;
 import java.io.IOException;
 import lombok.extern.java.Log;
 import org.apache.commons.text.StringSubstitutor;
+import org.hamcrest.core.Is;
 import org.opengroup.osdu.dataset.HeaderUtils;
 import org.opengroup.osdu.dataset.TenantUtils;
 import org.opengroup.osdu.dataset.TestUtils;
@@ -41,6 +45,7 @@ public class DatasetConfiguration {
 			HeaderUtils.getHeaders(TenantUtils.getTenantName(), token),
 			datasetFileSchema, "");
 
+		assertThat(createFileSchemaResponse.getStatus(), anyOf(Is.is(201), Is.is(400)));
 		log.info("create dataset file schema response status:" + createFileSchemaResponse.getStatus());
 
 		String datasetCollectionSchema = getDatasetSchema(INPUT_DATASET_FILE_COLLECTION_SCHEMA_JSON);
@@ -50,7 +55,8 @@ public class DatasetConfiguration {
 				HeaderUtils.getHeaders(TenantUtils.getTenantName(), token),
 				datasetCollectionSchema, "");
 
-		log.info("create dataset collection schema response status:" + createFileSchemaResponse.getStatus());
+		assertThat(createCollectionSchemaResponse.getStatus(), anyOf(Is.is(201), Is.is(400)));
+		log.info("create dataset collection schema response status:" + createCollectionSchemaResponse.getStatus());
 
 		String legalTag = getLegalTag(INPUT_LEGALTAG_JSON);
 
@@ -58,7 +64,8 @@ public class DatasetConfiguration {
 			HeaderUtils.getHeaders(TenantUtils.getTenantName(), token),
 			legalTag, "");
 
-		log.info("create legal tag response status: " + createFileSchemaResponse.getStatus());
+		assertThat(createLegalTagResponse.getStatus(), anyOf(Is.is(201), Is.is(409)));
+		log.info("create legal tag response status: " + createLegalTagResponse.getStatus());
 	}
 
 	private static String getDatasetSchema(String schemaFile) throws IOException {

@@ -311,15 +311,6 @@ public class TestDatasetIT extends TestBase {
   }
 
   private static String getAclSuffix() {
-    String environment = TestUtils.getEnvironment();
-    if (environment.equalsIgnoreCase("empty")) {
-      environment = "";
-    }
-
-    if (!environment.isEmpty()) {
-      environment = "." + environment;
-    }
-
-    return String.format("%s%s.%s", TestUtils.getTenantName(), environment, TestUtils.getDomain());
+    return String.format("%s%s.%s", TestUtils.getTenantName(), TestUtils.getDomain());
   }
 }
