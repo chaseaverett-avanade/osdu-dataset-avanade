@@ -134,54 +134,14 @@ After configuring your environment as specified above, you can follow these step
 cd provider/dataset-gcp && mvn spring-boot:run
 ```
 ## Testing
- 
- ### Running E2E Tests 
- This section describes how to run cloud OSDU E2E tests (testing/dataset-test-gcp).
- 
- You will need to have the following environment variables defined.
- 
- | name | value | description | sensitive? | source |
- | ---  | ---   | ---         | ---        | ---    |
- | `DOMAIN` | ex `osdu-gcp.go3-nrg.projects.epam.com` | - | no | - |
- | `STORAGE_BASE_URL` | ex `https://os-storage-jvmvia5dea-uc.a.run.app/api/storage/v2/` | Storage API endpoint | no | output of infrastructure deployment |
- | `LEGAL_BASE_URL` | ex `https://os-legal-jvmvia5dea-uc.a.run.app/api/legal/v1/` | Legal API endpoint | no | output of infrastructure deployment |
- | `DATASET_BASE_URL` | ex `http://localhost:8080/api/dataset/v1/` | Dataset API endpoint | no | output of infrastructure deployment |
- | `SCHEMA_API` | ex `https://os-schema-jvmvia5dea-uc.a.run.app/api/schema-service/v1` | Schema API endpoint | no | output of infrastructure deployment |
- | `PROVIDER_KEY` | `GCP` | required for response verification | no | - |
- | `INTEGRATION_TEST_AUDIENCE` | ex `****.apps.googleusercontent.com;` | Client application ID | yes | https://console.cloud.google.com/apis/credentials |
- | `INTEGRATION_TESTER` | `********` | Service account for API calls, passed as a filename or JSON content, plain or Base64 encoded.  Note: this user must have entitlements configured already | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
- | `GCP_DEPLOY_FILE` | `********` | Service account for test data tear down, passed as a filename or JSON content, plain or Base64 encoded. Must have cloud storage role configured | yes | https://console.cloud.google.com/iam-admin/serviceaccounts |
- | `TENANT_NAME` | `opendes` | Tenant name | no | - |
- | `KIND_SUBTYPE` | `DatasetTest` | Kind subtype that will be used in int tests, schema creation automated , result kind will be `TENANT_NAME::wks-test:dataset--FileCollection.KIND_SUBTYPE:1.0.0`| no | - |
- | `LEGAL_TAG` | `public-usa-dataset-1` | Legal tag name, if tag with that name doesn't exist then it will be created during preparing step | no | - |
- | `GCLOUD_PROJECT` | `osdu-cicd-epam` | Project id | no | - |
- | `GCP_STORAGE_PERSISTENT_AREA` | ex `persistent-area` | persistent area bucket(will be concatenated with project id ex `osdu-cicd-epam-persistent-area` | no | output of infrastructure deployment |
- | `LEGAL_HOST` | ex `https://os-legal-jvmvia5dea-uc.a.run.app/api/legal/v1/` | Legal API endpoint | no | output of infrastructure deployment |
 
- **Entitlements configuration for integration accounts**
+ ### Running E2E Tests
+ This section describes how to run cloud OSDU E2E tests.
  
- | INTEGRATION_TESTER | 
- | ---  | 
- | users<br/>service.entitlements.user<br/>service.storage.admin<br/>service.legal.user<br/>service.search.user<br/>service.delivery.viewer<br/>service.dataset.viewers<br/>service.dataset.editors | 
- 
- **Cloud roles configuration for integration accounts**
- 
- | GCP_DEPLOY_FILE|
- | ---  |
- | storage.admin access to the Google Cloud Storage |
- 
- Execute following command to build code and run all the integration tests:
- 
- ```bash
- # Note: this assumes that the environment variables for integration tests as outlined
- #       above are already exported in your environment.
- # build + install integration test core
- $ (cd testing/dataset-test-core/ && mvn clean install)
- ```
- ```bash
- # build + run GCP integration tests.
- $ (cd testing/dataset-test-gcp/ && mvn clean test)
- ```
+ ### Anthos test configuration:
+ [Anthos service configuration ](docs/anthos/README.md)
+ ### GCP test configuration:
+ [Gcp service configuration ](docs/gcp/README.md)
 
 ## Deployment
 

@@ -1,6 +1,7 @@
 # Service Configuration for Anthos
 
 ## Table of Contents <a name="TOC"></a>
+
 * [Environment variables](#Environment-variables)
     * [Common properties for all environments](#Common-properties-for-all-environments)
     * [For OSM Postgres](#For-OSM-Postgres)
@@ -30,8 +31,8 @@ Must have:
 | `REDIS_GROUP_PORT` |  ex `1111` | Redis port | no | https://console.cloud.google.com/memorystore/redis/instances |
 | `DMS_API_BASE` | ex `http://localhost:8081/api/file/v2/files` | *Only for local usage.* Allows to override DMS service base url value from Datastore.  | no | - |
 
-These variables define service behavior, and are used to switch between `anthos` or `gcp` environments, their overriding and usage in mixed mode was not tested.
-Usage of spring profiles is preferred.
+These variables define service behavior, and are used to switch between `anthos` or `gcp` environments, their overriding
+and usage in mixed mode was not tested. Usage of spring profiles is preferred.
 
 | name | value | description | sensitive? | source |
 | ---  | ---   | ---         | ---        | ---    |
@@ -40,13 +41,14 @@ Usage of spring profiles is preferred.
 | `OQMDRIVER` | `rabbitmq` | Oqm driver mode that defines which message broker will be used | no | - |
 | `SERVICE_TOKEN_PROVIDER` | `GCP` or `OPENID` |Service account token provider, `GCP` means use Google service account `OPEIND` means use OpenId provider like `Keycloak` | no | - |
 
-
 ### Properties set in Partition service:
 
-Note that properties can be set in Partition as `sensitive` in that case in property `value` should be present **not value itself**, but **ENV variable name**.
-This variable should be present in environment of service that need that variable.
+Note that properties can be set in Partition as `sensitive` in that case in property `value` should be present **not
+value itself**, but **ENV variable name**. This variable should be present in environment of service that need that
+variable.
 
 Example:
+
 ```
     "elasticsearch.port": {
       "sensitive": false, <- value not sensitive 
@@ -59,6 +61,7 @@ Example:
 ```
 
 ### For OSM Postgres
+
 As a quick shortcut, this example snippet can be used by DevOps DBA:
 
 ```
@@ -73,8 +76,7 @@ CREATE INDEX DmsServiceProperties_datagin ON public."DmsServiceProperties" USING
 
 ```
 
-There must be a table `DmsServiceProperties` in default schema, with DMS configuration,
-Example:
+There must be a table `DmsServiceProperties` in default schema, with DMS configuration, Example:
 
 | name | apiKey | dmsServiceBaseUrl | isStagingLocationSupported | isStorageAllowed |
 | ---  | ---   |---| ---        | ---    |
@@ -82,6 +84,7 @@ Example:
 | `name=dataset--FileCollection.*` |   | `https://osdu-anthos.osdu.club/api/file/v2/file-collections` | `true` | `true` |
 
 You can use the `INSERT` script below to bootstrap the data with valid records:
+
 ```roomsql
 INSERT INTO public."DmsServiceProperties"(id, data)
 	VALUES 
@@ -142,3 +145,57 @@ curl -L -X PATCH 'https://api/partition/v1/partitions/opendes' -H 'data-partitio
 ```
 
 </details>
+
+### Running E2E Tests
+
+This section describes how to run cloud OSDU E2E tests (testing/dataset-test-anthos).
+
+You will need to have the following environment variables defined.
+
+| name | value | description | sensitive? | source |
+ | ---  | ---   | ---         | ---        | ---    |
+| `DOMAIN` | ex `osdu-gcp.go3-nrg.projects.epam.com` | - | no | - |
+| `STORAGE_BASE_URL` | ex `https://os-storage-jvmvia5dea-uc.a.run.app/api/storage/v2/` | Storage API endpoint | no | output of infrastructure deployment |
+| `LEGAL_BASE_URL` | ex `https://os-legal-jvmvia5dea-uc.a.run.app/api/legal/v1/` | Legal API endpoint | no | output of infrastructure deployment |
+| `LEGAL_HOST` | ex `https://os-legal-jvmvia5dea-uc.a.run.app/api/legal/v1/` | Legal API endpoint | no | output of infrastructure deployment |
+| `DATASET_BASE_URL` | ex `http://localhost:8080/api/dataset/v1/` | Dataset API endpoint | no | output of infrastructure deployment |
+| `SCHEMA_API` | ex `https://os-schema-jvmvia5dea-uc.a.run.app/api/schema-service/v1` | Schema API endpoint | no | output of infrastructure deployment |
+| `PROVIDER_KEY` | `ANTHOS` | required for response verification | no | - |
+| `TENANT_NAME` | `opendes` | Tenant name | no | - |
+| `KIND_SUBTYPE` | `DatasetTest` | Kind subtype that will be used in int tests, schema creation automated , result kind will be `TENANT_NAME::wks-test:dataset--FileCollection.KIND_SUBTYPE:1.0.0`| no | - |
+| `LEGAL_TAG` | `public-usa-dataset-1` | Legal tag name, if tag with that name doesn't exist then it will be created during preparing step | no | - |
+| `ANTHOS_STORAGE_PERSISTENT_AREA` | ex `osdu-anthos-osdu-persistent-area` | persistent area bucket | no | output of infrastructure deployment |
+| `TEST_OPENID_PROVIDER_CLIENT_ID` | `********` | Client Id for `$INTEGRATION_TESTER` | yes | -- |
+| `TEST_OPENID_PROVIDER_CLIENT_SECRET` | `********` |  | Client secret for `$INTEGRATION_TESTER` | -- |
+| `TEST_NO_ACCESS_OPENID_PROVIDER_CLIENT_ID` | `********` | Client Id for `$NO_ACCESS_INTEGRATION_TESTER` | yes | -- |
+| `TEST_NO_ACCESS_OPENID_PROVIDER_CLIENT_SECRET` | `********` |  | Client secret for `$NO_ACCESS_INTEGRATION_TESTER` | -- |
+| `TEST_OPENID_PROVIDER_URL` | `https://keycloak.com/auth/realms/osdu` | OpenID provider url | yes | -- |
+| `TEST_MINIO_SECRET_KEY` | `********` | MinIO secret key | yes | -- |
+| `TEST_MINIO_ACCESS_KEY` | `********` | MinIO access key | yes | -- |
+| `TEST_MINIO_ENDPOINT` | `https://minio.com` | Endpoint of MinIO used by File service | no | -- |
+
+**Entitlements configuration for integration accounts**
+
+| INTEGRATION_TESTER | 
+ | ---  | 
+| users<br/>service.entitlements.user<br/>service.storage.admin<br/>service.legal.user<br/>service.search.user<br/>service.delivery.viewer<br/>service.dataset.viewers<br/>service.dataset.editors | 
+
+**Access configuration for minio test accounts**
+
+| TEST_MINIO_ACCESS_KEY|
+| ---  |
+| access to the staging and persistent bucket used by the File service |
+
+Execute following command to build code and run all the integration tests:
+
+ ```bash
+ # Note: this assumes that the environment variables for integration tests as outlined
+ #       above are already exported in your environment.
+ # build + install integration test core
+ $ (cd testing/dataset-test-core/ && mvn clean install)
+ ```
+
+ ```bash
+ # build + run GCP integration tests.
+ $ (cd testing/dataset-test-anthos/ && mvn clean test)
+ ```

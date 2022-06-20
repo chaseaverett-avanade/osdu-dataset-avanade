@@ -33,7 +33,7 @@ public class AnthosTestUtil extends TestUtils {
         return "Bearer " + token;
     }
 
-    public String getNoDataAccessToken() throws Exception {
+    public String getNoDataAccessToken() {
         if (noDataAccesstoken == null || noDataAccesstoken.isEmpty()) {
             noDataAccesstoken = tokenProvider.getNoAccessToken();
         }
