@@ -40,6 +40,8 @@
         <osdu.corelibazure.version>0.14.0</osdu.corelibazure.version>
         <osdu.oscorecommon-version>0.14.0</osdu.oscorecommon-version>
         <nimbus-jose-jwt.version>7.9</nimbus-jose-jwt.version>
+        <jackson-databind.version>2.13.2.2</jackson-databind.version>
+        <jackson.version>2.13.2</jackson.version>
     </properties>
 
     <dependencyManagement>
@@ -143,6 +145,23 @@
             <groupId>org.opengroup.osdu</groupId>
             <artifactId>core-lib-azure</artifactId>
             <version>${osdu.corelibazure.version}</version>
+        </dependency>
+
+         <!-- override jackson dependencies, can be removed after update os-core-common and azure-core-lib -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
