@@ -65,6 +65,7 @@ public class DatasetRegistryServiceImpl implements DatasetRegistryService {
      */
     final String DATASET_KIND_REGEX = "^[\\w\\-\\.]+:[\\w\\-\\.]+:dataset--+[\\w\\-\\.]+:[0-9]+.[0-9]+.[0-9]+$";
 
+    @Inject
     private HttpResponseBodyMapper bodyMapper;
 
     @Inject
