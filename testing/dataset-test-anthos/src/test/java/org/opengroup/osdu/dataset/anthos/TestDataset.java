@@ -198,7 +198,7 @@ public class TestDataset extends Dataset {
             HeaderUtils.getHeaders(TenantUtils.getTenantName(), gcpTestUtils.getToken()),
             datasetRegistry, "");
 
-        Assert.assertTrue(datasetRegistryResponse.getStatus() == 201);
+        Assert.assertEquals(201, datasetRegistryResponse.getStatus());
 
         IntTestGetCreateUpdateDatasetRegistryResponse registryResponse = objectMapper
             .readValue(datasetRegistryResponse.getEntity(String.class),
@@ -230,7 +230,7 @@ public class TestDataset extends Dataset {
             Assert.assertNotNull(item.getFileSource());
             Assert.assertNotNull(item.getCreatedBy());
         }
-        Assert.assertEquals(deliveryItem.getProviderKey(), AnthosTestUtil.providerKey);
+        Assert.assertEquals(AnthosTestUtil.providerKey, deliveryItem.getProviderKey());
     }
 
     public void validate_storageLocation(Object storageLocation) {

@@ -28,15 +28,12 @@ import com.sun.jersey.api.client.WebResource.Builder;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
 import io.minio.RemoveObjectArgs;
-import io.minio.RemoveObjectsArgs;
 import io.minio.Result;
 import io.minio.messages.Item;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.MediaType;
 import lombok.SneakyThrows;
@@ -150,7 +147,7 @@ public class CloudStorageUtilAnthos extends CloudStorageUtil {
         String blobObjectPrefix = gsObjectKeyParts[2];
         ListObjectsArgs listObjectsArgs = ListObjectsArgs.builder().bucket(bucketName).prefix("/" + blobObjectPrefix + "/").build();
         Iterable<Result<Item>> results = minioClient.listObjects(listObjectsArgs);
-        for (Result<Item> result : results){
+        for (Result<Item> result : results) {
             String objectName = result.get().objectName();
             RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build();
             minioClient.removeObject(removeObjectArgs);

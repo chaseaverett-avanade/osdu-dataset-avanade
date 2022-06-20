@@ -26,7 +26,7 @@ public class AnthosTestUtil extends TestUtils {
     private static String token;
     private static String noDataAccesstoken;
 
-    public String getToken(){
+    public String getToken() {
         if (token == null || token.isEmpty()) {
             token = tokenProvider.getToken();
         }
