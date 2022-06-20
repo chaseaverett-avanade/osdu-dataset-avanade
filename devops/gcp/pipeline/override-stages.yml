@@ -27,3 +27,13 @@ osdu-gcp-dev2-test:
     LEGAL_HOST: $OSDU_GCP_LEGAL_EXTERNAL_URL
     GCP_STORAGE_PERSISTENT_AREA: persistent-area
     GCP_DEPLOY_FILE: $OSDU_GCP_DEPLOY_FILE
+
+osdu-gcp-anthos-test:
+  variables:
+    OSDU_GCP_VENDOR: anthos
+    STORAGE_BASE_URL: $STORAGE_URL
+    LEGAL_BASE_URL: $LEGAL_URL
+    ENTITLEMENTS_BASE_URL: $HOST
+    SCHEMA_API: $SCHEMA_URL
+    LEGAL_TAG: public-usa-dataset-1
+    LEGAL_HOST: $LEGAL_URL
