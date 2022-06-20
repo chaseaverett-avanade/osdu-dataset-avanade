@@ -172,7 +172,7 @@ You will need to have the following environment variables defined.
 | `TEST_OPENID_PROVIDER_URL` | `https://keycloak.com/auth/realms/osdu` | OpenID provider url | yes | -- |
 | `TEST_MINIO_SECRET_KEY` | `********` | MinIO secret key | yes | -- |
 | `TEST_MINIO_ACCESS_KEY` | `********` | MinIO access key | yes | -- |
-| `TEST_MINIO_ENDPOINT` | `https://minio.com` | Endpoint of MinIO used by File service | no | -- |
+| `TEST_MINIO_URL` | `https://minio.com` | Endpoint of MinIO used by File service | no | -- |
 
 **Entitlements configuration for integration accounts**
 

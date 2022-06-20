@@ -34,7 +34,7 @@ public class MinioConfig {
     public static MinioConfig Instance() {
         if (Objects.isNull(minioConfig)) {
             minioConfig = new MinioConfig();
-            minioConfig.minioEndpoint = System.getProperty("TEST_MINIO_ENDPOINT", System.getenv("TEST_MINIO_ENDPOINT"));
+            minioConfig.minioEndpoint = System.getProperty("TEST_MINIO_URL", System.getenv("TEST_MINIO_URL"));
             minioConfig.minioAccessKey = System.getProperty("TEST_MINIO_ACCESS_KEY", System.getenv("TEST_MINIO_ACCESS_KEY"));
             minioConfig.minioSecretKey = System.getProperty("TEST_MINIO_SECRET_KEY", System.getenv("TEST_MINIO_SECRET_KEY"));
         }
